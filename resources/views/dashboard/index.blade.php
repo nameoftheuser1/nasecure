@@ -1,16 +1,15 @@
 <x-layout>
     <x-sidebar />
-    <main class="ps-96">
-        @auth
-            Hello, you are logged in,
 
-            <x-calendar :dates="$dates" />
+    @auth
+        Hello, you are logged in,
 
-        @endauth
+        <x-calendar :dates="$dates" />
 
-        @guest
-            You are not logged in.
-        @endguest
-    </main>
+    @endauth
+
+    @guest
+        You are not logged in.
+    @endguest
 
 </x-layout>

@@ -24,10 +24,11 @@
 
 
     @auth
-        <main>
-            {{ $slot }}
-        </main>
-
+        <div class="ps-96 pe-28">
+            <main>
+                {{ $slot }}
+            </main>
+        </div>
     @endauth
 
 
