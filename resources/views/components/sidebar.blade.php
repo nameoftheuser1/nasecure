@@ -4,14 +4,15 @@
         <div class="flex items-center justify-start mb-4 bg-slate-200 h-16 ps-4">
             <img src="" alt="" class="rounded w-8" width="40" height="40">
             <div class="ml-2">
-                <p class=" font-bold">name</p>
-                <p>email</p>
+                <p class="font-bold">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
+                <p>{{ Auth::user()->email }}</p>
             </div>
         </div>
 
         <ul class="flex-1">
             <li class="my-2">
-                <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-2 rounded-md {{ Route::currentRouteName() == 'dashboard' ? 'hover:bg-gray-300' : '' }}">
+                <a href="{{ route('dashboard') }}"
+                    class="flex items-center px-4 py-2 rounded-md {{ Route::currentRouteName() == 'dashboard' ? 'bg-gray-300' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6 mr-2">
                         <path stroke-linecap="round" stroke-linejoin="round"

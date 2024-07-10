@@ -19,7 +19,7 @@
 
     .login-image {
         flex: 1;
-        background-image: url('{{ asset('storage/img/NASECURE.jpg') }}');
+        background-image: url('{{ asset('images/NASECURE.png') }}');
         background-size: cover;
         background-position: center;
     }

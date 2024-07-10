@@ -12,21 +12,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Create the roles table
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
             $table->timestamps();
         });
 
-        // Insert the initial role
         DB::table('roles')->insert([
             'name' => 'ROLE_USER',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
-        // Create the users table
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('first_name');
@@ -40,14 +37,12 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // Create the password_reset_tokens table
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
-        // Create the sessions table
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();

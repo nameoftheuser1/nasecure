@@ -24,7 +24,7 @@
     .login-image {
         flex: 1;
         /* Take up remaining space */
-        background-image: url('{{ asset('storage/img/NASECURE.jpg') }}');
+        background-image: url('{{ asset('images/NASECURE.png') }}');
         /* Adjust the path to your image */
         background-size: cover;
         background-position: center;
@@ -106,34 +106,34 @@
                 @error('last_name')
                     <p class="error-message">{{ $message }}</p>
                 @enderror
-                
+
                 <label for="first_name">First Name:</label>
                 <input type="text" placeholder="Enter First Name" id="first_name" name="first_name" value="{{ old('first_name') }}">
                 @error('first_name')
                     <p class="error-message">{{ $message }}</p>
                 @enderror
-                
+
                 <label for="email">Email:</label>
                 <input type="text" placeholder="Enter Email" id="email" name="email" value="{{ old('email') }}">
                 @error('email')
                     <p class="error-message">{{ $message }}</p>
                 @enderror
-                
+
                 <label for="contact">Contact Number:</label>
                 <input type="text" placeholder="Enter Contact " id="contact" name="contact" value="{{ old('contact') }}">
                 @error('contact')
                     <p class="error-message">{{ $message }}</p>
                 @enderror
-                
+
                 <label for="password">Password:</label>
                 <input type="password" placeholder="Enter Password" id="password" name="password">
                 @error('password')
                     <p class="error-message">{{ $message }}</p>
                 @enderror
-                
+
                 <label for="password_confirmation">Confirm Password:</label>
                 <input type="password" placeholder="Enter Password" id="password_confirmation" name="password_confirmation">
-                
+
                 <button type="submit">Register</button>
                 <a href="{{ route('login')}}" class="login-link">Already have an account? Login here.</a>
             </form>
