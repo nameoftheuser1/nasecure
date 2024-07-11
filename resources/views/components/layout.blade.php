@@ -24,7 +24,7 @@
 
 
     @auth
-        <div class="ps-96 pe-28">
+        <div class="ps-80 pe-10">
             <main>
                 {{ $slot }}
             </main>

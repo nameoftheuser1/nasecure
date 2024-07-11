@@ -17,7 +17,7 @@ class AuthController extends Controller
             'contact' => ['required', 'max:50'],
             'password' => ['required', 'min:8', 'confirmed'],
         ]);
-        
+
         $user = User::create($fields);
 
         $fields['role_id'] = DB::table('roles')->where('name', 'ROLE_USER')->value('id');
