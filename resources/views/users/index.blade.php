@@ -1,7 +1,10 @@
 <x-layout>
     <x-sidebar />
     <div class="container mx-auto p-5 bg-gray-200 rounded-3xl">
-        <h1 class="text-2xl font-bold ">Users</h1>
+        <div class="flex justify-between h-16">
+            <h1 class="text-xl font-bold ">Users</h1>
+            <div></div>
+        </div>
         <div class="overflow-x-auto">
             <table class="min-w-full bg-gray-200 rounded-2xl border-gray-300">
                 <thead>
