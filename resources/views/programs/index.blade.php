@@ -57,14 +57,19 @@
                             <td class="py-2 px-7 border-b text-center">{{ $program->program_name }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $program->program_code }}</td>
                             <td class="py-2 px-7 border-b flex justify-center w-40">
-                                <button
-                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded w-full">
+                                <a href="{{ route('programs.edit', $student->id) }}"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
                                     Edit
-                                </button>
-                                <button
-                                    class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded w-full">
-                                    Delete
-                                </button>
+                                </a>
+                                <form action="{{ route('programs.destroy', $student->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
+                                        onclick="return confirm('Are you sure you want to delete this student?');">
+                                        Delete
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach

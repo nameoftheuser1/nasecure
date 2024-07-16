@@ -16,11 +16,11 @@ class StudentController extends Controller
     {
         $search = $request->input('search');
         $students = Student::query()
-            ->where('name', 'like', '%{search}%')
-            ->orWhere('student_id', 'like', '%{search}%')
-            ->orWhere('email', 'like', '%{search}%')
-            ->orWhere('rfid', 'like', '%{search}%')
-            ->orWhere('course_id', 'like', '%{search}%')
+            ->where('name', 'like', "%{$search}%")
+            ->orWhere('student_id', 'like', "%{$search}%")
+            ->orWhere('email', 'like', "%{$search}%")
+            ->orWhere('rfid', 'like', "%{$search}%")
+            ->orWhere('course_id', 'like', "%{$search}%")
             ->latest()
             ->paginate(10);
 
@@ -41,11 +41,11 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
-            'name' => 'required|string|max:255',
-            'student_id' => 'required|string|max:50|unique:students,student_id',
-            'email' => 'required|email|unique:students,email',
-            'rfid' => 'nullable|string|max:50',
-            'course_id' => 'required|string|max:50',
+            'name' => ['required', 'string', 'max:255'],
+            'student_id' => ['required', 'string', 'max:50', 'unique:students,student_id'],
+            'email' => ['required', 'email', 'unique:students,email'],
+            'rfid' => ['nullable', 'string', 'max:50'],
+            'course_id' => ['nullable', 'string', 'max:50'],
         ]);
 
         Student::create($fields);
@@ -66,15 +66,25 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        //
+        return view('students.edit', ['student' => $student]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateStudentRequest $request, Student $student)
+    public function update(Request $request, Student $student)
     {
-        //
+        $fields = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'student_id' => ['required', 'string', 'max:50', 'unique:students,student_id'],
+            'email' => ['required', 'email', 'unique:students,email'],
+            'rfid' => ['nullable', 'string', 'max:50'],
+            'course_id' => ['nullable', 'string', 'max:50'],
+        ]);
+
+        $student->update($fields);
+
+        return redirect()->route('students.index')->with('success', 'Student updated successfully.');
     }
 
     /**

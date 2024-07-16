@@ -5,15 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\Course;
 use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
+use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $search = $request->input('search');
+        $courses = Course::query()
+            ->where('program_id', 'like', "%{$search}%")
+            ->orWhere('course_name', 'like', "%{$search}%")
+            ->latest()
+            ->paginate(10);
+
+        return view('courses.index', ['courses' => $courses]);
     }
 
     /**
@@ -21,7 +29,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**

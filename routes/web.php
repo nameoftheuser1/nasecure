@@ -1,10 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\StudentController;
-use App\Http\Controllers\UserController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -21,8 +22,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('/users', [UserController::class, 'index'])->name('users');
+    Route::get('/users', [AuthController::class, 'index'])->name('users');
 
     Route::resource('students', StudentController::class);
     Route::resource('programs', ProgramController::class);
+    Route::resource('courses', CourseController::class);
 });
