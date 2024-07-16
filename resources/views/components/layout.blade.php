@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ env('APP_NAME') }}</title>
-    
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
 
 <body>
 
-    <div class="py-24">
+    <div class="py-5">
 
         @guest
             <div class="container">
@@ -24,10 +24,11 @@
 
 
     @auth
-        <main>
-            {{ $slot }}
-        </main>
-
+        <div class="ps-80 pe-10">
+            <main>
+                {{ $slot }}
+            </main>
+        </div>
     @endauth
 
 

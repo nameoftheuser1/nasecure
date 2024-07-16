@@ -12,10 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('students', function (Blueprint $table) {
-            $table->id(); 
-            $table->unsignedBigInteger('user_id')->nullable(); 
+            $table->id();
             $table->unsignedBigInteger('course_id')->nullable();
-            $table->string('rfid');
+            $table->string('name');
+            $table->string('student_id');
+            $table->string('email')->unique();
+            $table->string('rfid')->unique();
             $table->timestamps();
 
         });
