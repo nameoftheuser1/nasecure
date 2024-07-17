@@ -19,10 +19,17 @@ return new class extends Migration
         });
 
         DB::table('roles')->insert([
-            'name' => 'ROLE_USER',
+            'name' => 'ROLE_STAFF',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        DB::table('roles')->insert([
+            'name' => 'ROLE_ADMIN',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
 
         Schema::create('users', function (Blueprint $table) {
             $table->id();

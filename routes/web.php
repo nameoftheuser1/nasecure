@@ -21,8 +21,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
     Route::get('/users', [AuthController::class, 'index'])->name('users');
+    Route::get('/users/{user}/edit', [AuthController::class, 'edit'])->name('edituser');
+    Route::put('/users/{user}', [AuthController::class, 'update'])->name('updateuser');
 
     Route::resource('students', StudentController::class);
     Route::resource('programs', ProgramController::class);

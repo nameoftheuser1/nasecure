@@ -13,18 +13,16 @@
             <p class="text-sm ps-8">Manage your users here. Add, edit, or delete users as needed.</p>
         </div>
         <div class="flex justify-end">
-            {{-- <a href="{{ route('users.create') }}"
-                class="ml-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="h-6 w-6 mr-2">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+            {{-- Uncomment to add "Add User" button --}}
+            {{-- <a href="{{ route('users.create') }}" class="ml-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 mr-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
                 </svg>
                 Add User
             </a> --}}
         </div>
         <div class="w-full mt-6">
-            {{-- <form method="GET" action="{{ route('users') }}" class="flex items-center">
+            <form method="GET" action="{{ route('users') }}" class="flex items-center">
                 <div class="relative flex w-full">
                     <input type="text" name="search" placeholder="Search..." value="{{ request('search') }}"
                         class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full">
@@ -37,7 +35,7 @@
                         </svg>
                     </button>
                 </div>
-            </form> --}}
+            </form>
         </div>
         <div class="overflow-x-auto">
             <table class="min-w-full bg-gray-200 rounded-2xl border-gray-300">
@@ -61,13 +59,14 @@
                             <td class="py-2 px-4 text-center border-b">{{ $user->contact }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $user->email }}</td>
                             <td class="py-2 px-4 text-center border-b">
-                                {{ $user->role ? $user->role->name : 'No Role' }}</td>
+                                {{ $user->role ? $user->role->name : 'No Role' }}
+                            </td>
                             <td class="py-2 px-4 text-center border-b flex justify-center">
-                                <a href="{{-- {{ route('users.edit', $user->id) }} --}}"
+                                <a href="{{ route('edituser', $user->id) }}"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
                                     Edit
                                 </a>
-                                <form action=" {{-- {{ route('users.destroy', $user->id) }} --}}" method="POST">
+                                <form action="{{-- {{ route('users.destroy', $user->id) }} --}}" method="POST" class="ml-2">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
