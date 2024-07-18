@@ -52,7 +52,6 @@ class ProgramController extends Controller
      */
     public function show(Program $program)
     {
-        //
     }
 
     /**
@@ -60,15 +59,22 @@ class ProgramController extends Controller
      */
     public function edit(Program $program)
     {
-        //
+        return view('programs.edit', compact('program'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProgramRequest $request, Program $program)
+    public function update(Request $request, Program $program)
     {
-        //
+        $fields = $request->validate([
+            'program_name' => ['required', 'max:50'],
+            'program_code' => ['required', 'max:50', 'unique:programs,program_code,' . $program->id],
+        ]);
+
+        $program->update($fields);
+
+        return redirect()->route('programs.index')->with('success', 'Program updated successfully.');
     }
 
     /**
@@ -76,6 +82,8 @@ class ProgramController extends Controller
      */
     public function destroy(Program $program)
     {
-        //
+        $program->delete();
+
+        return redirect()->route('programs.index')->with('deleted', 'Program deleted successfully.');
     }
 }

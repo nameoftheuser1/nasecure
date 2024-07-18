@@ -10,30 +10,48 @@
                 <input type="text" id="name" name="name"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     value="{{ old('name', $student->name) }}" required autofocus>
+                @error('name')
+                    <p class="error-message">{{ $message }}</p>
+                @enderror
             </div>
             <div>
                 <label for="student_id" class="block text-sm font-medium text-gray-700">Student ID</label>
                 <input type="text" id="student_id" name="student_id"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     value="{{ old('student_id', $student->student_id) }}" required>
+                @error('student_id')
+                    <p class="error-message">{{ $message }}</p>
+                @enderror
             </div>
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                 <input type="text" id="email" name="email"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     value="{{ old('email', $student->email) }}" required>
+                @error('email')
+                    <p class="error-message">{{ $message }}</p>
+                @enderror
             </div>
             <div>
                 <label for="rfid" class="block text-sm font-medium text-gray-700">RFID</label>
                 <input type="text" id="rfid" name="rfid"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     value="{{ old('rfid', $student->rfid) }}">
+                @error('rfid')
+                    <p class="error-message">{{ $message }}</p>
+                @enderror
             </div>
             <div>
-                <label for="course_id" class="block text-sm font-medium text-gray-700">Course ID</label>
-                <input type="text" id="course_id" name="course_id"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    value="{{ old('course_id', $student->course_id) }}">
+                <label for="course_id" class="block text-sm font-medium text-gray-700">Course</label>
+                <select id="course_id" name="course_id"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    @foreach ($courses as $course)
+                        <option value="{{ $course->id }}" @if ($course->id == $student->course_id) selected @endif>{{ $course->course_name }}</option>
+                    @endforeach
+                </select>
+                @error('course_id')
+                    <p class="error-message">{{ $message }}</p>
+                @enderror
             </div>
             <div>
                 <button type="submit"

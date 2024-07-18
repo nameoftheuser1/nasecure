@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
+use App\Models\Course;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -32,7 +33,8 @@ class StudentController extends Controller
      */
     public function create()
     {
-        return view('students.create');
+        $courses = Course::all();
+        return view('students.create', compact('courses'));
     }
 
     /**
@@ -66,7 +68,8 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        return view('students.edit', ['student' => $student]);
+        $courses = Course::all();
+        return view('students.edit', compact('student', 'courses'));
     }
 
     /**

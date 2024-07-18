@@ -57,11 +57,11 @@
                             <td class="py-2 px-7 border-b text-center">{{ $program->program_name }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $program->program_code }}</td>
                             <td class="py-2 px-7 border-b flex justify-center w-40">
-                                <a href="{{ route('programs.edit', $student->id) }}"
+                                <a href="{{ route('programs.edit', $program->id) }}"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
                                     Edit
                                 </a>
-                                <form action="{{ route('programs.destroy', $student->id) }}" method="POST">
+                                <form action="{{ route('programs.destroy', $program->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
