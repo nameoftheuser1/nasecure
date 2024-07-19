@@ -62,10 +62,10 @@
                                 {{ $user->role ? $user->role->name : 'No Role' }}
                             </td>
                             <td class="py-2 px-4 text-center border-b flex justify-center">
-                                <a href="{{ route('edituser', $user->id) }}"
+                                {{-- <a href="{{ route('edituser', $user->id) }}"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
                                     Edit
-                                </a>
+                                </a> --}}
                                 <form action="{{-- {{ route('users.destroy', $user->id) }} --}}" method="POST" class="ml-2">
                                     @csrf
                                     @method('DELETE')

@@ -22,17 +22,6 @@
                 </a>
             </li>
             <li class="my-2">
-                <a href="{{ route('programs.index') }}"
-                    class="flex items-center px-4 py-2 rounded-md  hover:bg-gray-300 {{ Route::currentRouteName() == 'programs.index' ? 'bg-gray-300' : '' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6 mr-2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08M15.75 18.75v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5A3.375 3.375 0 0 0 6.375 7.5H5.25m11.9-3.664A2.251 2.251 0 0 0 15 2.25h-1.5a2.251 2.251 0 0 0-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.5H4.875c-.621 0-1.125.504-1.125 1.125v12c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V16.5a9 9 0 0 0-9-9Z" />
-                    </svg>
-                    <span>Programs</span>
-                </a>
-            </li>
-            <li class="my-2">
                 <a href="{{ route('students.index') }}"
                     class="flex items-center px-4 py-2 rounded-md  hover:bg-gray-300 {{ Route::currentRouteName() == 'students.index' ? 'bg-gray-300' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -44,7 +33,30 @@
                 </a>
             </li>
             <li class="my-2">
-                <a href="{{ route('courses.index') }}" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-300 {{ Route::currentRouteName() == 'courses.index' ? 'bg-gray-300' : '' }}">
+                <a href="{{ route('instructors.index') }}"
+                    class="flex items-center px-4 py-2 rounded-md hover:bg-gray-300 {{ Route::currentRouteName() == 'instructors.index' ? 'bg-gray-300' : '' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+                    </svg>
+                    <span>Instructors</span>
+                </a>
+            </li>
+            <li class="my-2">
+                <a href="{{ route('programs.index') }}"
+                    class="flex items-center px-4 py-2 rounded-md  hover:bg-gray-300 {{ Route::currentRouteName() == 'programs.index' ? 'bg-gray-300' : '' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08M15.75 18.75v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5A3.375 3.375 0 0 0 6.375 7.5H5.25m11.9-3.664A2.251 2.251 0 0 0 15 2.25h-1.5a2.251 2.251 0 0 0-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.5H4.875c-.621 0-1.125.504-1.125 1.125v12c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V16.5a9 9 0 0 0-9-9Z" />
+                    </svg>
+                    <span>Programs</span>
+                </a>
+            </li>
+            <li class="my-2">
+                <a href="{{ route('courses.index') }}"
+                    class="flex items-center px-4 py-2 rounded-md hover:bg-gray-300 {{ Route::currentRouteName() == 'courses.index' ? 'bg-gray-300' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6 mr-2">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -114,7 +126,7 @@
                         </button>
                     </form>
                 </li>
-                <li >
+                <li>
                     <p class="text-gray-400 flex justify-center text-sm">Nasecure &#169; 2024</p>
 
                 </li>

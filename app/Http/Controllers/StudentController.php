@@ -6,8 +6,9 @@ use App\Models\Student;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Models\Course;
+use App\Rules\EmailDomain;
 use Illuminate\Http\Request;
-use Rap2hpoutre\FastExcel\Facades\FastExcel;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 class StudentController extends Controller
 {
@@ -46,7 +47,7 @@ class StudentController extends Controller
         $fields = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'student_id' => ['required', 'string', 'max:50', 'unique:students,student_id'],
-            'email' => ['required', 'email', 'unique:students,email'],
+            'email' => ['required', 'email', 'unique:students,email', new EmailDomain],
             'rfid' => ['nullable', 'string', 'max:50'],
             'course_id' => ['nullable', 'string', 'max:50'],
         ]);
@@ -81,7 +82,7 @@ class StudentController extends Controller
         $fields = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'student_id' => ['required', 'string', 'max:50', 'unique:students,student_id,' . $student->id],
-            'email' => ['required', 'email', 'unique:students,email,' . $student->id],
+            'email' => ['required', 'email', 'unique:students,email,' . $student->id, new EmailDomain],
             'rfid' => ['nullable', 'string', 'max:50'],
             'course_id' => ['nullable', 'string', 'max:50'],
         ]);
@@ -96,7 +97,9 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        //
+        $student->delete();
+
+        return back()->with('deleted', 'The student is deleted');
     }
 
     public function import(Request $request)

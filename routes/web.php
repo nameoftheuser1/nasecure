@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\StudentController;
 
@@ -26,7 +27,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/users/{user}', [AuthController::class, 'update'])->name('updateuser');
 
     Route::resource('students', StudentController::class);
-    Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
     Route::resource('programs', ProgramController::class);
     Route::resource('courses', CourseController::class);
+    Route::resource('instructors', InstructorController::class);
+
+
+    Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
+    Route::post('instructors/import', [InstructorController::class, 'import'])->name('instructors.import');
 });
