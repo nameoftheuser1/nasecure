@@ -12,9 +12,9 @@
             <h1 class="text-xl font-bold ps-4 mb-4">Students</h1>
             <p class="text-sm ps-8"> Cannot add a student without course added. Must add courses first click here</p>
         </div>
-        <div class="flex justify-end">
+        <div class="flex justify-end items-center">
             <a href="{{ route('students.create') }}"
-                class="ml-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                class="ml-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-600 flex items-center focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="h-6 w-6 mr-2">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -48,7 +48,7 @@
                         <th class="py-2 px-4 text-center border-b">Student ID</th>
                         <th class="py-2 px-4 text-center border-b">Email</th>
                         <th class="py-2 px-4 text-center border-b">RFID</th>
-                        <th class="py-2 px-4 text-center border-b">Course ID</th>
+                        <th class="py-2 px-4 text-center border-b">Course</th>
                         <th class="py-2 px-4 text-center border-b">Actions</th>
                     </tr>
                 </thead>
@@ -60,8 +60,8 @@
                             <td class="py-2 px-4 text-center border-b">{{ $student->student_id }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $student->email }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $student->rfid }}</td>
-                            <td class="py-2 px-4 text-center border-b">{{ $student->course_id }}</td>
-                            <td class="py-2 px-4 text-center border-b flex justify-center">
+                            <td class="py-2 px-4 text-center border-b">{{ $student->course->course_name }}</td>
+                            <td class="py-2 px-4 text-center border-b flex justify-center gap-2">
                                 <a href="{{ route('students.edit', $student->id) }}"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
                                     Edit

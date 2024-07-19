@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/users/{user}', [AuthController::class, 'update'])->name('updateuser');
 
     Route::resource('students', StudentController::class);
+    Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
     Route::resource('programs', ProgramController::class);
     Route::resource('courses', CourseController::class);
 });

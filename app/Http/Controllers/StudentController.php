@@ -7,6 +7,7 @@ use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Models\Course;
 use Illuminate\Http\Request;
+use Rap2hpoutre\FastExcel\Facades\FastExcel;
 
 class StudentController extends Controller
 {
@@ -16,7 +17,7 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $students = Student::query()
+        $students = Student::with('course')
             ->where('name', 'like', "%{$search}%")
             ->orWhere('student_id', 'like', "%{$search}%")
             ->orWhere('email', 'like', "%{$search}%")
@@ -79,8 +80,8 @@ class StudentController extends Controller
     {
         $fields = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'student_id' => ['required', 'string', 'max:50', 'unique:students,student_id'],
-            'email' => ['required', 'email', 'unique:students,email'],
+            'student_id' => ['required', 'string', 'max:50', 'unique:students,student_id,' . $student->id],
+            'email' => ['required', 'email', 'unique:students,email,' . $student->id],
             'rfid' => ['nullable', 'string', 'max:50'],
             'course_id' => ['nullable', 'string', 'max:50'],
         ]);
@@ -96,5 +97,26 @@ class StudentController extends Controller
     public function destroy(Student $student)
     {
         //
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx',
+        ]);
+
+        $file = $request->file('file');
+
+        $students = (new FastExcel)->import($file, function ($line) {
+            return Student::create([
+                'name' => $line['Name'],
+                'student_id' => $line['Student ID'],
+                'email' => $line['Email'],
+                'rfid' => $line['RFID'],
+                'course_id' => $line['Course ID'],
+            ]);
+        });
+
+        return redirect()->route('students.index')->with('success', 'Students imported successfully.');
     }
 }
