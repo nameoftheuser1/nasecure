@@ -43,14 +43,13 @@
                     @enderror
                 </div>
                 <div>
-                    <label for="course_id" class="block text-sm font-medium text-gray-700">Course</label>
-                    <select id="course_id" name="course_id"
+                    <label for="section_id" class="block text-sm font-medium text-gray-700">Section</label>
+                    <select id="section_id" name="section_id"
                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                        @foreach ($courses as $course)
-                            <option value="{{ $course->id }}"
-                                {{ old('course_id') == $course->id ? 'selected' : '' }}>
-                                {{ $course->course_name }}
-                            </option>
+                        @foreach ($sections as $section)
+                            <option value="{{ $section->id }}"
+                                {{ old('section_id') == $section->id ? 'selected' : '' }}>
+                                {{ $section->section_name }}</option>
                         @endforeach
                     </select>
                 </div>
