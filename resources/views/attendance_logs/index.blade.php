@@ -44,7 +44,8 @@
                             <td class="py-2 px-7 border-b text-center">{{ $log->id }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $log->user_type }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $log->user_id }}</td>
-                            <td class="py-2 px-7 border-b text-center">{{ $log->attendance_date->format('Y-m-d') }}</td>
+                            <td class="py-2 px-7 border-b text-center">
+                                {{ \Carbon\Carbon::parse($log->attendance_date)->format('Y-m-d') }}</td>
                         </tr>
                     @endforeach
                 </tbody>

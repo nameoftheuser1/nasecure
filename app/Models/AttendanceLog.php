@@ -20,4 +20,8 @@ class AttendanceLog extends Model
     {
         return $this->morphTo();
     }
+
+    protected $casts = [
+        'attendance_date' => 'datetime',
+    ];
 }
