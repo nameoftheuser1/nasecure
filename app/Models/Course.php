@@ -16,20 +16,14 @@ class Course extends Model
         'course_name',
     ];
 
-    public function students(): HasMany
+    public function section(): HasMany
     {
-        return $this->hasMany(Student::class);
+        return $this->hasMany(Section::class);
     }
-    public function instructors(): HasMany
-    {
-        return $this->hasMany(Instructor::class);
-    }
+
     public function program(): BelongsTo
     {
         return $this->belongsTo(Program::class);
     }
-    public function classSession(): HasMany
-    {
-        return $this->hasMany(ClassSession::class);
-    }
+
 }

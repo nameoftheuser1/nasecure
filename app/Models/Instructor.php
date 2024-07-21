@@ -6,26 +6,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Instructor extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'course_id',
         'name',
         'pin_code',
         'rfid',
     ];
 
-    public function course(): BelongsTo
+
+    public function section(): HasMany
     {
-        return $this->belongsTo(Course::class);
+        return $this->hasMany(Section::class);
     }
 
-    public function classSession(): HasMany
+    public function attendanceLogs(): MorphMany
     {
-        return $this->hasMany(ClassSession::class);
+        return $this->morphMany(AttendanceLog::class, 'user');
     }
-
 }

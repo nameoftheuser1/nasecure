@@ -11,20 +11,16 @@ class AttendanceLog extends Model
     use HasFactory;
 
     protected $fillable = [
-        'class_session_id',
+        'user_type',
         'user_id',
         'attendance_date',
         'status'
     ];
 
 
-    public function classSession(): BelongsTo
-    {
-        return $this->belongsTo(ClassSession::class);
-    }
 
-    public function user(): BelongsTo
+    public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->morphTo();
     }
 }

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Instructor;
 use App\Http\Requests\StoreInstructorRequest;
 use App\Http\Requests\UpdateInstructorRequest;
-use App\Models\Course;
 use Illuminate\Http\Request;
 use Rap2hpoutre\FastExcel\FastExcel;
 
@@ -17,25 +16,22 @@ class InstructorController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $instructors = Instructor::with('course')
+        $instructors = Instructor::query()
             ->where('name', 'like', "%{$search}%")
             ->orWhere('pin_code', 'like', "%{$search}%")
             ->orWhere('rfid', 'like', "%{$search}%")
-            ->orWhereHas('course', function ($query) use ($search) {
-                $query->where('course_name', 'like', "%{$search}%");
-            })
             ->latest()
             ->paginate(10);
 
         return view('instructors.index', ['instructors' => $instructors]);
     }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $courses = Course::all();
-        return view('instructors.create', compact('courses'));
+        return view('instructors.create');
     }
 
     /**
@@ -47,7 +43,6 @@ class InstructorController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'pin_code' => ['required', 'string', 'max:50', 'unique:instructors,pin_code'],
             'rfid' => ['nullable', 'string', 'max:50'],
-            'course_id' => ['nullable', 'integer', 'exists:courses,id'],
         ]);
 
         Instructor::create($fields);
@@ -68,8 +63,7 @@ class InstructorController extends Controller
      */
     public function edit(Instructor $instructor)
     {
-        $courses = Course::all();
-        return view('instructors.edit', compact('instructor', 'courses'));
+        return view('instructors.edit', compact('instructor'));
     }
 
     /**
@@ -81,7 +75,6 @@ class InstructorController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'pin_code' => ['required', 'string', 'max:50'],
             'rfid' => ['nullable', 'string', 'max:50'],
-            'course_id' => ['nullable', 'string', 'max:50'],
         ]);
 
         $instructor->update($fields);
@@ -112,7 +105,6 @@ class InstructorController extends Controller
                 'name' => $line['Name'],
                 'pin_code' => $line['Pin Code'],
                 'rfid' => $line['RFID'],
-                'course_id' => $line['Course ID'],
             ]);
         });
 

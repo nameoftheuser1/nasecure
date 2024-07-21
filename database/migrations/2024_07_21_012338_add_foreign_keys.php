@@ -11,16 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('instructors', function (Blueprint $table) {
-            $table->foreign('course_id')->references('id')->on('courses');
-        });
 
         Schema::table('students', function (Blueprint $table) {
-            $table->foreign('course_id')->references('id')->on('courses');
-        });
-
-        Schema::table('courses', function (Blueprint $table) {
-            $table->foreign('program_id')->references('id')->on('programs')->onDelete('set null');
+            $table->foreign('section_id')->references('id')->on('sections')->onDelete('set null');
         });
 
         Schema::table('class_sessions', function (Blueprint $table) {
@@ -29,8 +22,12 @@ return new class extends Migration
         });
 
         Schema::table('attendance_logs', function (Blueprint $table) {
-            $table->foreign('class_session_id')->references('id')->on('class_sessions')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+
+        Schema::table('sections', function (Blueprint $table) {
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('set null');
+            $table->foreign('instructor_id')->references('id')->on('instructors')->onDelete('set null');
         });
     }
 
@@ -39,18 +36,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('instructors', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropForeign(['course_id']);
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign(['role_id']);
         });
 
         Schema::table('students', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropForeign(['course_id']);
-        });
-
-        Schema::table('courses', function (Blueprint $table) {
-            $table->dropForeign(['program_id']);
+            $table->dropForeign(['section_id']);
         });
 
         Schema::table('class_sessions', function (Blueprint $table) {
@@ -59,8 +50,12 @@ return new class extends Migration
         });
 
         Schema::table('attendance_logs', function (Blueprint $table) {
-            $table->dropForeign(['class_session_id']);
             $table->dropForeign(['user_id']);
+        });
+
+        Schema::table('sections', function (Blueprint $table) {
+            $table->dropForeign(['course_id']);
+            $table->dropForeign(['instructor_id']);
         });
     }
 };

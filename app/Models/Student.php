@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Student extends Model
 {
@@ -15,11 +17,16 @@ class Student extends Model
         'student_id',
         'email',
         'rfid',
-        'course_id'
+        'section_id',
     ];
 
-    public function course(): BelongsTo
+    public function section(): BelongsTo
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Section::class);
+    }
+
+    public function attendanceLogs(): MorphMany
+    {
+        return $this->morphMany(AttendanceLog::class, 'user');
     }
 }

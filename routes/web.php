@@ -5,6 +5,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
 
 use Illuminate\Support\Facades\Route;
@@ -18,8 +19,9 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::redirect('/', 'dashboard');
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::redirect('/', 'dashboard.index');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/attendance-logs', [DashboardController::class, 'fetchAttendanceLogs']);
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/users', [AuthController::class, 'index'])->name('users');
@@ -30,6 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('programs', ProgramController::class);
     Route::resource('courses', CourseController::class);
     Route::resource('instructors', InstructorController::class);
+    Route::resource('sections', SectionController::class);
 
 
     Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
