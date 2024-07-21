@@ -25,10 +25,10 @@
     </div>
 
     <div class="bg-gray-100 w-1/2 min-h-96 rounded-lg border-blue-600 border mt-4">
-        <table class="min-w-full mt-4 ">
+        <table class="min-w-full mt-4">
             <thead>
                 <tr>
-                    <th class="py-2 text-center">User ID</th>
+                    <th class="py-2 text-center">Student Name</th>
                     <th class="py-2 text-center">Attendance Date</th>
                 </tr>
             </thead>
@@ -120,7 +120,7 @@
                             const formattedDate = dayjs(log.attendance_date).format(
                                 'YYYY-MM-DD HH:mm:ss');
                             row.innerHTML = `
-                                <td class="py-2 text-center">${log.user_id}</td>
+                                <td class="py-2 text-center">${log.student.name}</td> <!-- Show student's name -->
                                 <td class="py-2 text-center">${formattedDate}</td>
                             `;
                             attendanceLogTable.appendChild(row);

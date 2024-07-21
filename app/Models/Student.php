@@ -25,8 +25,8 @@ class Student extends Model
         return $this->belongsTo(Section::class);
     }
 
-    public function attendanceLogs(): MorphMany
+    public function attendanceLogs(): HasMany
     {
-        return $this->morphMany(AttendanceLog::class, 'user');
+        return $this->hasMany(AttendanceLog::class);
     }
 }

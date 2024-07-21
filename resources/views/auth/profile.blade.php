@@ -10,7 +10,7 @@
 
             <div class="flex-1 text-center">
                 @if ($user->img_url)
-                    <img src="{{ asset($user->img_url) }}" alt="Profile Picture"
+                    <img src="{{ Storage::url($user->img_url) }}" alt="Profile Picture"
                         class="w-40 h-40 rounded-full mx-auto mb-4">
                 @else
                     <div
@@ -22,14 +22,7 @@
                         </svg>
                     </div>
                 @endif
-                <div class="mb-4">
-                    <label for="img_url" class="block text-sm font-medium text-gray-700">Profile Picture</label>
-                    <input type="file" name="img_url" id="img_url"
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2">
-                    @error('img_url')
-                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+
                 <h1 class="text-2xl font-bold">Profile Settings</h1>
             </div>
         </div>
@@ -80,6 +73,15 @@
                 <input type="text" name="contact" id="contact" value="{{ old('contact', $user->contact) }}"
                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 @error('contact')
+                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="mb-4">
+                <label for="img_url" class="block text-sm font-medium text-gray-700">Profile Picture</label>
+                <input type="file" name="img_url" id="img_url"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2">
+                @error('img_url')
                     <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>

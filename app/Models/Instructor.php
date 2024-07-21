@@ -24,8 +24,4 @@ class Instructor extends Model
         return $this->hasMany(Section::class);
     }
 
-    public function attendanceLogs(): MorphMany
-    {
-        return $this->morphMany(AttendanceLog::class, 'user');
-    }
 }

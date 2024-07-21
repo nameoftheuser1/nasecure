@@ -55,9 +55,12 @@ class AuthController extends Controller
 
         if ($request->hasFile('img_url')) {
             if ($user->img_url) {
-                Storage::delete($user->img_url);
+                Storage::disk('public')->delete($user->img_url);
             }
-            $path = $request->file('img_url')->store('profile_pictures');
+
+            $file = $request->file('img_url');
+            $path = $file->store('profile_pictures', 'public');
+
             $fields['img_url'] = $path;
         }
 

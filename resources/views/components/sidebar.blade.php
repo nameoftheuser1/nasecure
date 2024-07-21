@@ -2,7 +2,8 @@
     <div class="p-4 flex flex-col h-full">
 
         <div class="flex items-center justify-start mb-4 bg-slate-200 h-16 ps-4">
-            <img src="/{{ Auth::user()->img_url }}" alt="User Image" class="rounded w-8" width="40" height="40">
+            <img src="{{ Storage::url(Auth::user()->img_url) }}" alt="User Image" class="rounded w-8" width="40"
+                height="40">
             <div class="ml-2">
                 <p class="font-bold">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
                 <p>{{ Auth::user()->email }}</p>
