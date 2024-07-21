@@ -113,7 +113,7 @@
                     <p class="error-message">{{ $message }}</p>
                 @enderror
 
-                <label for="email">Email:</label>
+                <label for="email">Email: (@my.cspc.edu.ph)</label>
                 <input type="text" placeholder="Enter Email" id="email" name="email" value="{{ old('email') }}">
                 @error('email')
                     <p class="error-message">{{ $message }}</p>

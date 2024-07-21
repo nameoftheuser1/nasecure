@@ -36,7 +36,6 @@
                         <th class="py-2 px-4 border-b">User Type</th>
                         <th class="py-2 px-4 border-b">User ID</th>
                         <th class="py-2 px-4 border-b">Attendance Date</th>
-                        <th class="py-2 px-4 border-b">Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,7 +45,6 @@
                             <td class="py-2 px-7 border-b text-center">{{ $log->user_type }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $log->user_id }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $log->attendance_date->format('Y-m-d') }}</td>
-                            <td class="py-2 px-7 border-b text-center">{{ $log->status }}</td>
                         </tr>
                     @endforeach
                 </tbody>

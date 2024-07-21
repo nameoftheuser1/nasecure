@@ -14,7 +14,6 @@ class AttendanceLog extends Model
         'user_type',
         'user_id',
         'attendance_date',
-        'status'
     ];
 
     public function user()

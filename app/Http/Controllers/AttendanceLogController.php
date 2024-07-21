@@ -19,7 +19,6 @@ class AttendanceLogController extends Controller
             ->where('user_type', 'like', "%{$search}%")
             ->orWhere('user_id', 'like', "%{$search}%")
             ->orWhere('attendance_date', 'like', "%{$search}%")
-            ->orWhere('status', 'like', "%{$search}%")
             ->latest()
             ->paginate(10);
 

@@ -24,7 +24,6 @@ class AttendanceLogSeeder extends Seeder
                 'user_id' => $student->id,
                 'user_type' => Student::class,
                 'attendance_date' => Carbon::today()->subDays(rand(1, 10)),
-                'status' => 'Present',
             ]);
         }
 
@@ -34,7 +33,6 @@ class AttendanceLogSeeder extends Seeder
                 'user_id' => $instructor->id,
                 'user_type' => Instructor::class,
                 'attendance_date' => Carbon::today()->subDays(rand(1, 10)),
-                'status' => 'Present',
             ]);
         }
     }
