@@ -3,8 +3,6 @@
 
     @auth
 
-        <x-calendar :dates="$dates" />
-
     @endauth
 
     @guest

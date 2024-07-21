@@ -24,7 +24,7 @@ class Student extends Model
         return $this->belongsTo(Section::class);
     }
 
-    public function attendanceLogs(): HasMany
+    public function attendanceLog(): HasMany
 {
     return $this->hasMany(AttendanceLog::class);
 }

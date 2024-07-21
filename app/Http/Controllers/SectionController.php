@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Section;
 use App\Http\Requests\StoreSectionRequest;
 use App\Http\Requests\UpdateSectionRequest;
+use App\Models\Course;
+use App\Models\Instructor;
 use Illuminate\Http\Request;
 
 class SectionController extends Controller
@@ -36,7 +38,9 @@ class SectionController extends Controller
      */
     public function create()
     {
-        //
+        $instructors = Instructor::all();
+        $courses = Course::all();
+        return view('sections.create', compact('instructors', 'courses'));
     }
 
     /**
@@ -44,7 +48,16 @@ class SectionController extends Controller
      */
     public function store(StoreSectionRequest $request)
     {
-        //
+        $fields = $request->validate([
+            'section_name' => ['required', 'max:50'],
+            'student_count' => ['required', 'integer'],
+            'instructor_id' => ['required', 'exists:instructors,id'],
+            'course_id' => ['required', 'exists:courses,id'],
+        ]);
+
+        Section::create($fields);
+
+        return redirect()->route('sections.index')->with('success', 'Section added successfully.');
     }
 
     /**

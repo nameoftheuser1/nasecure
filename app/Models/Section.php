@@ -28,7 +28,7 @@ class Section extends Model
         return $this->belongsTo(Course::class);
     }
 
-    public function students(): HasMany
+    public function student(): HasMany
     {
         return $this->hasMany(Student::class);
     }

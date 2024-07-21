@@ -23,9 +23,8 @@ class Instructor extends Model
         return $this->hasMany(Section::class);
     }
 
-    public function attendanceLogs(): HasMany
-{
-    return $this->hasMany(AttendanceLog::class);
-}
-
+    public function attendanceLog(): HasMany
+    {
+        return $this->hasMany(AttendanceLog::class);
+    }
 }
