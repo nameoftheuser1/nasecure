@@ -1,9 +1,15 @@
 <x-layout>
     <x-sidebar />
     <div>
+        @if (session('error'))
+            <x-flashMsg msg="{{ session('error') }}" bg="bg-red-500" />
+        @endif
+
         @if (session('success'))
-            <x-flashMsg msg="{{ session('success') }}" />
-        @elseif(session('deleted'))
+            <x-flashMsg msg="{{ session('success') }}" bg="bg-green-500" />
+        @endif
+
+        @if (session('deleted'))
             <x-flashMsg msg="{{ session('deleted') }}" bg="bg-red-500" />
         @endif
     </div>
@@ -57,11 +63,12 @@
                     @foreach ($students as $student)
                         <tr class="hover:bg-blue-50">
                             <td class="py-2 px-4 text-center border-b">{{ $student->id }}</td>
-                            <td class="py-2 px-4 text-center border-b">{{ $student->name }}</td>
-                            <td class="py-2 px-4 text-center border-b">{{ $student->student_id }}</td>
-                            <td class="py-2 px-4 text-center border-b">{{ $student->email }}</td>
-                            <td class="py-2 px-4 text-center border-b">{{ $student->rfid }}</td>
-                            <td class="py-2 px-4 text-center border-b">{{ $student->section->section_name }}</td>
+                            <td class="py-2 px-4 text-center border-b">{{ $student->name ?? 'Not Set' }}</td>
+                            <td class="py-2 px-4 text-center border-b">{{ $student->student_id ?? 'Not Set' }}</td>
+                            <td class="py-2 px-4 text-center border-b">{{ $student->email ?? 'Not Set' }}</td>
+                            <td class="py-2 px-4 text-center border-b">{{ $student->rfid ?? 'Not Set' }}</td>
+                            <td class="py-2 px-4 text-center border-b">
+                                {{ $student->section->section_name ?? 'Not Set' }}</td>
                             <td class="py-2 px-4 text-center border-b flex justify-center gap-2">
                                 <a href="{{ route('students.edit', $student->id) }}"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">

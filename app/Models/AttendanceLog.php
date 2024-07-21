@@ -17,8 +17,6 @@ class AttendanceLog extends Model
         'status'
     ];
 
-
-
     public function user()
     {
         return $this->morphTo();

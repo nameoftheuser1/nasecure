@@ -77,7 +77,8 @@
                 </a>
             </li>
             <li class="my-2">
-                <a href="#" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-300">
+                <a href="{{ route('attendance_logs.index') }}"
+                    class="flex items-center px-4 py-2 rounded-md hover:bg-gray-300 {{ Route::currentRouteName() == 'attendance_logs.index' ? 'bg-gray-300' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-6 mr-2">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -103,7 +104,8 @@
         <div class="mt-auto border-t-4 border-gray-400">
             <ul>
                 <li class="my-2">
-                    <a href="#" class="flex items-center px-4 py-2 rounded-md hover:bg-gray-300">
+                    <a href="{{ route('profile') }}"
+                        class="flex items-center px-4 py-2 rounded-md hover:bg-gray-300">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                             stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
                             <path stroke-linecap="round" stroke-linejoin="round"
