@@ -46,7 +46,7 @@ class SectionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSectionRequest $request)
+    public function store(Request $request)
     {
         $fields = $request->validate([
             'section_name' => ['required', 'max:50'],
@@ -73,15 +73,27 @@ class SectionController extends Controller
      */
     public function edit(Section $section)
     {
-        //
+        $instructors = Instructor::all();
+        $courses = Course::all();
+
+        return view('sections.edit', compact('section', 'instructors', 'courses'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSectionRequest $request, Section $section)
+    public function update(Request $request, Section $section)
     {
-        //
+        $fields = $request->validate([
+            'section_name' => ['required', 'max:50'],
+            'student_count' => ['required', 'integer'],
+            'instructor_id' => ['required', 'exists:instructors,id'],
+            'course_id' => ['required', 'exists:courses,id'],
+        ]);
+
+        $section->update($fields);
+
+        return redirect()->route('sections.index')->with('success', 'Section updated successfully.');
     }
 
     /**

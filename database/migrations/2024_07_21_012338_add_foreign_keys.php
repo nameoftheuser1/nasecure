@@ -11,7 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-
         Schema::table('students', function (Blueprint $table) {
             $table->foreign('section_id')->references('id')->on('sections')->onDelete('set null');
         });
@@ -22,7 +21,7 @@ return new class extends Migration
         });
 
         Schema::table('attendance_logs', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
 
         Schema::table('sections', function (Blueprint $table) {
@@ -36,10 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['role_id']);
-        });
-
         Schema::table('students', function (Blueprint $table) {
             $table->dropForeign(['section_id']);
         });
@@ -50,7 +45,10 @@ return new class extends Migration
         });
 
         Schema::table('attendance_logs', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
+            // Drop the new foreign key constraint
+            $table->dropForeign(['student_id']);
+            $table->dropColumn('student_id');
+
         });
 
         Schema::table('sections', function (Blueprint $table) {

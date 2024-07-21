@@ -5,15 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\AttendanceLog;
 use App\Http\Requests\StoreAttendanceLogRequest;
 use App\Http\Requests\UpdateAttendanceLogRequest;
+use Illuminate\Http\Request;
 
 class AttendanceLogController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $search = $request->input('search');
+        $attendanceLogs = AttendanceLog::query()
+            ->where('user_type', 'like', "%{$search}%")
+            ->orWhere('user_id', 'like', "%{$search}%")
+            ->orWhere('attendance_date', 'like', "%{$search}%")
+            ->latest()
+            ->paginate(10);
+
+        return view('attendance_logs.index', ['attendanceLogs' => $attendanceLogs]);
     }
 
     /**

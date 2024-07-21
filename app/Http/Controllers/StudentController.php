@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateStudentRequest;
 use App\Models\Section;
 use App\Rules\EmailDomain;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Rap2hpoutre\FastExcel\FastExcel;
 
 class StudentController extends Controller
@@ -108,18 +109,25 @@ class StudentController extends Controller
             'file' => 'required|mimes:xlsx',
         ]);
 
-        $file = $request->file('file');
+        try {
+            $file = $request->file('file');
 
-        $students = (new FastExcel)->import($file, function ($line) {
-            return Student::create([
-                'name' => $line['Name'],
-                'student_id' => $line['Student ID'],
-                'email' => $line['Email'],
-                'rfid' => $line['RFID'],
-                'section_id' => $line['Section ID'],
-            ]);
-        });
+            (new FastExcel)->import($file, function ($line) {
+                Student::updateOrCreate(
+                    ['student_id' => $line['Student ID']],
+                    [
+                        'name' => $line['Name'] ?? null,
+                        'email' => $line['Email'] ?? null,
+                        'rfid' => $line['RFID'] ?? null,
+                        'section_id' => $line['Section ID'] ?? null,
+                    ]
+                );
+            });
 
-        return redirect()->route('students.index')->with('success', 'Students imported successfully.');
+            return redirect()->route('students.index')->with('success', 'Students imported successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error importing students: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'There was an error importing the students. Please check the file and try again.');
+        }
     }
 }

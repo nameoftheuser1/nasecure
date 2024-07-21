@@ -5,8 +5,8 @@
         <h2 id="month-year" class="mx-4 text-lg font-bold"></h2>
 
         <div id="calendar" class="mb-8 grid grid-cols-7 gap-1 text-gray-600">
-
         </div>
+
         <div class="flex justify-between mb-4 font-bold">
             <button id="prev-month" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -20,28 +20,31 @@
                     stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                 </svg>
-
             </button>
         </div>
-
     </div>
 
-    <div>
-        <table class="min-w-full bg-white mt-4">
+    <div class="bg-gray-100 w-1/2 min-h-96 rounded-lg border-blue-600 border mt-4">
+        <table class="min-w-full mt-4">
             <thead>
                 <tr>
-                    <th class="py-2">User ID</th>
-                    <th class="py-2">Attendance Date</th>
-                    <th class="py-2">Status</th>
+                    <th class="py-2 text-center">Student Name</th>
+                    <th class="py-2 text-center">Attendance Date</th>
                 </tr>
             </thead>
             <tbody id="attendance-log">
             </tbody>
         </table>
     </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.4/dayjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.4/plugin/utc.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.4/plugin/timezone.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            dayjs.extend(window.dayjs_plugin_utc);
+            dayjs.extend(window.dayjs_plugin_timezone);
+
             const calendar = document.getElementById('calendar');
             const attendanceLogTable = document.getElementById('attendance-log');
             const monthYearDisplay = document.getElementById('month-year');
@@ -114,10 +117,11 @@
                         attendanceLogTable.innerHTML = '';
                         data.forEach(log => {
                             const row = document.createElement('tr');
+                            const formattedDate = dayjs(log.attendance_date).format(
+                                'YYYY-MM-DD HH:mm:ss');
                             row.innerHTML = `
-                                <td class="py-2">${log.user_id}</td>
-                                <td class="py-2">${log.attendance_date}</td>
-                                <td class="py-2">${log.status}</td>
+                                <td class="py-2 text-center">${log.student.name}</td> <!-- Show student's name -->
+                                <td class="py-2 text-center">${formattedDate}</td>
                             `;
                             attendanceLogTable.appendChild(row);
                         });

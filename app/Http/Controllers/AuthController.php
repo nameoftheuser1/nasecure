@@ -8,6 +8,8 @@ use App\Rules\EmailDomain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
@@ -31,26 +33,45 @@ class AuthController extends Controller
         return view('users.index', ['users' => $users]);
     }
 
-
-    public function edit(User $user)
+    public function profile()
     {
-        $roles = Role::all();
-        return view('users.edit', compact('user', 'roles'));
+        $user = Auth::user();
+        return view('auth.profile', compact('user'));
     }
 
-    public function update(Request $request, User $user)
+    public function updateProfile(Request $request)
     {
+        $user = Auth::user();
+
         $fields = $request->validate([
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'contact' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            'role_id' => ['required', 'exists:roles,id'],
+            'first_name' => ['required', 'max:50', 'regex:/^[a-zA-Z\s]+$/'],
+            'last_name' => ['required', 'max:50', 'regex:/^[a-zA-Z\s]+$/'],
+            'email' => ['required', 'max:255', 'email', 'unique:users,email,' . $user->id, new EmailDomain],
+            'contact' => ['required', 'max:50'],
+            'password' => ['nullable', 'min:8', 'confirmed'],
+            'img_url' => ['nullable', 'image', 'mimes:jpg,png,jpeg,gif,svg', 'max:2048'],
         ]);
+
+        if ($request->hasFile('img_url')) {
+            if ($user->img_url) {
+                Storage::disk('public')->delete($user->img_url);
+            }
+
+            $file = $request->file('img_url');
+            $path = $file->store('profile_pictures', 'public');
+
+            $fields['img_url'] = $path;
+        }
+
+        if ($request->filled('password')) {
+            $fields['password'] = Hash::make($request->password);
+        } else {
+            unset($fields['password']);
+        }
 
         $user->update($fields);
 
-        return redirect()->route('users')->with('success', 'User updated successfully.');
+        return redirect()->route('profile')->with('success', 'Profile updated successfully!');
     }
 
     public function register(Request $request)
