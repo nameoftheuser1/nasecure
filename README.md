@@ -16,8 +16,8 @@ Ensure you have the following installed:
 
    If you haven't already, clone the repository to your local machine:
    ```bash
-   git clone <repository-url>
-   cd <repository-folder>
+   git clone https://github.com/nameoftheuser1/nasecure
+   cd nasecure
    ```
 
 2. **Install Composer Dependencies**
