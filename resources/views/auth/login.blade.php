@@ -97,8 +97,8 @@
                 @error('failed')
                     <p class="error-message"> {{ $message }}</p>
                 @enderror
-                <label for="email">Email</label>
-                <input type="text" placeholder="Enter Email" value="{{ old('email') }}" id="email" name="email" >
+                <label for="email">Email (@my.cspc.edu.ph)</label>
+                <input type="text" placeholder="Enter Email" value="{{ old('email') }}" id="email" name="email">
                 @error('email')
                     <div class="error-message">{{ $message }}</div>
                 @enderror

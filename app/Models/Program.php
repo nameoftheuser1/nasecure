@@ -15,7 +15,7 @@ class Program extends Model
         'program_code'
     ];
 
-    public function courses():HasMany
+    public function course():HasMany
     {
         return $this->hasMany(Course::class);
     }

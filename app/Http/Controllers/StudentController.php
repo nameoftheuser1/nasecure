@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
-use App\Models\Course;
+use App\Models\Section;
 use App\Rules\EmailDomain;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Rap2hpoutre\FastExcel\FastExcel;
 
 class StudentController extends Controller
@@ -18,12 +19,12 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $students = Student::with('course')
+        $students = Student::with('section')
             ->where('name', 'like', "%{$search}%")
             ->orWhere('student_id', 'like', "%{$search}%")
             ->orWhere('email', 'like', "%{$search}%")
             ->orWhere('rfid', 'like', "%{$search}%")
-            ->orWhere('course_id', 'like', "%{$search}%")
+            ->orWhere('section_id', 'like', "%{$search}%")
             ->latest()
             ->paginate(10);
 
@@ -35,8 +36,8 @@ class StudentController extends Controller
      */
     public function create()
     {
-        $courses = Course::all();
-        return view('students.create', compact('courses'));
+        $sections = Section::all();
+        return view('students.create', compact('sections'));
     }
 
     /**
@@ -49,7 +50,7 @@ class StudentController extends Controller
             'student_id' => ['required', 'string', 'max:50', 'unique:students,student_id'],
             'email' => ['required', 'email', 'unique:students,email', new EmailDomain],
             'rfid' => ['nullable', 'string', 'max:50'],
-            'course_id' => ['nullable', 'string', 'max:50'],
+            'section_id' => ['nullable', 'string', 'max:50'],
         ]);
 
         Student::create($fields);
@@ -70,8 +71,8 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        $courses = Course::all();
-        return view('students.edit', compact('student', 'courses'));
+        $sections = Section::all();
+        return view('students.edit', compact('student', 'sections'));
     }
 
     /**
@@ -84,7 +85,7 @@ class StudentController extends Controller
             'student_id' => ['required', 'string', 'max:50', 'unique:students,student_id,' . $student->id],
             'email' => ['required', 'email', 'unique:students,email,' . $student->id, new EmailDomain],
             'rfid' => ['nullable', 'string', 'max:50'],
-            'course_id' => ['nullable', 'string', 'max:50'],
+            'section_id' => ['nullable', 'string', 'max:50'],
         ]);
 
         $student->update($fields);
@@ -108,18 +109,25 @@ class StudentController extends Controller
             'file' => 'required|mimes:xlsx',
         ]);
 
-        $file = $request->file('file');
+        try {
+            $file = $request->file('file');
 
-        $students = (new FastExcel)->import($file, function ($line) {
-            return Student::create([
-                'name' => $line['Name'],
-                'student_id' => $line['Student ID'],
-                'email' => $line['Email'],
-                'rfid' => $line['RFID'],
-                'course_id' => $line['Course ID'],
-            ]);
-        });
+            (new FastExcel)->import($file, function ($line) {
+                Student::updateOrCreate(
+                    ['student_id' => $line['Student ID']],
+                    [
+                        'name' => $line['Name'] ?? null,
+                        'email' => $line['Email'] ?? null,
+                        'rfid' => $line['RFID'] ?? null,
+                        'section_id' => $line['Section ID'] ?? null,
+                    ]
+                );
+            });
 
-        return redirect()->route('students.index')->with('success', 'Students imported successfully.');
+            return redirect()->route('students.index')->with('success', 'Students imported successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error importing students: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'There was an error importing the students. Please check the file and try again.');
+        }
     }
 }
