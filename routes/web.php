@@ -19,8 +19,9 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::redirect('/', 'dashboard');
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::redirect('/', 'dashboard.index');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/attendance-logs', [DashboardController::class, 'fetchAttendanceLogs']);
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/users', [AuthController::class, 'index'])->name('users');

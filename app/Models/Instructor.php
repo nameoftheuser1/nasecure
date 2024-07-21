@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Instructor extends Model
 {
@@ -23,8 +24,8 @@ class Instructor extends Model
         return $this->hasMany(Section::class);
     }
 
-    public function attendanceLog(): HasMany
+    public function attendanceLogs(): MorphMany
     {
-        return $this->hasMany(AttendanceLog::class);
+        return $this->morphMany(AttendanceLog::class, 'user');
     }
 }

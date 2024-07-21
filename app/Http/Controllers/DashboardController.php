@@ -2,24 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AttendanceLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $currentMonth = Carbon::now()->startOfMonth();
+        return view('dashboard.index');
+    }
 
-        if ($request->has('month')) {
-            $currentMonth = Carbon::parse($request->input('month'))->startOfMonth();
-        }
+    public function fetchAttendanceLogs(Request $request)
+    {
+        $date = $request->query('date');
+        $attendanceLogs = AttendanceLog::whereDate('attendance_date', $date)->get();
 
-        $dates = collect(range(0, $currentMonth->daysInMonth - 1))
-            ->map(function ($day) use ($currentMonth) {
-                return $currentMonth->copy()->addDays($day);
-            });
-
-        return view('dashboard.index', compact('dates', 'currentMonth'));
+        return response()->json($attendanceLogs);
     }
 }
