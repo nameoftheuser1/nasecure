@@ -49,8 +49,8 @@
                 <label class="block text-center mb-2 font-bold" for="password_confirmation">Confirm Password:</label>
                 <input class="w-full p-1 mb-1 border border-gray-300 rounded-md" type="password" placeholder="Enter Password" id="password_confirmation" name="password_confirmation">
 
-                <button type="submit" class="w-full p-1.5 border-none rounded-md bg-gray-300 cursor-pointer mb-1 hover:bg-blue-700">Register</button>
-                <a href="{{ route('login')}}" class="text-center no-underline block text-sm mt-2.5 hover:underline">Already have an account? <span class="text-blue-400">Login here.</span> </a>
+                <button type="submit" class="w-full p-1.5 border-none rounded-md bg-gray-300 cursor-pointer mb-1 hover:bg-blue-700 transition-colors duration-300">Register</button>
+                <a href="{{ route('login')}}" class="text-center no-underline block text-sm mt-2.5 hover:underline">Already have an account? <span class="text-blue-700">Login here.</span> </a>
             </form>
         </div>
     </div>

@@ -1,3 +1,9 @@
+@php
+    $imgUrl = $user->img_url;
+    $defaultImage = 'images/profile.png';
+    $imageSource = $imgUrl === $defaultImage ? asset($defaultImage) : asset('storage/' . $imgUrl);
+@endphp
+
 <x-layout>
     <a href="{{ route('dashboard.index') }}" class="text-blue-500 hover:text-blue-700 mr-4">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -9,20 +15,7 @@
         <div class="flex items-center mb-4">
 
             <div class="flex-1 text-center">
-                @if ($user->img_url)
-                    <img src="{{ Storage::url($user->img_url) }}" alt="Profile Picture"
-                        class="w-40 h-40 rounded-full mx-auto mb-4">
-                @else
-                    <div
-                        class="w-24 h-24 rounded-full bg-gray-200 mx-auto mb-4 flex items-center justify-center text-gray-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M5.121 5.121a3 3 0 014.242 0M6.414 6.414a4.5 4.5 0 016.364 0M8.121 8.121a6 6 0 018.485 0M14.828 14.828a6 6 0 00-8.485 0M18.364 18.364a4.5 4.5 0 00-6.364 0M17.879 17.879a3 3 0 00-4.242 0" />
-                        </svg>
-                    </div>
-                @endif
-
+                <img src="{{ $imageSource }}" alt="Profile Picture" class="w-40 h-40 rounded-full mx-auto mb-4">
                 <h1 class="text-2xl font-bold">Profile Settings</h1>
             </div>
         </div>

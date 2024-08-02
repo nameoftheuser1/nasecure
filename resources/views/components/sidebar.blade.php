@@ -1,9 +1,14 @@
+@php
+    $imgUrl = Auth::user()->img_url;
+    $defaultImage = 'images/profile.png';
+    $imageSource = $imgUrl === $defaultImage ? asset($defaultImage) : asset('storage/' . $imgUrl);
+@endphp
+
 <div class="bg-gray-100 h-full w-72 fixed top-0 left-0">
     <div class="p-4 flex flex-col h-full">
 
         <div class="flex items-center justify-start mb-4 bg-slate-200 h-16 ps-4">
-            <img src="{{ Storage::url(Auth::user()->img_url) }}" alt="User Image" class="rounded w-8" width="40"
-                height="40">
+            <img src="{{ $imageSource }}" alt="User Image" class="rounded w-10" width="70" height="70">
             <div class="ml-2">
                 <p class="font-bold">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
                 <p>{{ Auth::user()->email }}</p>
