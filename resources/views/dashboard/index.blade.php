@@ -120,7 +120,7 @@
                             const formattedDate = dayjs(log.attendance_date).format(
                                 'YYYY-MM-DD HH:mm:ss');
                             row.innerHTML = `
-                                <td class="py-2 text-center">${log.student.name}</td> <!-- Show student's name -->
+                                <td class="py-2 text-center">${log.student.name}</td>
                                 <td class="py-2 text-center">${formattedDate}</td>
                             `;
                             attendanceLogTable.appendChild(row);
