@@ -15,7 +15,6 @@ class AttendanceController extends Controller
         $rfid = $request->input('rfid');
         $classSessionId = $request->input('class_session_id');
 
-        // Find user by RFID
         $student = Student::where('rfid', $rfid)->first();
         $instructor = Instructor::where('rfid', $rfid)->first();
 

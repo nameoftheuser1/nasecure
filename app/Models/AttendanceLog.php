@@ -13,6 +13,8 @@ class AttendanceLog extends Model
     protected $fillable = [
         'student_id',
         'attendance_date',
+        'time_in',
+        'time_out',
     ];
 
     public function student(): BelongsTo
