@@ -1,7 +1,7 @@
 <x-layout>
     <x-sidebar />
 
-    <div class="container mx-auto mt-8 border-2 p-5 w-1/2 rounded-lg border-blue-600 bg-gray-100">
+    <div class="container mx-auto mt-8 border p-5 w-1/2 rounded-lg border-blue-600 bg-gray-100">
         <h2 id="month-year" class="mx-4 text-lg font-bold"></h2>
 
         <div id="calendar" class="mb-8 grid grid-cols-7 gap-1 text-gray-600">
@@ -24,17 +24,36 @@
         </div>
     </div>
 
-    <div class="bg-gray-100 w-1/2 min-h-96 rounded-lg border-blue-600 border mt-4">
-        <table class="min-w-full mt-4">
-            <thead>
-                <tr>
-                    <th class="py-2 text-center">Student Name</th>
-                    <th class="py-2 text-center">Attendance Date</th>
-                </tr>
-            </thead>
-            <tbody id="attendance-log">
-            </tbody>
-        </table>
+    {{-- you can add here search function if you want its already in the controller just follow how the search function works in other file --}}
+    <div class="w-full flex justify-between gap-5">
+        <div class="bg-gray-100 w-1/2 min-h-96 rounded-lg border-blue-600 border mt-4">
+            <table class="min-w-full mt-4">
+                <thead>
+                    <tr>
+                        <th class="py-2 text-center">Section Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($sections as $section)
+                        <tr>
+                            <td class="py-2 text-center">{{ $section->section_name }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div class="bg-gray-100 w-1/2 min-h-96 rounded-lg border-blue-600 border mt-4">
+            <table class="min-w-full mt-4">
+                <thead>
+                    <tr>
+                        <th class="py-2 text-center">Student Name</th>
+                        <th class="py-2 text-center">Attendance Date</th>
+                    </tr>
+                </thead>
+                <tbody id="attendance-log">
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.4/dayjs.min.js"></script>

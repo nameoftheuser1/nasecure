@@ -3,13 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\AttendanceLog;
+use App\Models\Section;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('dashboard.index');
+        $search = $request->input('search');
+
+        $sections = Section::with('students')
+            ->where('sections.section_name', 'like', "%{$search}%")
+            ->select('sections.*')
+            ->latest()
+            ->paginate(10);
+
+        return view('dashboard.index', ['sections' => $sections]);
     }
 
     public function fetchAttendanceLogs(Request $request)
