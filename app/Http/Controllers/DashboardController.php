@@ -24,8 +24,13 @@ class DashboardController extends Controller
     public function fetchAttendanceLogs(Request $request)
     {
         $date = $request->query('date');
+        $sectionId = $request->query('section_id');
+
         $attendanceLogs = AttendanceLog::with('student')
             ->whereDate('attendance_date', $date)
+            ->whereHas('student', function ($query) use ($sectionId) {
+                $query->where('section_id', $sectionId);
+            })
             ->get();
 
         return response()->json($attendanceLogs);

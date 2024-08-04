@@ -4,8 +4,7 @@
     <div class="container mx-auto mt-8 border p-5 w-1/2 rounded-lg border-blue-600 bg-gray-100">
         <h2 id="month-year" class="mx-4 text-lg font-bold"></h2>
 
-        <div id="calendar" class="mb-8 grid grid-cols-7 gap-1 text-gray-600">
-        </div>
+        <div id="calendar" class="mb-8 grid grid-cols-7 gap-1 text-gray-600"></div>
 
         <div class="flex justify-between mb-4 font-bold">
             <button id="prev-month" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
@@ -35,7 +34,7 @@
                 </thead>
                 <tbody>
                     @foreach ($sections as $section)
-                        <tr>
+                        <tr class="cursor-pointer" data-section-id="{{ $section->id }}">
                             <td class="py-2 text-center">{{ $section->section_name }}</td>
                         </tr>
                     @endforeach
@@ -50,8 +49,7 @@
                         <th class="py-2 text-center">Attendance Date</th>
                     </tr>
                 </thead>
-                <tbody id="attendance-log">
-                </tbody>
+                <tbody id="attendance-log"></tbody>
             </table>
         </div>
     </div>
@@ -72,6 +70,7 @@
 
             let currentMonth = dayjs().month();
             let currentYear = dayjs().year();
+            let selectedSectionId = null;
 
             function renderCalendar() {
                 calendar.innerHTML = '';
@@ -100,7 +99,9 @@
                             'px-4 py-2 m-1 text-center rounded hover:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500';
                         dateButton.dataset.date = date;
                         dateButton.addEventListener('click', function() {
-                            fetchAttendanceLogs(this.dataset.date);
+                            if (selectedSectionId) {
+                                fetchAttendanceLogs(this.dataset.date, selectedSectionId);
+                            }
                             setActiveDate(this.dataset.date);
                         });
 
@@ -129,15 +130,14 @@
                 });
             }
 
-            function fetchAttendanceLogs(date) {
-                fetch(`/attendance-logs?date=${date}`)
+            function fetchAttendanceLogs(date, sectionId) {
+                fetch(`/attendance-logs?date=${date}&section_id=${sectionId}`)
                     .then(response => response.json())
                     .then(data => {
                         attendanceLogTable.innerHTML = '';
                         data.forEach(log => {
                             const row = document.createElement('tr');
-                            const formattedDate = dayjs(log.attendance_date).format(
-                                'YYYY-MM-DD HH:mm:ss');
+                            const formattedDate = dayjs(log.attendance_date).format('YYYY-MM-DD HH:mm:ss');
                             row.innerHTML = `
                                 <td class="py-2 text-center">${log.student.name}</td>
                                 <td class="py-2 text-center">${formattedDate}</td>
@@ -159,6 +159,16 @@
                 currentMonth = nextMonth.month();
                 currentYear = nextMonth.year();
                 renderCalendar();
+            });
+
+            document.querySelectorAll('tbody tr[data-section-id]').forEach(row => {
+                row.addEventListener('click', function() {
+                    selectedSectionId = this.dataset.sectionId;
+                    const selectedDate = document.querySelector('#calendar button.bg-blue-700')?.dataset.date;
+                    if (selectedDate) {
+                        fetchAttendanceLogs(selectedDate, selectedSectionId);
+                    }
+                });
             });
 
             renderCalendar();
