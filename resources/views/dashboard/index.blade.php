@@ -30,12 +30,14 @@
                 <thead>
                     <tr>
                         <th class="py-2 text-center">Section Name</th>
+                        <th class="py-2 text-center">Instructor Name</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="sections-table-body">
                     @foreach ($sections as $section)
-                        <tr class="cursor-pointer" data-section-id="{{ $section->id }}">
+                        <tr class="cursor-pointer hover:bg-blue-100" data-section-id="{{ $section->id }}">
                             <td class="py-2 text-center">{{ $section->section_name }}</td>
+                            <td class="py-2 text-center">{{ $section->instructor->name }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -47,6 +49,8 @@
                     <tr>
                         <th class="py-2 text-center">Student Name</th>
                         <th class="py-2 text-center">Attendance Date</th>
+                        <th class="py-2 text-center">Time In</th>
+                        <th class="py-2 text-center">Time Out</th>
                     </tr>
                 </thead>
                 <tbody id="attendance-log"></tbody>
@@ -145,11 +149,14 @@
                         attendanceLogTable.innerHTML = '';
                         data.forEach(log => {
                             const row = document.createElement('tr');
-                            const formattedDate = dayjs(log.attendance_date).format(
-                                'YYYY-MM-DD HH:mm:ss');
+                            const formattedDate = dayjs(log.attendance_date).format('YYYY-MM-DD');
+                            const formattedTimeIn = dayjs(log.time_in).format('HH:mm:ss');
+                            const formattedTimeOut = dayjs(log.time_out).format('HH:mm:ss');
                             row.innerHTML = `
                             <td class="py-2 text-center">${log.student.name}</td>
                             <td class="py-2 text-center">${formattedDate}</td>
+                            <td class="py-2 text-center">${formattedTimeIn}</td>
+                            <td class="py-2 text-center">${formattedTimeOut}</td>
                         `;
                             attendanceLogTable.appendChild(row);
                         });
@@ -176,6 +183,10 @@
 
             document.querySelectorAll('tbody tr[data-section-id]').forEach(row => {
                 row.addEventListener('click', function() {
+                    document.querySelectorAll('tbody tr').forEach(tr => {
+                        tr.classList.remove('bg-blue-100', 'font-bold');
+                    });
+                    this.classList.add('bg-blue-100', 'font-bold');
                     selectedSectionId = this.dataset.sectionId;
                     const selectedDate = document.querySelector('#calendar button.bg-blue-700')
                         ?.dataset.date;

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceLogController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
@@ -18,10 +19,15 @@ Route::middleware('guest')->group(function () {
     Route::view('/login', 'auth.login')->name('login');
     Route::post('/login', [AuthController::class, 'login']);
 
+
     Route::post('/password/update', [AuthController::class, 'updatePassword'])->name('password.update');
     Route::get('/password/reset', function (Request $request) {
         return view('auth.reset')->with('token', $request->token);
     })->name('password.reset');
+  
+    Route::view('/attendance', 'attendance.attendance')->name('attendance');
+    Route::post('/attendance/time-in', [AttendanceController::class, 'storeTimeIn'])->name('attendance.timeIn');
+    Route::post('/attendance/time-out', [AttendanceController::class, 'storeTimeOut'])->name('attendance.timeOut');
 });
 
 Route::middleware('auth')->group(function () {
