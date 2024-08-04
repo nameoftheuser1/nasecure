@@ -9,7 +9,7 @@ use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
-
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -19,6 +19,12 @@ Route::middleware('guest')->group(function () {
     Route::view('/login', 'auth.login')->name('login');
     Route::post('/login', [AuthController::class, 'login']);
 
+
+    Route::post('/password/update', [AuthController::class, 'updatePassword'])->name('password.update');
+    Route::get('/password/reset', function (Request $request) {
+        return view('auth.reset')->with('token', $request->token);
+    })->name('password.reset');
+  
     Route::view('/attendance', 'attendance.attendance')->name('attendance');
     Route::post('/attendance/time-in', [AttendanceController::class, 'storeTimeIn'])->name('attendance.timeIn');
     Route::post('/attendance/time-out', [AttendanceController::class, 'storeTimeOut'])->name('attendance.timeOut');
@@ -45,6 +51,7 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('admin')->group(function () {
         Route::get('/users', [AuthController::class, 'index'])->name('users');
+        Route::post('/users/{user}/reset-password', [AuthController::class, 'resetPassword'])->name('users.resetPassword');
     });
 });
 
