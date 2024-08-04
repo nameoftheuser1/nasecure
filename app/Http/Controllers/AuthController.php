@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use App\Rules\EmailDomain;
+use Illuminate\Support\Str;
 use App\Rules\ValidPhoneNumber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -130,5 +132,66 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/login');
+    }
+
+    public function resetPassword(Request $request, User $user)
+    {
+        if (!$request->user()->isAdmin()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $token = Str::random(60);
+
+        $resetUrl = url('/password/reset?token=' . $token);
+
+        $data = [
+            'email' => $user->email,
+            'token' => $token,
+            'created_at' => now()->toDateTimeString(),
+            'reset_url' => $resetUrl,
+        ];
+
+        $filePath = storage_path('app/password_resets.json');
+
+        $existingData = File::exists($filePath) ? json_decode(File::get($filePath), true) : [];
+        $existingData[] = $data;
+
+        File::put($filePath, json_encode($existingData, JSON_PRETTY_PRINT));
+
+        return response()->json([
+            'success' => 'Password reset data has been recorded.',
+            'reset_url' => $resetUrl,
+        ]);
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'password' => ['required', 'confirmed', 'min:8'],
+        ]);
+
+        $filePath = storage_path('app/password_resets.json');
+        $data = json_decode(file_get_contents($filePath), true);
+
+        $resetEntry = collect($data)->firstWhere('token', $request->token);
+
+        if (!$resetEntry) {
+            return redirect()->back()->withErrors(['token' => 'Invalid or expired token.']);
+        }
+
+        $user = User::where('email', $resetEntry['email'])->first();
+
+        if (!$user) {
+            return redirect()->back()->withErrors(['email' => 'User not found.']);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        $data = array_filter($data, fn ($entry) => $entry['token'] !== $request->token);
+        file_put_contents($filePath, json_encode($data, JSON_PRETTY_PRINT));
+
+        return redirect()->route('login')->with('success', 'Password has been reset successfully.');
     }
 }
