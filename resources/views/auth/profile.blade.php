@@ -26,6 +26,10 @@
             </div>
         @endif
 
+        <div class="mb-4 p-4 bg-blue-100 text-blue-800 rounded-md">
+            You can update your profile details here. Leave the password fields blank if you don't want to change your password.
+        </div>
+
         <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('POST')
@@ -78,7 +82,6 @@
                     <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
-
 
             <div class="mb-4">
                 <label for="password" class="block text-sm font-medium text-gray-700">Password</label>

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('section_id')->nullable();
             $table->string('student_id');
             $table->string('email')->unique();
-            $table->string('rfid')->unique();
+            $table->string('rfid')->unique()->nullable();
             $table->timestamps();
 
         });

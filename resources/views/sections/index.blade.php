@@ -15,11 +15,11 @@
         </div>
         <div class="flex justify-end">
             <a href="{{ route('sections.create') }}"
-                class="ml-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                class="ml-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-600 flex items-center focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="h-6 w-6 mr-2">
+                    stroke="currentColor" class="w-6 h-6 mr-2">
                     <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                        d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
                 </svg>
                 Add Section
             </a>
@@ -44,7 +44,7 @@
             <table class="min-w-full bg-gray-200 rounded-2xl border-gray-300">
                 <thead>
                     <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border-b">ID</th>
+                        <th class="py-2 px-4 border-b">Section ID</th>
                         <th class="py-2 px-4 border-b">Section Name</th>
                         <th class="py-2 px-4 border-b">Student Count</th>
                         <th class="py-2 px-4 border-b">Instructor</th>

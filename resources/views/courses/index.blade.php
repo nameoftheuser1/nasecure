@@ -14,11 +14,11 @@
         </div>
         <div class="flex justify-end">
             <a href="{{ route('courses.create') }}"
-                class="ml-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                class="ml-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-600 flex items-center focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="h-6 w-6 mr-2">
+                    stroke="currentColor" class="w-6 h-6 mr-2">
                     <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                        d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5" />
                 </svg>
                 Add Course
             </a>
@@ -43,7 +43,7 @@
             <table class="min-w-full bg-gray-200 rounded-2xl border-gray-300">
                 <thead>
                     <tr class="bg-gray-200">
-                        <th class="py-2 px-4 text-center border-b">ID</th>
+                        <th class="py-2 px-4 text-center border-b">Course ID</th>
                         <th class="py-2 px-4 text-center border-b">Program Code</th>
                         <th class="py-2 px-4 text-center border-b">Course Name</th>
                         <th class="py-2 px-4 text-center border-b">Actions</th>

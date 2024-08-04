@@ -33,7 +33,7 @@
                 <thead>
                     <tr class="bg-gray-200">
                         <th class="py-2 px-4 border-b">ID</th>
-                        <th class="py-2 px-4 border-b">Student ID</th>
+                        <th class="py-2 px-4 border-b">Student Name</th>
                         <th class="py-2 px-4 border-b">Attendance Date</th>
                     </tr>
                 </thead>
@@ -41,7 +41,7 @@
                     @foreach ($attendanceLogs as $log)
                         <tr class="hover:bg-blue-50">
                             <td class="py-2 px-7 border-b text-center">{{ $log->id }}</td>
-                            <td class="py-2 px-7 border-b text-center">{{ $log->student_id }}</td>
+                            <td class="py-2 px-7 border-b text-center">{{ $log->student->name }}</td>
                             <td class="py-2 px-7 border-b text-center">
                                 {{ \Carbon\Carbon::parse($log->attendance_date)->format('Y-m-d') }}</td>
                         </tr>

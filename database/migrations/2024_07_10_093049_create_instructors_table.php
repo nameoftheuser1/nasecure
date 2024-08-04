@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('instructors', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('pin_code');
-            $table->string('rfid')->unique();
+            $table->integer('pin_code')->nullable();
+            $table->string('rfid')->unique()->nullable();
             $table->timestamps();
 
         });

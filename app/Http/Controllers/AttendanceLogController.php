@@ -15,8 +15,10 @@ class AttendanceLogController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $attendanceLogs = AttendanceLog::query()
-            ->orWhere('student_id', 'like', "%{$search}%")
+        $attendanceLogs = AttendanceLog::with('student')
+            ->orWhereHas('student', function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
             ->orWhere('attendance_date', 'like', "%{$search}%")
             ->latest()
             ->paginate(10);

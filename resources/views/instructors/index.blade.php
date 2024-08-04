@@ -44,7 +44,7 @@
             <table class="min-w-full bg-gray-200 rounded-2xl border-gray-300">
                 <thead>
                     <tr class="bg-gray-200">
-                        <th class="py-2 px-4 text-center border-b">ID</th>
+                        <th class="py-2 px-4 text-center border-b">Instructor ID</th>
                         <th class="py-2 px-4 text-center border-b">Name</th>
                         <th class="py-2 px-4 text-center border-b">Pin Code</th>
                         <th class="py-2 px-4 text-center border-b">RFID</th>
@@ -56,8 +56,8 @@
                         <tr class="hover:bg-blue-50">
                             <td class="py-2 px-4 text-center border-b">{{ $instructor->id }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $instructor->name }}</td>
-                            <td class="py-2 px-4 text-center border-b">{{ $instructor->pin_code }}</td>
-                            <td class="py-2 px-4 text-center border-b">{{ $instructor->rfid }}</td>
+                            <td class="py-2 px-4 text-center border-b">{{ obscureString($instructor->pin_code) }}</td>
+                            <td class="py-2 px-4 text-center border-b">{{ obscureString($instructor->rfid) }}</td>
                             <td class="py-2 px-4 text-center border-b flex justify-center gap-2">
                                 <a href="{{ route('instructors.edit', $instructor->id) }}"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">

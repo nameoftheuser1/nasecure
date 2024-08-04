@@ -15,11 +15,11 @@
         <div class="flex justify-end">
 
             <a href="{{ route('programs.create') }}"
-                class="ml-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                class="ml-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-600 flex items-center focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="h-6 w-6 mr-2">
+                    stroke="currentColor" class="w-6 h-6 mr-2">
                     <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                        d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08M15.75 18.75v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5A3.375 3.375 0 0 0 6.375 7.5H5.25m11.9-3.664A2.251 2.251 0 0 0 15 2.25h-1.5a2.251 2.251 0 0 0-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.5H4.875c-.621 0-1.125.504-1.125 1.125v12c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V16.5a9 9 0 0 0-9-9Z" />
                 </svg>
                 Add Program
             </a>
@@ -44,7 +44,7 @@
             <table class="min-w-full bg-gray-200 rounded-2xl border-gray-300">
                 <thead>
                     <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border-b">ID</th>
+                        <th class="py-2 px-4 border-b">Program ID</th>
                         <th class="py-2 px-4 border-b">Program Name</th>
                         <th class="py-2 px-4 border-b">Program Code</th>
                         <th class="py-2 px-4 border-b w-40">Actions</th>

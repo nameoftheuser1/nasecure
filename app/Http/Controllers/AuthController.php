@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use App\Rules\EmailDomain;
+use App\Rules\ValidPhoneNumber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -44,10 +45,10 @@ class AuthController extends Controller
         $user = Auth::user();
 
         $fields = $request->validate([
-            'first_name' => ['required', 'max:50', 'regex:/^[a-zA-Z\s]+$/'],
-            'last_name' => ['required', 'max:50', 'regex:/^[a-zA-Z\s]+$/'],
+            'first_name' => ['required', 'max:50', 'min:3', 'regex:/^[a-zA-Z\s]+$/'],
+            'last_name' => ['required', 'max:50', 'min:3', 'regex:/^[a-zA-Z\s]+$/'],
             'email' => ['required', 'max:255', 'email', 'unique:users,email,' . $user->id, new EmailDomain],
-            'contact' => ['required', 'max:50'],
+            'contact' => ['required', 'max:11', new ValidPhoneNumber],
             'password' => ['nullable', 'min:8', 'confirmed'],
             'img_url' => ['nullable', 'image', 'mimes:jpg,png,jpeg,gif,svg', 'max:2048'],
         ]);
@@ -77,11 +78,11 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $fields = $request->validate([
-            'first_name' => ['required', 'max:50', 'regex:/^[a-zA-Z\s]+$/'],
-            'last_name' => ['required', 'max:50', 'regex:/^[a-zA-Z\s]+$/'],
-            'email' => ['required', 'max:255', 'email', 'unique:users', new EmailDomain],
-            'contact' => ['required', 'max:50'],
-            'password' => ['required', 'min:8', 'confirmed'],
+            'first_name' => ['required', 'max:50', 'min:3', 'regex:/^[a-zA-Z\s]+$/'],
+            'last_name' => ['required', 'max:50', 'min:3', 'regex:/^[a-zA-Z\s]+$/'],
+            'email' => ['required', 'max:50', 'email', 'unique:users', new EmailDomain],
+            'contact' => ['required', 'max:11', new ValidPhoneNumber],
+            'password' => ['required', 'min:8', 'confirmed', 'max:50'],
         ]);
 
         $user = User::create($fields);
