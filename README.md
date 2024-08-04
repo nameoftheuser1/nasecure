@@ -2,6 +2,7 @@
 
 ![NASECURE](public/images/NASECURE.png)
 
+
 ## Prerequisites
 
 Ensure you have the following installed:
@@ -62,7 +63,17 @@ Ensure you have the following installed:
    php artisan migrate:fresh
    ```
 
-8. **Update `php.ini` in XAMPP**
+8. **Seed the Database with Admin User**
+
+   Run the seeder to create an admin user:
+   ```bash
+   php artisan db:seed --class=AdminSeeder
+   ```
+
+   - The default password for the admin user is `admin` if you just run the `php artisan db:seed --class=AdminSeeder` command.
+   - You can change the password of the admin user by modifying the `database/seeders/AdminSeeder.php` file. Look for the section where the admin user is created and update the password as needed.
+
+9. **Update `php.ini` in XAMPP**
 
    To use FastExcel, you need to enable the `zip` extension. Open `php.ini` (found in the `php` folder of your XAMPP installation) and remove the semicolon (`;`) from the line:
    ```ini

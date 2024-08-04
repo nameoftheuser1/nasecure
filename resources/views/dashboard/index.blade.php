@@ -131,19 +131,32 @@
             }
 
             function fetchAttendanceLogs(date, sectionId) {
-                fetch(`/attendance-logs?date=${date}&section_id=${sectionId}`)
-                    .then(response => response.json())
+                const sanitizedDate = encodeURIComponent(date);
+                const sanitizedSectionId = encodeURIComponent(sectionId);
+
+                fetch(`/attendance-logs?date=${sanitizedDate}&section_id=${sanitizedSectionId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         attendanceLogTable.innerHTML = '';
                         data.forEach(log => {
                             const row = document.createElement('tr');
-                            const formattedDate = dayjs(log.attendance_date).format('YYYY-MM-DD HH:mm:ss');
+                            const formattedDate = dayjs(log.attendance_date).format(
+                                'YYYY-MM-DD HH:mm:ss');
                             row.innerHTML = `
-                                <td class="py-2 text-center">${log.student.name}</td>
-                                <td class="py-2 text-center">${formattedDate}</td>
-                            `;
+                            <td class="py-2 text-center">${log.student.name}</td>
+                            <td class="py-2 text-center">${formattedDate}</td>
+                        `;
                             attendanceLogTable.appendChild(row);
                         });
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                        alert('Failed to fetch attendance logs. Please try again later.');
                     });
             }
 
@@ -164,7 +177,8 @@
             document.querySelectorAll('tbody tr[data-section-id]').forEach(row => {
                 row.addEventListener('click', function() {
                     selectedSectionId = this.dataset.sectionId;
-                    const selectedDate = document.querySelector('#calendar button.bg-blue-700')?.dataset.date;
+                    const selectedDate = document.querySelector('#calendar button.bg-blue-700')
+                        ?.dataset.date;
                     if (selectedDate) {
                         fetchAttendanceLogs(selectedDate, selectedSectionId);
                     }

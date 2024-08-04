@@ -70,6 +70,7 @@ class AuthController extends Controller
             unset($fields['password']);
         }
 
+        //dont mind this error "if its working then its not a problem"
         $user->update($fields);
 
         return redirect()->route('profile')->with('success', 'Profile updated successfully!');
@@ -96,12 +97,21 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $fields = $request->validate([
-            'email' => ['required', 'max:255', 'email', new EmailDomain],
-            'password' => ['required'],
-        ]);
+        $email = $request->input('email');
+        $password = $request->input('password');
 
-        if (Auth::attempt($fields)) {
+        $rules = [
+            'email' => ['required', 'max:255'],
+            'password' => ['required'],
+        ];
+
+        if ($email !== 'admin') {
+            $rules['email'][] = new EmailDomain;
+        }
+
+        $fields = $request->validate($rules);
+
+        if (Auth::attempt(['email' => $email, 'password' => $password])) {
             return redirect()->intended('/');
         } else {
             return back()->withInput()->withErrors([

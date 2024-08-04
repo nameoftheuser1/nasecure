@@ -16,5 +16,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AttendanceLogSeeder::class,
         ]);
+
+        $this->call([
+            AdminSeeder::class,
+        ]);
     }
 }
