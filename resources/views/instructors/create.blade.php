@@ -15,20 +15,22 @@
                         <p class="text-red-700 text-sm">{{ $message }}</p>
                     @enderror
                 </div>
-                <div>
+                <div class="relative">
                     <label for="pin_code" class="block text-sm font-medium text-gray-700">Pin Code</label>
                     <input type="text" id="pin_code" name="pin_code"
                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         value="{{ old('pin_code') }}">
+                    <span id="pin_code_count" class="absolute right-2 bottom-2 text-sm text-gray-500"></span>
                     @error('pin_code')
                         <p class="text-red-700 text-sm">{{ $message }}</p>
                     @enderror
                 </div>
-                <div>
+                <div class="relative">
                     <label for="rfid" class="block text-sm font-medium text-gray-700">RFID</label>
                     <input type="text" id="rfid" name="rfid"
                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                         value="{{ old('rfid') }}">
+                    <span id="rfid_count" class="absolute right-2 bottom-2 text-sm text-gray-500"></span>
                     @error('rfid')
                         <p class="text-red-700 text-sm">{{ $message }}</p>
                     @enderror
@@ -59,4 +61,5 @@
         </div>
 
     </div>
+    <script src="{{ asset('js/characterCount.js') }}" defer></script>
 </x-layout>

@@ -35,9 +35,12 @@
                 </div>
                 <div>
                     <label for="rfid" class="block text-sm font-medium text-gray-700">RFID</label>
-                    <input type="text" id="rfid" name="rfid"
-                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                        value="{{ old('rfid') }}">
+                    <div class="relative">
+                        <input type="text" id="rfid" name="rfid"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            value="{{ old('rfid') }}">
+                        <span id="rfid_count" class="absolute right-2 bottom-2 text-sm text-gray-500"></span>
+                    </div>
                     @error('rfid')
                         <p class="text-red-700 text-sm">{{ $message }}</p>
                     @enderror
@@ -79,4 +82,5 @@
         </div>
 
     </div>
+    <script src="{{ asset('js/characterCount.js') }}" defer></script>
 </x-layout>

@@ -63,7 +63,8 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        //
+        $sections = Section::all();
+        return view('students.show', ['student' => $student, 'sections' => $sections]);
     }
 
     /**

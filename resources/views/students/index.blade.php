@@ -16,7 +16,8 @@
     <div class="container mx-auto p-5 bg-gray-200 rounded-3xl">
         <div class="items-center mb-3">
             <h1 class="text-xl font-bold ps-4 mb-4">Students</h1>
-            <p class="text-sm ps-8"> You cannot add a student without first adding a section. Please add sections first.
+            <p class="text-sm ps-8">
+                You cannot add a student without first adding a section. Please add sections first.
             </p>
         </div>
         <div class="flex justify-end items-center">
@@ -61,14 +62,15 @@
                 </thead>
                 <tbody>
                     @foreach ($students as $student)
-                        <tr class="hover:bg-blue-50">
+                        <tr class="hover:bg-blue-50 cursor-pointer" onclick="window.location='{{ route('students.show', $student->id) }}'">
                             <td class="py-2 px-4 text-center border-b">{{ $student->id }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $student->name ?? 'Not Set' }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $student->student_id ?? 'Not Set' }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $student->email ?? 'Not Set' }}</td>
-                            <td class="py-2 px-4 text-center border-b">{{ $student->rfid ?? 'Not Set' }}</td>
+                            <td class="py-2 px-4 text-center border-b">{{ obscureString($student->rfid ?? 'Not Set') }}</td>
                             <td class="py-2 px-4 text-center border-b">
-                                {{ $student->section->section_name ?? 'Not Set' }}</td>
+                                {{ $student->section->section_name ?? 'Not Set' }}
+                            </td>
                             <td class="py-2 px-4 text-center border-b flex justify-center gap-2">
                                 <a href="{{ route('students.edit', $student->id) }}"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
