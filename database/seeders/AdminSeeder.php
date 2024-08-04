@@ -22,7 +22,7 @@ class AdminSeeder extends Seeder
             User::create([
                 'first_name' => 'Admin',
                 'last_name' => 'User',
-                'contact' => '1234567890',
+                'contact' => '000',
                 'email' => 'admin',
                 'password' => Hash::make('admin'),
                 'role_id' => $roleAdmin->id,
