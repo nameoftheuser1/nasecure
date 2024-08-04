@@ -12,9 +12,14 @@ class DashboardController extends Controller
     {
         $search = $request->input('search');
 
-        $sections = Section::with('students')
-            ->where('sections.section_name', 'like', "%{$search}%")
-            ->select('sections.*')
+        $sections = Section::with('instructor', 'students')
+            ->where('section_name', 'like', "%{$search}%")
+            ->orWhereHas('instructor', function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->orWhereHas('students', function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
             ->latest()
             ->paginate(10);
 

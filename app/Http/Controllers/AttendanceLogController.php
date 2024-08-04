@@ -20,6 +20,8 @@ class AttendanceLogController extends Controller
                 $query->where('name', 'like', "%{$search}%");
             })
             ->orWhere('attendance_date', 'like', "%{$search}%")
+            ->orWhere('time_in', 'like', "%{$search}%")
+            ->orWhere('time_out', 'like', "%{$search}%")
             ->latest()
             ->paginate(10);
 
