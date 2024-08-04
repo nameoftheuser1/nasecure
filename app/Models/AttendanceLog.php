@@ -24,5 +24,7 @@ class AttendanceLog extends Model
 
     protected $casts = [
         'attendance_date' => 'datetime',
+        'time_in' => 'datetime',
+        'time_out' => 'datetime',
     ];
 }

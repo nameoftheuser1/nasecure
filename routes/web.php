@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceLogController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
@@ -17,6 +18,10 @@ Route::middleware('guest')->group(function () {
 
     Route::view('/login', 'auth.login')->name('login');
     Route::post('/login', [AuthController::class, 'login']);
+
+    Route::view('/attendance', 'attendance.attendance')->name('attendance');
+    Route::post('/attendance/time-in', [AttendanceController::class, 'storeTimeIn'])->name('attendance.timeIn');
+    Route::post('/attendance/time-out', [AttendanceController::class, 'storeTimeOut'])->name('attendance.timeOut');
 });
 
 Route::middleware('auth')->group(function () {
@@ -41,7 +46,6 @@ Route::middleware('auth')->group(function () {
     Route::middleware('admin')->group(function () {
         Route::get('/users', [AuthController::class, 'index'])->name('users');
     });
-
 });
 
 
