@@ -13,14 +13,12 @@
 </head>
 
 <body>
-
+    @guest
+        {{ $slot }}
+    @endguest
     <div class="py-5">
 
-        @guest
-            <div class="container">
-                {{ $slot }}
-            </div>
-        @endguest
+
     </div>
 
 

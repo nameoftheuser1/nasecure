@@ -67,7 +67,7 @@
                             <td class="py-2 px-4 text-center border-b">{{ $student->name ?? 'Not Set' }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $student->student_id ?? 'Not Set' }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $student->email ?? 'Not Set' }}</td>
-                            <td class="py-2 px-4 text-center border-b">{{ obscureString($student->rfid ?? 'Not Set') }}</td>
+                            <td class="py-2 px-4 text-center border-b">{{ obscureString($student->rfid ?? '') }}</td>
                             <td class="py-2 px-4 text-center border-b">
                                 {{ $student->section->section_name ?? 'Not Set' }}
                             </td>
