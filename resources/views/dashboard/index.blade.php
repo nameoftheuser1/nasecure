@@ -37,7 +37,7 @@
                     @foreach ($sections as $section)
                         <tr class="cursor-pointer hover:bg-blue-100" data-section-id="{{ $section->id }}">
                             <td class="py-2 text-center">{{ $section->section_name }}</td>
-                            <td class="py-2 text-center">{{ $section->instructor->name }}</td>
+                            <td class="py-2 text-center">{{ $section->instructor->name ?? '' }}</td>
                         </tr>
                     @endforeach
                 </tbody>

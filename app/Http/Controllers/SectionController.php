@@ -101,6 +101,8 @@ class SectionController extends Controller
      */
     public function destroy(Section $section)
     {
-        //
+        $section->delete();
+
+        return back()->with('deleted', 'The section is deleted');
     }
 }

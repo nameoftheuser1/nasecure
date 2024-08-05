@@ -30,6 +30,41 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Attendance Logs Table -->
+            <div class="w-full mt-10">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">Attendance Logs</h2>
+                <div class="overflow-x-auto bg-white rounded-lg shadow-md">
+                    <table class="min-w-full bg-white">
+                        <thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                            <tr>
+                                <th class="py-3 px-6 text-left">Date</th>
+                                <th class="py-3 px-6 text-left">Time In</th>
+                                <th class="py-3 px-6 text-left">Time Out</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600 text-sm font-light">
+                            @forelse ($attendanceLogs as $log)
+                                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                    <td class="py-3 px-6 text-left whitespace-nowrap">
+                                        {{ $log->attendance_date->format('Y-m-d') }}</td>
+                                    <td class="py-3 px-6 text-left">{{ $log->time_in->format('H:i:s') }}</td>
+                                    <td class="py-3 px-6 text-left">{{ $log->time_out->format('H:i:s') }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="py-3 px-6 text-center">No attendance logs found.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination Links -->
+                <div class="mt-4">
+                    {{ $attendanceLogs->links() }}
+                </div>
+            </div>
+
             <div class="mt-8 text-center">
                 <a href="{{ route('students.index') }}"
                     class="inline-flex items-center px-6 py-3 border border-transparent rounded-full shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">

@@ -64,8 +64,15 @@ class StudentController extends Controller
     public function show(Student $student)
     {
         $sections = Section::all();
-        return view('students.show', ['student' => $student, 'sections' => $sections]);
+        $attendanceLogs = $student->attendanceLogs()->latest()->paginate(10);
+
+        return view('students.show', [
+            'student' => $student,
+            'sections' => $sections,
+            'attendanceLogs' => $attendanceLogs,
+        ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.

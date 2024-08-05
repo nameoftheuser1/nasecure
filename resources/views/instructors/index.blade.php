@@ -53,7 +53,8 @@
                 </thead>
                 <tbody>
                     @foreach ($instructors as $instructor)
-                        <tr class="hover:bg-blue-50">
+                        <tr class="hover:bg-blue-50 cursor-pointer"
+                            onclick="window.location='{{ route('instructors.show', $instructor->id) }}';">
                             <td class="py-2 px-4 text-center border-b">{{ $instructor->id }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $instructor->name }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ obscureString($instructor->pin_code) }}</td>

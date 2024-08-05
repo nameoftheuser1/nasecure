@@ -19,7 +19,7 @@ class Instructor extends Model
     ];
 
 
-    public function section(): HasMany
+    public function sections(): HasMany
     {
         return $this->hasMany(Section::class);
     }

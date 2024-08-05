@@ -55,7 +55,8 @@ class InstructorController extends Controller
      */
     public function show(Instructor $instructor)
     {
-        //
+        $instructor->load('sections');
+        return view('instructors.show', compact('instructor'));
     }
 
     /**
