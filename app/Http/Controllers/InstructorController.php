@@ -41,7 +41,7 @@ class InstructorController extends Controller
     {
         $fields = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'pin_code' => ['nullable', 'integer', 'max:10', 'unique:instructors,pin_code'],
+            'pin_code' => ['nullable', 'integer', 'digits_between:1,10', 'unique:instructors,pin_code'],
             'rfid' => ['nullable', 'string', 'max:50'],
         ]);
 
