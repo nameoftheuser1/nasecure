@@ -18,9 +18,12 @@ class CourseController extends Controller
         $search = $request->input('search');
 
         $courses = Course::query()
-            ->join('programs', 'courses.program_id', '=', 'programs.id')
-            ->where('programs.program_code', 'like', "%{$search}%")
-            ->orWhere('courses.course_name', 'like', "%{$search}%")
+            ->leftJoin('programs', 'courses.program_id', '=', 'programs.id')
+            ->where(function ($query) use ($search) {
+                $query->where('programs.program_code', 'like', "%{$search}%")
+                    ->orWhere('courses.course_name', 'like', "%{$search}%");
+            })
+            ->orWhereNull('courses.program_id')
             ->select('courses.*', 'programs.program_code')
             ->latest()
             ->paginate(10);

@@ -53,7 +53,9 @@
                     @foreach ($courses as $course)
                         <tr class="hover:bg-blue-50">
                             <td class="py-2 px-4 text-center border-b">{{ $course->id }}</td>
-                            <td class="py-2 px-4 text-center border-b">{{ $course->program_code }}</td>
+                            <td class="py-2 px-4 text-center border-b">
+                                {{ $course->program_code ?? 'Not Set' }}
+                            </td>
                             <td class="py-2 px-4 text-center border-b">{{ $course->course_name }}</td>
                             <td class="py-2 px-4 text-center border-b flex justify-center">
                                 <a href="{{ route('courses.edit', $course->id) }}"
