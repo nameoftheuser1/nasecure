@@ -30,7 +30,8 @@
                 <button
                     class="w-full p-1.5 border-none rounded-md bg-gray-300 cursor-pointer mb-1 hover:bg-blue-700 transition-colors duration-300"
                     type="submit">Log In</button>
-                <a href="#" class="text-center no-underline block text-sm mt-2.5 hover:underline">Reset
+                <a href="{{ route('resetpasswordguide') }}"
+                    class="text-center no-underline block text-sm mt-2.5 hover:underline">Reset
                     Password</a>
                 <a href="{{ route('register') }}"
                     class="text-center no-underline block text-sm mt-2.5 hover:underline">Don't have an account? <span
