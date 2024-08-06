@@ -53,6 +53,8 @@ class AuthController extends Controller
             'contact' => ['required', 'max:11', new ValidPhoneNumber],
             'password' => ['nullable', 'min:8', 'confirmed'],
             'img_url' => ['nullable', 'image', 'mimes:jpg,png,jpeg,gif,svg', 'max:2048'],
+            'rfid' => ['nullable', 'max:30'],
+            'pin_code' => ['nullable', 'max:10']
         ]);
 
         if ($request->hasFile('img_url')) {

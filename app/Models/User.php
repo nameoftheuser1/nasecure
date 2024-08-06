@@ -25,6 +25,8 @@ class User extends Authenticatable
         'img_url',
         'email',
         'password',
+        'rfid',
+        'pin_code',
         'role_id',
     ];
 
