@@ -61,6 +61,11 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    public function students(): HasMany
+    {
+        return $this->hasMany(Student::class, 'created_by');
+    }
+
     public function isAdmin()
     {
         return $this->role->name === 'admin';

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('students', function (Blueprint $table) {
             $table->foreign('section_id')->references('id')->on('sections')->onDelete('set null');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
         });
 
         Schema::table('class_sessions', function (Blueprint $table) {

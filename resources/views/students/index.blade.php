@@ -62,7 +62,8 @@
                 </thead>
                 <tbody>
                     @foreach ($students as $student)
-                        <tr class="hover:bg-blue-50 cursor-pointer" onclick="window.location='{{ route('students.show', $student->id) }}'">
+                        <tr class="hover:bg-blue-50 cursor-pointer"
+                            onclick="window.location='{{ route('students.show', $student->id) }}'">
                             <td class="py-2 px-4 text-center border-b">{{ $student->id }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $student->name ?? 'Not Set' }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $student->student_id ?? 'Not Set' }}</td>

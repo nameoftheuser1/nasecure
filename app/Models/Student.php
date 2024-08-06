@@ -18,6 +18,7 @@ class Student extends Model
         'email',
         'rfid',
         'section_id',
+        'created_by',
     ];
 
     public function section(): BelongsTo
@@ -28,5 +29,10 @@ class Student extends Model
     public function attendanceLogs(): HasMany
     {
         return $this->hasMany(AttendanceLog::class);
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('student_id');
             $table->string('email')->unique();
             $table->string('rfid')->unique()->nullable();
+            $table->unsignedBigInteger('created_by');
             $table->timestamps();
-
         });
     }
 

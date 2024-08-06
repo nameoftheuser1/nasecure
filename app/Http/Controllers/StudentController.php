@@ -10,6 +10,7 @@ use App\Rules\EmailDomain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Rap2hpoutre\FastExcel\FastExcel;
+use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
@@ -20,11 +21,14 @@ class StudentController extends Controller
     {
         $search = $request->input('search');
         $students = Student::with('section')
-            ->where('name', 'like', "%{$search}%")
-            ->orWhere('student_id', 'like', "%{$search}%")
-            ->orWhere('email', 'like', "%{$search}%")
-            ->orWhere('rfid', 'like', "%{$search}%")
-            ->orWhere('section_id', 'like', "%{$search}%")
+            ->where('created_by', Auth::id())
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('student_id', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('rfid', 'like', "%{$search}%")
+                    ->orWhere('section_id', 'like', "%{$search}%");
+            })
             ->latest()
             ->paginate(10);
 
@@ -53,6 +57,8 @@ class StudentController extends Controller
             'section_id' => ['nullable', 'string', 'max:50'],
         ]);
 
+        $fields['created_by'] = Auth::id();
+
         Student::create($fields);
 
         return redirect()->route('students.index')->with('success', 'Student added successfully.');
@@ -72,7 +78,6 @@ class StudentController extends Controller
             'attendanceLogs' => $attendanceLogs,
         ]);
     }
-
 
     /**
      * Show the form for editing the specified resource.
@@ -128,6 +133,7 @@ class StudentController extends Controller
                         'email' => $line['Email'] ?? null,
                         'rfid' => $line['RFID'] ?? null,
                         'section_id' => $line['Section ID'] ?? null,
+                        'created_by' => Auth::id(),
                     ]
                 );
             });
