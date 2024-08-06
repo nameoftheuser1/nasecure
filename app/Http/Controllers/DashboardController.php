@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AttendanceLog;
 use App\Models\Section;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -12,11 +13,9 @@ class DashboardController extends Controller
     {
         $search = $request->input('search');
 
-        $sections = Section::with('instructor', 'students')
+        $sections = Section::with('students')
             ->where('section_name', 'like', "%{$search}%")
-            ->orWhereHas('instructor', function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%");
-            })
+            ->orWhere('subject', 'like', "%{$search}%")
             ->orWhereHas('students', function ($query) use ($search) {
                 $query->where('name', 'like', "%{$search}%");
             })
@@ -30,11 +29,13 @@ class DashboardController extends Controller
     {
         $date = $request->query('date');
         $sectionId = $request->query('section_id');
+        $userId = Auth::id();
 
         $attendanceLogs = AttendanceLog::with('student')
             ->whereDate('attendance_date', $date)
-            ->whereHas('student', function ($query) use ($sectionId) {
-                $query->where('section_id', $sectionId);
+            ->whereHas('student', function ($query) use ($sectionId, $userId) {
+                $query->where('section_id', $sectionId)
+                    ->where('created_by', $userId);
             })
             ->get();
 

@@ -30,7 +30,6 @@
                 <thead>
                     <tr>
                         <th class="py-2 text-center">Section Name</th>
-                        <th class="py-2 text-center">Instructor Name</th>
                     </tr>
                 </thead>
                 <tbody id="sections-table-body">
