@@ -27,7 +27,7 @@ return new class extends Migration
 
         Schema::table('sections', function (Blueprint $table) {
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('set null');
-            $table->foreign('instructor_id')->references('id')->on('instructors')->onDelete('set null');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
         });
     }
 
@@ -49,7 +49,6 @@ return new class extends Migration
             // Drop the new foreign key constraint
             $table->dropForeign(['student_id']);
             $table->dropColumn('student_id');
-
         });
 
         Schema::table('sections', function (Blueprint $table) {

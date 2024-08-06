@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
-            $table->String('section_name');
+            $table->string('section_name');
             $table->integer('student_count');
             $table->unsignedBigInteger('course_id')->nullable();
-            $table->unsignedBigInteger('instructor_id')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->string('subject');
             $table->timestamps();
-
         });
     }
 
