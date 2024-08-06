@@ -22,6 +22,7 @@ return new class extends Migration
         });
 
         Schema::table('attendance_logs', function (Blueprint $table) {
+            $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade');
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
 

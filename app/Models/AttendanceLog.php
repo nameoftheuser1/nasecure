@@ -12,6 +12,7 @@ class AttendanceLog extends Model
 
     protected $fillable = [
         'student_id',
+        'section_id',
         'attendance_date',
         'time_in',
         'time_out',
@@ -20,6 +21,11 @@ class AttendanceLog extends Model
     public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class);
+    }
+
+    public function section(): BelongsTo
+    {
+        return $this->belongsTo(Section::class);
     }
 
     protected $casts = [

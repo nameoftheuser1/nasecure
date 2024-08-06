@@ -23,20 +23,21 @@
         </div>
     </div>
 
-    {{-- you can add here search function if you want its already in the controller just follow how the search function works in other file --}}
+    {{-- You can add a search function here if needed. It's already in the controller. --}}
     <div class="w-full flex justify-between gap-5">
         <div class="bg-gray-100 w-1/2 min-h-96 rounded-lg border-blue-600 border mt-4">
             <table class="min-w-full mt-4">
                 <thead>
                     <tr>
                         <th class="py-2 text-center">Section Name</th>
+                        <th class="py-2 text-center">Subject</th>
                     </tr>
                 </thead>
                 <tbody id="sections-table-body">
                     @foreach ($sections as $section)
                         <tr class="cursor-pointer hover:bg-blue-100" data-section-id="{{ $section->id }}">
                             <td class="py-2 text-center">{{ $section->section_name }}</td>
-                            <td class="py-2 text-center">{{ $section->instructor->name ?? '' }}</td>
+                            <td class="py-2 text-center">{{ $section->subject }}</td>
                         </tr>
                     @endforeach
                 </tbody>

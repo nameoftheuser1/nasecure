@@ -18,6 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('course_id')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->string('subject');
+            $table->time('time_in')->nullable();
+            $table->time('time_out')->nullable();
             $table->timestamps();
         });
     }

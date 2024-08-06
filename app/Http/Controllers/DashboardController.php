@@ -12,18 +12,26 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $user = Auth::user();
 
-        $sections = Section::with('students')
-            ->where('section_name', 'like', "%{$search}%")
-            ->orWhere('subject', 'like', "%{$search}%")
-            ->orWhereHas('students', function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%");
-            })
-            ->latest()
-            ->paginate(10);
+        $sectionsQuery = Section::with('students')
+            ->where(function ($query) use ($search) {
+                $query->where('section_name', 'like', "%{$search}%")
+                    ->orWhere('subject', 'like', "%{$search}%")
+                    ->orWhereHas('students', function ($query) use ($search) {
+                        $query->where('name', 'like', "%{$search}%");
+                    });
+            });
+
+        if ($user->role->name !== 'admin') {
+            $sectionsQuery->where('created_by', $user->id);
+        }
+
+        $sections = $sectionsQuery->latest()->paginate(10);
 
         return view('dashboard.index', ['sections' => $sections]);
     }
+
 
     public function fetchAttendanceLogs(Request $request)
     {

@@ -17,6 +17,8 @@ class Section extends Model
         'course_id',
         'subject',
         'created_by',
+        'time_in',
+        'time_out',
     ];
 
     public function course(): BelongsTo
@@ -26,11 +28,16 @@ class Section extends Model
 
     public function students(): HasMany
     {
-        return $this->hasMany(Student::class);
+        return $this->hasMany(Student::class, 'section_id');
     }
 
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function attendanceLogs(): HasMany
+    {
+        return $this->hasMany(AttendanceLog::class);
     }
 }

@@ -19,7 +19,7 @@ return new class extends Migration
         });
 
         DB::table('roles')->insert([
-            'name' => 'staff',
+            'name' => 'instructor',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

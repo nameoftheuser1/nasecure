@@ -6,7 +6,6 @@ use App\Models\Section;
 use App\Http\Requests\StoreSectionRequest;
 use App\Http\Requests\UpdateSectionRequest;
 use App\Models\Course;
-use App\Models\Instructor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,8 +35,6 @@ class SectionController extends Controller
         return view('sections.index', ['sections' => $sections]);
     }
 
-
-
     /**
      * Show the form for creating a new resource.
      */
@@ -57,6 +54,8 @@ class SectionController extends Controller
             'student_count' => ['required', 'integer'],
             'course_id' => ['nullable', 'exists:courses,id'],
             'subject' => ['required', 'string', 'max:100'],
+            'time_in' => ['nullable', 'date_format:H:i'],
+            'time_out' => ['nullable', 'date_format:H:i'],
         ]);
 
         $fields['created_by'] = Auth::id();
@@ -79,7 +78,6 @@ class SectionController extends Controller
      */
     public function edit(Section $section)
     {
-
         $courses = Course::all();
 
         return view('sections.edit', compact('section', 'courses'));
@@ -93,8 +91,10 @@ class SectionController extends Controller
         $fields = $request->validate([
             'section_name' => ['required', 'max:50'],
             'student_count' => ['required', 'integer'],
-            'instructor_id' => ['required', 'exists:instructors,id'],
             'course_id' => ['required', 'exists:courses,id'],
+            'subject' => ['required', 'string', 'max:100'],
+            'time_in' => ['nullable', 'date_format:H:i'],
+            'time_out' => ['nullable', 'date_format:H:i'],
         ]);
 
         $section->update($fields);

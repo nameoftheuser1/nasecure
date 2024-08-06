@@ -34,6 +34,7 @@
                     <tr class="bg-gray-200">
                         <th class="py-2 px-4 border-b">ID</th>
                         <th class="py-2 px-4 border-b">Student Name</th>
+                        <th class="py-2 px-4 border-b">Section Subject</th>
                         <th class="py-2 px-4 border-b">Attendance Date</th>
                         <th class="py-2 px-4 border-b">Time In</th>
                         <th class="py-2 px-4 border-b">Time Out</th>
@@ -42,15 +43,16 @@
                 <tbody>
                     @foreach ($attendanceLogs as $log)
                         <tr class="hover:bg-blue-50">
-                            <td class="py-2 px-7 border-b text-center">{{ $log->id }}</td>
-                            <td class="py-2 px-7 border-b text-center">{{ $log->student->name }}</td>
-                            <td class="py-2 px-7 border-b text-center">
+                            <td class="py-2 px-4 border-b text-center">{{ $log->id }}</td>
+                            <td class="py-2 px-4 border-b text-center">{{ $log->student->name }}</td>
+                            <td class="py-2 px-4 border-b text-center">{{ $log->section->subject ?? 'N/A' }}</td>
+                            <td class="py-2 px-4 border-b text-center">
                                 {{ \Carbon\Carbon::parse($log->attendance_date)->format('Y-m-d') }}
                             </td>
-                            <td class="py-2 px-7 border-b text-center">
+                            <td class="py-2 px-4 border-b text-center">
                                 {{ $log->time_in ? \Carbon\Carbon::parse($log->time_in)->format('H:i') : 'N/A' }}
                             </td>
-                            <td class="py-2 px-7 border-b text-center">
+                            <td class="py-2 px-4 border-b text-center">
                                 {{ $log->time_out ? \Carbon\Carbon::parse($log->time_out)->format('H:i') : 'N/A' }}
                             </td>
                         </tr>
