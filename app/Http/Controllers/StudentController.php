@@ -10,6 +10,7 @@ use App\Rules\EmailDomain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Rap2hpoutre\FastExcel\FastExcel;
+use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
@@ -19,24 +20,41 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $students = Student::with('section')
-            ->where('name', 'like', "%{$search}%")
-            ->orWhere('student_id', 'like', "%{$search}%")
-            ->orWhere('email', 'like', "%{$search}%")
-            ->orWhere('rfid', 'like', "%{$search}%")
-            ->orWhere('section_id', 'like', "%{$search}%")
+        $user = Auth::user();
+
+        $studentsQuery = Student::with('section');
+
+        if ($user->role->name !== 'admin') {
+            $studentsQuery->where('created_by', $user->id);
+        }
+
+        $students = $studentsQuery->where(function ($query) use ($search) {
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('student_id', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")
+                ->orWhere('rfid', 'like', "%{$search}%")
+                ->orWhere('section_id', 'like', "%{$search}%");
+        })
             ->latest()
             ->paginate(10);
 
         return view('students.index', ['students' => $students]);
     }
 
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $sections = Section::all();
+        $user = auth()->user();
+
+        if ($user->role->name !== 'admin') {
+            $sections = Section::where('created_by', $user->id)->get();
+        } else {
+            $sections = Section::all();
+        }
+
         return view('students.create', compact('sections'));
     }
 
@@ -52,6 +70,8 @@ class StudentController extends Controller
             'rfid' => ['nullable', 'string', 'max:50'],
             'section_id' => ['nullable', 'string', 'max:50'],
         ]);
+
+        $fields['created_by'] = Auth::id();
 
         Student::create($fields);
 
@@ -73,13 +93,19 @@ class StudentController extends Controller
         ]);
     }
 
-
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Student $student)
     {
-        $sections = Section::all();
+        $user = auth()->user();
+
+        if ($user->role->name !== 'admin') {
+            $sections = Section::where('created_by', $user->id)->get();
+        } else {
+            $sections = Section::all();
+        }
+
         return view('students.edit', compact('student', 'sections'));
     }
 
@@ -120,6 +146,8 @@ class StudentController extends Controller
         try {
             $file = $request->file('file');
 
+            Log::info('File received: ' . $file->getClientOriginalName());
+
             (new FastExcel)->import($file, function ($line) {
                 Student::updateOrCreate(
                     ['student_id' => $line['Student ID']],
@@ -128,14 +156,15 @@ class StudentController extends Controller
                         'email' => $line['Email'] ?? null,
                         'rfid' => $line['RFID'] ?? null,
                         'section_id' => $line['Section ID'] ?? null,
+                        'created_by' => Auth::id(),
                     ]
                 );
             });
 
             return redirect()->route('students.index')->with('success', 'Students imported successfully.');
         } catch (\Exception $e) {
-            Log::error('Error importing students: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'There was an error importing the students. Please check the file and try again.');
+            $msg = Log::error('Error importing students: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'There was an error importing the students. Please check the file and try again.' . $msg);
         }
     }
 }

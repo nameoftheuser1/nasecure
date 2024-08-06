@@ -27,7 +27,8 @@
         @endif
 
         <div class="mb-4 p-4 bg-blue-100 text-blue-800 rounded-md">
-            You can update your profile details here. Leave the password fields blank if you don't want to change your password.
+            You can update your profile details here. Leave the password fields blank if you don't want to change your
+            password.
         </div>
 
         <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
@@ -79,6 +80,24 @@
                 <input type="file" name="img_url" id="img_url"
                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2">
                 @error('img_url')
+                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="mb-4">
+                <label for="pin_code" class="block text-sm font-medium text-gray-700">Pin Code</label>
+                <input type="number" name="pin_code" id="pin_code" value="{{ old('contact', $user->pin_code) }}"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2">
+                @error('pin_code')
+                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="mb-4">
+                <label for="rfid" class="block text-sm font-medium text-gray-700">RFID</label>
+                <input type="text" name="rfid" id="rfid" value="{{ old('contact', $user->rfid) }}"
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2">
+                @error('rfid')
                     <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>

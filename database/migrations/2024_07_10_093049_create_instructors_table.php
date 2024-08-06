@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->integer('pin_code')->nullable();
-            $table->string('rfid')->unique()->nullable();
+            $table->string('rfid')->nullable();
             $table->timestamps();
 
         });

@@ -20,7 +20,7 @@ class MarkIncompleteLogs extends Command
      *
      * @var string
      */
-    protected $description = 'Mark attendance logs as incomplete if time_out is not set.';
+    protected $description = 'Mark attendance logs as incomplete if time_out is not set within 3 hours.';
 
     /**
      * Execute the console command.
@@ -29,9 +29,9 @@ class MarkIncompleteLogs extends Command
      */
     public function handle()
     {
-        $today = Carbon::today();
+        $threeHoursAgo = Carbon::now()->subHours(3);
 
-        $updated = AttendanceLog::whereDate('attendance_date', $today)
+        $updated = AttendanceLog::where('time_in', '<=', $threeHoursAgo)
             ->whereNull('time_out')
             ->update(['time_out' => null]);
 

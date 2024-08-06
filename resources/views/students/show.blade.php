@@ -48,8 +48,12 @@
                                 <tr class="border-b border-gray-200 hover:bg-gray-100">
                                     <td class="py-3 px-6 text-left whitespace-nowrap">
                                         {{ $log->attendance_date->format('Y-m-d') }}</td>
-                                    <td class="py-3 px-6 text-left">{{ $log->time_in->format('H:i:s') }}</td>
-                                    <td class="py-3 px-6 text-left">{{ $log->time_out->format('H:i:s') }}</td>
+                                    <td class="py-3 px-6 text-left">
+                                        {{ optional($log->time_in)->format('H:i:s') ?? '' }}
+                                    </td>
+                                    <td class="py-3 px-6 text-left">
+                                        {{ optional($log->time_out)->format('H:i:s') ?? '' }}
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>

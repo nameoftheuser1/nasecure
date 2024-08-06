@@ -6,6 +6,7 @@ use App\Models\AttendanceLog;
 use App\Http\Requests\StoreAttendanceLogRequest;
 use App\Http\Requests\UpdateAttendanceLogRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AttendanceLogController extends Controller
 {
@@ -15,18 +16,32 @@ class AttendanceLogController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $attendanceLogs = AttendanceLog::with('student')
-            ->orWhereHas('student', function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%");
+        $user = Auth::user();
+
+        $attendanceLogsQuery = AttendanceLog::with('student', 'section')
+            ->when($user->role->name !== 'admin', function ($query) use ($user) {
+                $query->whereHas('student', function ($query) use ($user) {
+                    $query->where('created_by', $user->id);
+                });
             })
-            ->orWhere('attendance_date', 'like', "%{$search}%")
-            ->orWhere('time_in', 'like', "%{$search}%")
-            ->orWhere('time_out', 'like', "%{$search}%")
+            ->where(function ($query) use ($search) {
+                $query->whereHas('student', function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                })
+                    ->orWhere('attendance_date', 'like', "%{$search}%")
+                    ->orWhere('time_in', 'like', "%{$search}%")
+                    ->orWhere('time_out', 'like', "%{$search}%")
+                    ->orWhereHas('section', function ($query) use ($search) {
+                        $query->where('subject', 'like', "%{$search}%");
+                    });
+            })
             ->latest()
             ->paginate(10);
 
-        return view('attendance_logs.index', ['attendanceLogs' => $attendanceLogs]);
+        return view('attendance_logs.index', ['attendanceLogs' => $attendanceLogsQuery]);
     }
+
 
     /**
      * Show the form for creating a new resource.

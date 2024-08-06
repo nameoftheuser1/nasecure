@@ -47,8 +47,10 @@
                         <th class="py-2 px-4 border-b">Section ID</th>
                         <th class="py-2 px-4 border-b">Section Name</th>
                         <th class="py-2 px-4 border-b">Student Count</th>
-                        <th class="py-2 px-4 border-b">Instructor</th>
+                        <th class="py-2 px-4 border-b">Subject</th>
                         <th class="py-2 px-4 border-b">Course</th>
+                        <th class="py-2 px-4 border-b">Time In</th>
+                        <th class="py-2 px-4 border-b">Time Out</th>
                         <th class="py-2 px-4 border-b w-40">Actions</th>
                     </tr>
                 </thead>
@@ -58,8 +60,10 @@
                             <td class="py-2 px-7 border-b text-center">{{ $section->id }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $section->section_name }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $section->student_count }}</td>
-                            <td class="py-2 px-7 border-b text-center">{{ $section->instructor->name ?? 'N/A' }}</td>
+                            <td class="py-2 px-7 border-b text-center">{{ $section->subject }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $section->course->course_name ?? 'N/A' }}</td>
+                            <td class="py-2 px-7 border-b text-center">{{ $section->time_in }}</td>
+                            <td class="py-2 px-7 border-b text-center">{{ $section->time_out }}</td>
                             <td class="py-2 px-7 border-b flex justify-center w-40">
                                 <a href="{{ route('sections.edit', $section->id) }}"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">

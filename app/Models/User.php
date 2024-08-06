@@ -25,6 +25,8 @@ class User extends Authenticatable
         'img_url',
         'email',
         'password',
+        'rfid',
+        'pin_code',
         'role_id',
     ];
 
@@ -59,6 +61,11 @@ class User extends Authenticatable
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function students(): HasMany
+    {
+        return $this->hasMany(Student::class, 'created_by');
     }
 
     public function isAdmin()

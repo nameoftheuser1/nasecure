@@ -23,18 +23,11 @@
                 @enderror
             </div>
             <div>
-                <label for="instructor_id" class="block text-sm font-medium text-gray-700">Instructor</label>
-                <select id="instructor_id" name="instructor_id"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                    <option value="">Select Instructor</option>
-                    @foreach ($instructors as $instructor)
-                        <option value="{{ $instructor->id }}"
-                            {{ old('instructor_id') == $instructor->id ? 'selected' : '' }}>
-                            {{ $instructor->name }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('instructor_id')
+                <label for="subject" class="block text-sm font-medium text-gray-700">Subject</label>
+                <input type="text" id="subject" name="subject"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value="{{ old('subject') }}">
+                @error('subject')
                     <p class="text-red-700 text-sm">{{ $message }}</p>
                 @enderror
             </div>
@@ -50,6 +43,24 @@
                     @endforeach
                 </select>
                 @error('course_id')
+                    <p class="text-red-700 text-sm">{{ $message }}</p>
+                @enderror
+            </div>
+            <div>
+                <label for="time_in" class="block text-sm font-medium text-gray-700">Time In</label>
+                <input type="time" id="time_in" name="time_in"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value="{{ old('time_in') }}">
+                @error('time_in')
+                    <p class="text-red-700 text-sm">{{ $message }}</p>
+                @enderror
+            </div>
+            <div>
+                <label for="time_out" class="block text-sm font-medium text-gray-700">Time Out</label>
+                <input type="time" id="time_out" name="time_out"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value="{{ old('time_out') }}">
+                @error('time_out')
                     <p class="text-red-700 text-sm">{{ $message }}</p>
                 @enderror
             </div>

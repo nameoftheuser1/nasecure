@@ -1,5 +1,16 @@
 <x-layout>
     <x-sidebar />
+    @if (session('error'))
+        <x-flashMsg msg="{{ session('error') }}" bg="bg-red-500" />
+    @endif
+
+    @if (session('success'))
+        <x-flashMsg msg="{{ session('success') }}" bg="bg-green-500" />
+    @endif
+
+    @if (session('deleted'))
+        <x-flashMsg msg="{{ session('deleted') }}" bg="bg-red-500" />
+    @endif
     <div class="container mx-auto w-full p-5 bg-gray-200 rounded-3xl flex">
 
         <div class="w-full m-5">

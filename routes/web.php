@@ -28,6 +28,7 @@ Route::middleware('guest')->group(function () {
     Route::view('/attendance', 'attendance.attendance')->name('attendance');
     Route::post('/attendance/time-in', [AttendanceController::class, 'storeTimeIn'])->name('attendance.timeIn');
     Route::post('/attendance/time-out', [AttendanceController::class, 'storeTimeOut'])->name('attendance.timeOut');
+    Route::post('/fetch-sections', [AttendanceController::class, 'fetchSections'])->name('attendance.fetchSections');
 });
 
 Route::middleware('auth')->group(function () {
@@ -42,16 +43,17 @@ Route::middleware('auth')->group(function () {
     Route::resource('students', StudentController::class);
     Route::resource('programs', ProgramController::class);
     Route::resource('courses', CourseController::class);
-    Route::resource('instructors', InstructorController::class);
     Route::resource('sections', SectionController::class);
     Route::resource('attendance_logs', AttendanceLogController::class);
 
     Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
-    Route::post('instructors/import', [InstructorController::class, 'import'])->name('instructors.import');
+
 
     Route::middleware('admin')->group(function () {
         Route::get('/users', [AuthController::class, 'index'])->name('users');
         Route::post('/users/{user}/reset-password', [AuthController::class, 'resetPassword'])->name('users.resetPassword');
+        Route::post('instructors/import', [InstructorController::class, 'import'])->name('instructors.import');
+        Route::resource('instructors', InstructorController::class);
     });
 });
 

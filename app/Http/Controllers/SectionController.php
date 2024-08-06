@@ -6,8 +6,8 @@ use App\Models\Section;
 use App\Http\Requests\StoreSectionRequest;
 use App\Http\Requests\UpdateSectionRequest;
 use App\Models\Course;
-use App\Models\Instructor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SectionController extends Controller
 {
@@ -17,14 +17,17 @@ class SectionController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $sections = Section::query()
-            ->where('section_name', 'like', "%{$search}%")
-            ->orWhere('student_count', 'like', "%{$search}%")
-            ->orWhereHas('instructor', function ($query) use ($search) {
-                $query->where('name', 'like', "%{$search}%");
-            })
-            ->orWhereHas('course', function ($query) use ($search) {
-                $query->where('course_name', 'like', "%{$search}%");
+        $userId = Auth::id();
+        $sections = Section::with('course')
+            ->where('created_by', $userId)
+            ->where(function ($query) use ($search) {
+                $query->where('section_name', 'like', "%{$search}%")
+                    ->orWhere('student_count', 'like', "%{$search}%")
+                    ->orWhere('subject', 'like', "%{$search}%")
+                    ->orWhere('course_id', 'like', "%{$search}%")
+                    ->orWhereHas('course', function ($query) use ($search) {
+                        $query->where('course_name', 'like', "%{$search}%");
+                    });
             })
             ->latest()
             ->paginate(10);
@@ -32,15 +35,13 @@ class SectionController extends Controller
         return view('sections.index', ['sections' => $sections]);
     }
 
-
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $instructors = Instructor::all();
         $courses = Course::all();
-        return view('sections.create', compact('instructors', 'courses'));
+        return view('sections.create', compact('courses'));
     }
 
     /**
@@ -51,9 +52,13 @@ class SectionController extends Controller
         $fields = $request->validate([
             'section_name' => ['required', 'max:50'],
             'student_count' => ['required', 'integer'],
-            'instructor_id' => ['required', 'exists:instructors,id'],
-            'course_id' => ['required', 'exists:courses,id'],
+            'course_id' => ['nullable', 'exists:courses,id'],
+            'subject' => ['required', 'string', 'max:100'],
+            'time_in' => ['nullable', 'date_format:H:i'],
+            'time_out' => ['nullable', 'date_format:H:i'],
         ]);
+
+        $fields['created_by'] = Auth::id();
 
         Section::create($fields);
 
@@ -73,10 +78,9 @@ class SectionController extends Controller
      */
     public function edit(Section $section)
     {
-        $instructors = Instructor::all();
         $courses = Course::all();
 
-        return view('sections.edit', compact('section', 'instructors', 'courses'));
+        return view('sections.edit', compact('section', 'courses'));
     }
 
     /**
@@ -87,8 +91,10 @@ class SectionController extends Controller
         $fields = $request->validate([
             'section_name' => ['required', 'max:50'],
             'student_count' => ['required', 'integer'],
-            'instructor_id' => ['required', 'exists:instructors,id'],
             'course_id' => ['required', 'exists:courses,id'],
+            'subject' => ['required', 'string', 'max:100'],
+            'time_in' => ['nullable', 'date_format:H:i'],
+            'time_out' => ['nullable', 'date_format:H:i'],
         ]);
 
         $section->update($fields);
