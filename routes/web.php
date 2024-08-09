@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstructorController;
+use App\Http\Controllers\KitController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
@@ -29,6 +30,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/attendance/time-in', [AttendanceController::class, 'storeTimeIn'])->name('attendance.timeIn');
     Route::post('/attendance/time-out', [AttendanceController::class, 'storeTimeOut'])->name('attendance.timeOut');
     Route::post('/fetch-sections', [AttendanceController::class, 'fetchSections'])->name('attendance.fetchSections');
+    Route::post('/attendance/scan-rfid', [AttendanceController::class, 'scanRFID'])->name('attendance.scan-rfid');
 });
 
 Route::middleware('auth')->group(function () {
@@ -54,6 +56,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/users/{user}/reset-password', [AuthController::class, 'resetPassword'])->name('users.resetPassword');
         Route::post('instructors/import', [InstructorController::class, 'import'])->name('instructors.import');
         Route::resource('instructors', InstructorController::class);
+        Route::resource('kits', KitController::class);
     });
 });
 

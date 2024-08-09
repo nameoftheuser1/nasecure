@@ -34,4 +34,9 @@ class Student extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function borrowedKits()
+    {
+        return $this->hasMany(BorrowedKit::class);
+    }
 }

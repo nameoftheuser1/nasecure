@@ -9,6 +9,7 @@ use App\Models\Section;
 use App\Rules\EmailDomain;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Log;
 
 class AttendanceController extends Controller
 {
@@ -68,6 +69,95 @@ class AttendanceController extends Controller
             return response()->json([
                 'error' => 'Student not found.',
             ], 404);
+        }
+    }
+
+    /**
+     * MUST READ!!
+     *
+     * This code is a Laravel controller action that handles RFID scanning in a student attendance system.
+     * It can be integrated with an Arduino Mega board to create a physical RFID-based attendance system.
+     *
+     * The Arduino Mega can be used to read RFID tags and send the RFID data to the Laravel application
+     * through a serial connection or a network connection (e.g., Ethernet or WiFi).
+     *
+     * Here's an example of how you can use this code with an Arduino Mega:
+     *
+     * 1. Connect an RFID reader module (e.g., MFRC522) to the Arduino Mega.
+     * 2. Write Arduino code to read the RFID tag data and send it to the Laravel application
+     *    through a serial connection or a network connection.
+     * 3. In the Arduino code, when an RFID tag is detected, send the RFID tag data to the Laravel application
+     *    by making an HTTP POST request to the `scanRFID` endpoint.
+     * 4. The Laravel application will then process the RFID data, look up the student, check the current section,
+     *    and update the attendance log accordingly.
+     * 5. The Laravel application can then send a response back to the Arduino Mega, which can be used to trigger
+     *    a buzzer or some other output based on the attendance status (e.g., successful check-in, check-out, or error).
+     *
+     * By integrating the Arduino Mega with the Laravel application, you can create a robust and automated
+     * attendance tracking system that leverages the RFID technology and the capabilities of the Laravel framework.
+     */
+
+    public function scanRFID(Request $request)
+    {
+        $validated = $request->validate([
+            'rfid' => ['required', 'string'],
+        ]);
+
+        try {
+            $student = Student::where('rfid', $validated['rfid'])->firstOrFail();
+            $currentTime = Carbon::now();
+            $section = Section::where('time_in', '<=', $currentTime)
+                ->where('time_out', '>=', $currentTime)
+                ->first();
+
+            if (!$section) {
+                Log::warning('No section registered at this time. Buzzer output triggered.');
+                return response()->json([
+                    'error' => 'No section registered at this time. Buzzer output triggered.',
+                ], 404);
+            }
+
+            $attendanceLog = AttendanceLog::where('student_id', $student->id)
+                ->where('section_id', $section->id)
+                ->whereDate('attendance_date', $currentTime)
+                ->first();
+
+            if ($attendanceLog) {
+                if ($attendanceLog->time_out === null) {
+                    $attendanceLog->update(['time_out' => $currentTime]);
+                    Log::info('Time out recorded successfully for Section ' . $section->id);
+                    return response()->json([
+                        'success' => 'Time out recorded successfully for Section ' . $section->id,
+                    ]);
+                } else {
+                    Log::warning('Time out has already been recorded for Section ' . $section->id . ' today.');
+                    return response()->json([
+                        'error' => 'Time out has already been recorded for Section ' . $section->id . ' today.',
+                    ], 400);
+                }
+            } else {
+                $attendanceLog = AttendanceLog::create([
+                    'student_id' => $student->id,
+                    'section_id' => $section->id,
+                    'attendance_date' => $currentTime,
+                    'time_in' => $currentTime,
+                    'time_out' => null,
+                ]);
+                Log::info('Time in recorded successfully for Section ' . $section->id);
+                return response()->json([
+                    'success' => 'Time in recorded successfully for Section ' . $section->id,
+                ]);
+            }
+        } catch (ModelNotFoundException $e) {
+            Log::warning('RFID not recognized. Buzzer output triggered.');
+            return response()->json([
+                'error' => 'RFID not recognized. Buzzer output triggered.',
+            ], 404);
+        } catch (\Exception $e) {
+            Log::error('An error occurred while processing the RFID scan: ' . $e->getMessage());
+            return response()->json([
+                'error' => 'An unexpected error occurred. Please try again later.',
+            ], 500);
         }
     }
 }
