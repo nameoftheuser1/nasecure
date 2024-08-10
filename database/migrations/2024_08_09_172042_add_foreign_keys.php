@@ -30,6 +30,11 @@ return new class extends Migration
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('set null');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('set null');
         });
+
+        Schema::table('borrowed_kits', function (Blueprint $table) {
+            $table->foreign('kit_id')->references('id')->on('kits')->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('set null');
+        });
     }
 
     /**
@@ -37,8 +42,18 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('borrowed_kits', function (Blueprint $table) {
+            $table->dropForeign(['kit_id']);
+            $table->dropForeign(['student_id']);
+        });
+
+        Schema::table('kits', function (Blueprint $table) {
+            $table->dropForeign(['created_by']);
+        });
+
         Schema::table('students', function (Blueprint $table) {
             $table->dropForeign(['section_id']);
+            $table->dropForeign(['created_by']);
         });
 
         Schema::table('class_sessions', function (Blueprint $table) {
@@ -47,14 +62,13 @@ return new class extends Migration
         });
 
         Schema::table('attendance_logs', function (Blueprint $table) {
-            // Drop the new foreign key constraint
+            $table->dropForeign(['section_id']);
             $table->dropForeign(['student_id']);
-            $table->dropColumn('student_id');
         });
 
         Schema::table('sections', function (Blueprint $table) {
             $table->dropForeign(['course_id']);
-            $table->dropForeign(['instructor_id']);
+            $table->dropForeign(['created_by']);
         });
     }
 };
