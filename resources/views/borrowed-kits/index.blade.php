@@ -49,9 +49,12 @@
                             <td class="py-2 px-7 border-b text-center">{{ $borrowedKit->kit->kit_name ?? 'N/A' }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $borrowedKit->quantity_borrowed }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $borrowedKit->student->email ?? 'N/A' }}</td>
-                            <td class="py-2 px-7 border-b text-center">{{ $borrowedKit->borrowed_at }}</td>
-                            <td class="py-2 px-7 border-b text-center">{{ $borrowedKit->due_date }}</td>
-                            <td class="py-2 px-7 border-b text-center">{{ $borrowedKit->returned_at }}</td>
+                            <td class="py-2 px-7 border-b text-center">{{ $borrowedKit->borrowed_at->format('Y-m-d') }}
+                            </td>
+                            <td class="py-2 px-7 border-b text-center">{{ $borrowedKit->due_date->format('Y-m-d') }}
+                            </td>
+                            <td class="py-2 px-7 border-b text-center">{{ $borrowedKit->returned_at->format('Y-m-d') }}
+                            </td>
                             <td class="py-2 px-7 border-b text-center">{{ $borrowedKit->status }}</td>
                         </tr>
                     @endforeach

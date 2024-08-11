@@ -47,13 +47,13 @@
                                         {{ $borrowedKit->quantity_borrowed }}
                                     </td>
                                     <td class="py-3 px-6 text-left">
-                                        {{ optional($borrowedKit->borrowed_at)->format('Y-m-d H:i:s') ?? '' }}
+                                        {{ optional($borrowedKit->borrowed_at)->format('Y-m-d') ?? '' }}
                                     </td>
                                     <td class="py-3 px-6 text-left">
                                         {{ optional($borrowedKit->due_date)->format('Y-m-d') ?? '' }}
                                     </td>
                                     <td class="py-3 px-6 text-left">
-                                        {{ optional($borrowedKit->returned_at)->format('Y-m-d H:i:s') ?? '' }}
+                                        {{ optional($borrowedKit->returned_at)->format('Y-m-d') ?? '' }}
                                     </td>
                                     <td class="py-3 px-6 text-left">
                                         {{ $borrowedKit->status }}
