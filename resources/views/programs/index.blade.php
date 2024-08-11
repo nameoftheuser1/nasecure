@@ -76,8 +76,51 @@
                 </tbody>
             </table>
         </div>
-        <div class="mt-4">
-            {{ $programs->links() }}
-        </div>
+        @if ($programs->hasPages())
+            <div class="mt-4">
+                <ul class="flex justify-center space-x-2">
+                    <li>
+                        <a href="{{ $programs->url(1) }}" aria-label="First"
+                            class="px-3 py-1 border rounded-md hover:bg-gray-200
+                    {{ $programs->onFirstPage() ? 'cursor-not-allowed text-gray-400' : '' }}">
+                            << </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ $programs->previousPageUrl() }}" aria-label="Previous"
+                            class="px-3 py-1 border rounded-md hover:bg-gray-200
+                    {{ $programs->onFirstPage() ? 'cursor-not-allowed text-gray-400' : '' }}">
+                            Previous
+                        </a>
+                    </li>
+
+                    @for ($page = 1; $page <= $programs->lastPage(); $page++)
+                        <li>
+                            <a href="{{ $programs->url($page) }}"
+                                class="px-3 py-1 border rounded-md hover:bg-gray-200
+                        {{ $programs->currentPage() == $page ? 'bg-gray-300 text-gray-700' : '' }}">
+                                {{ $page }}
+                            </a>
+                        </li>
+                    @endfor
+
+                    <li>
+                        <a href="{{ $programs->nextPageUrl() }}" aria-label="Next"
+                            class="px-3 py-1 border rounded-md hover:bg-gray-200
+                    {{ $programs->hasMorePages() ? '' : 'cursor-not-allowed text-gray-400' }}">
+                            Next
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ $programs->url($programs->lastPage()) }}" aria-label="Last"
+                            class="px-3 py-1 border rounded-md hover:bg-gray-200
+                    {{ $programs->hasMorePages() ? '' : 'cursor-not-allowed text-gray-400' }}">
+                            >>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        @endif
     </div>
 </x-layout>
