@@ -84,8 +84,51 @@
                 </tbody>
             </table>
         </div>
-        <div class="mt-4">
-            {{ $sections->links() }}
-        </div>
+        @if ($sections->hasPages())
+            <div class="mt-4">
+                <ul class="flex justify-center space-x-2">
+                    <li>
+                        <a href="{{ $sections->url(1) }}" aria-label="First"
+                            class="px-3 py-1 border rounded-md hover:bg-gray-200
+                    {{ $sections->onFirstPage() ? 'cursor-not-allowed text-gray-400' : '' }}">
+                            << </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ $sections->previousPageUrl() }}" aria-label="Previous"
+                            class="px-3 py-1 border rounded-md hover:bg-gray-200
+                    {{ $sections->onFirstPage() ? 'cursor-not-allowed text-gray-400' : '' }}">
+                            Previous
+                        </a>
+                    </li>
+
+                    @for ($page = 1; $page <= $sections->lastPage(); $page++)
+                        <li>
+                            <a href="{{ $sections->url($page) }}"
+                                class="px-3 py-1 border rounded-md hover:bg-gray-200
+                        {{ $sections->currentPage() == $page ? 'bg-gray-300 text-gray-700' : '' }}">
+                                {{ $page }}
+                            </a>
+                        </li>
+                    @endfor
+
+                    <li>
+                        <a href="{{ $sections->nextPageUrl() }}" aria-label="Next"
+                            class="px-3 py-1 border rounded-md hover:bg-gray-200
+                    {{ $sections->hasMorePages() ? '' : 'cursor-not-allowed text-gray-400' }}">
+                            Next
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ $sections->url($sections->lastPage()) }}" aria-label="Last"
+                            class="px-3 py-1 border rounded-md hover:bg-gray-200
+                    {{ $sections->hasMorePages() ? '' : 'cursor-not-allowed text-gray-400' }}">
+                            >>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        @endif
     </div>
 </x-layout>

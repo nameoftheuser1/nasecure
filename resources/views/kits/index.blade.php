@@ -79,8 +79,51 @@
                 </tbody>
             </table>
         </div>
-        <div class="mt-4">
-            {{ $kits->links() }}
-        </div>
+        @if ($kits->hasPages())
+            <div class="mt-4">
+                <ul class="flex justify-center space-x-2">
+                    <li>
+                        <a href="{{ $kits->url(1) }}" aria-label="First"
+                            class="px-3 py-1 border rounded-md hover:bg-gray-200
+                    {{ $kits->onFirstPage() ? 'cursor-not-allowed text-gray-400' : '' }}">
+                            << </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ $kits->previousPageUrl() }}" aria-label="Previous"
+                            class="px-3 py-1 border rounded-md hover:bg-gray-200
+                    {{ $kits->onFirstPage() ? 'cursor-not-allowed text-gray-400' : '' }}">
+                            Previous
+                        </a>
+                    </li>
+
+                    @for ($page = 1; $page <= $kits->lastPage(); $page++)
+                        <li>
+                            <a href="{{ $kits->url($page) }}"
+                                class="px-3 py-1 border rounded-md hover:bg-gray-200
+                        {{ $kits->currentPage() == $page ? 'bg-gray-300 text-gray-700' : '' }}">
+                                {{ $page }}
+                            </a>
+                        </li>
+                    @endfor
+
+                    <li>
+                        <a href="{{ $kits->nextPageUrl() }}" aria-label="Next"
+                            class="px-3 py-1 border rounded-md hover:bg-gray-200
+                    {{ $kits->hasMorePages() ? '' : 'cursor-not-allowed text-gray-400' }}">
+                            Next
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ $kits->url($kits->lastPage()) }}" aria-label="Last"
+                            class="px-3 py-1 border rounded-md hover:bg-gray-200
+                    {{ $kits->hasMorePages() ? '' : 'cursor-not-allowed text-gray-400' }}">
+                            >>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        @endif
     </div>
 </x-layout>
