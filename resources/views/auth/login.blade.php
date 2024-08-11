@@ -10,7 +10,7 @@
     }
 </style>
 <x-layout>
-    <div class="fixed right-1/2  top-1/4 flex gap-3 ">
+    <div class="fixed right-1/2 top-1/4 ">
         <a href="{{ route('attendance') }}" class="flex mb-5 border-2 rounded-lg p-4 w-52 bg-gray-100 hover:bg-slate-300">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-6 h-6 mr-2">
