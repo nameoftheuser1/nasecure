@@ -42,7 +42,7 @@ class BorrowedKitController extends Controller
                     ->orWhere('description', 'like', "%{$search}%");
             })
             ->latest()
-            ->paginate(10);
+            ->paginate(9);
 
         return view('borrowed-kits.borrow', ['kits' => $kits]);
     }
@@ -89,6 +89,105 @@ class BorrowedKitController extends Controller
         session()->forget('cart');
 
         return redirect()->back()->with('success', 'Kits borrowed successfully!');
+    }
+
+    public function fetchBorrowedKits(Request $request)
+    {
+        $email = $request->query('email');
+
+        $student = Student::where('email', $email)->first();
+
+        if (!$student) {
+            return response()->json([]);
+        }
+
+        $borrowedKits = BorrowedKit::where('student_id', $student->id)
+            ->with('kit')
+            ->get()
+            ->map(function ($borrowedKit) {
+                return [
+                    'kit_id' => $borrowedKit->kit->id,
+                    'kit_name' => $borrowedKit->kit->kit_name,
+                    'quantity_borrowed' => $borrowedKit->quantity_borrowed,
+                ];
+            });
+
+        return response()->json($borrowedKits);
+    }
+
+    public function showReturnForm()
+    {
+        return view('borrowed-kits.return');
+    }
+
+    public function processReturn(Request $request)
+    {
+        $studentEmail = $request->input('email');
+        $kitId = $request->input('kit_id');
+        $quantityToReturn = $request->input('quantity');
+
+        $student = Student::where('email', $studentEmail)->first();
+        $borrowedKit = BorrowedKit::where('student_id', $student->id)->where('kit_id', $kitId)->first();
+
+        if (!$borrowedKit || $borrowedKit->quantity_borrowed < $quantityToReturn) {
+            return redirect()->back()->with('error', 'Invalid return quantity.');
+        }
+
+        $borrowedKit->quantity_borrowed -= $quantityToReturn;
+        if ($borrowedKit->quantity_borrowed == 0) {
+            $borrowedKit->delete();
+        } else {
+            $borrowedKit->save();
+        }
+
+        $kit = Kit::find($kitId);
+        $kit->quantity += $quantityToReturn;
+        $kit->save();
+
+        return redirect()->route('borrowed-kits.return')->with('success', 'Kit returned successfully.');
+    }
+
+
+    public function returnKits(Request $request)
+    {
+        $email = $request->input('email');
+        $kits = $request->input('kits');
+
+        $student = Student::where('email', $email)->first();
+
+        if (!$student) {
+            return redirect()->back()->with('error', 'Student with this email does not exist.');
+        }
+
+        foreach ($kits as $kitId => $quantityToReturn) {
+            $borrowedKit = BorrowedKit::where('kit_id', $kitId)
+                ->where('student_id', $student->id)
+                ->where('status', 'borrowed')
+                ->first();
+
+            if (!$borrowedKit) {
+                continue;
+            }
+
+            if ($quantityToReturn > $borrowedKit->quantity_borrowed) {
+                return redirect()->back()->with('error', "Return quantity for {$borrowedKit->kit->kit_name} exceeds the borrowed quantity.");
+            }
+
+            $kit = $borrowedKit->kit;
+            $kit->quantity += $quantityToReturn;
+            $kit->save();
+
+            $borrowedKit->quantity_borrowed -= $quantityToReturn;
+
+            if ($borrowedKit->quantity_borrowed == 0) {
+                $borrowedKit->status = 'returned';
+                $borrowedKit->returned_at = Carbon::now();
+            }
+
+            $borrowedKit->save();
+        }
+
+        return redirect()->back()->with('success', 'Kits returned successfully!');
     }
 
 

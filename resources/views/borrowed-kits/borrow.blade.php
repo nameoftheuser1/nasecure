@@ -1,7 +1,13 @@
 <x-layout>
     <div class="container mx-auto p-6">
         <h1 class="text-3xl font-bold mb-6">Borrow Kits</h1>
-
+        <a href="{{ route('borrowed-kits.return') }}"
+            class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded w-64 mr-4">
+            Return Kits
+        </a>
+        <a href="{{ route('login') }}" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded w-64">
+            Back to Login
+        </a>
         @if (session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
                 {{ session('success') }}
@@ -34,48 +40,61 @@
                 @if ($kits->isEmpty())
                     <p class="text-gray-600">No kits available for borrowing at the moment.</p>
                 @else
-                    <div class="overflow-x-auto mt-4">
-                        <table class="min-w-full bg-white border border-gray-200">
-                            <thead>
-                                <tr class="bg-gray-100">
-                                    <th class="py-3 px-4 text-left text-gray-600 font-medium border-b">Kit Name</th>
-                                    <th class="py-3 px-4 text-left text-gray-600 font-medium border-b">Description</th>
-                                    <th class="py-3 px-4 text-left text-gray-600 font-medium border-b">Quantity
-                                        Available
-                                    </th>
-                                    <th class="py-3 px-4 text-left text-gray-600 font-medium border-b">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($kits as $kit)
-                                    <tr class="hover:bg-gray-50">
-                                        <td class="py-3 px-4 border-b">{{ $kit->kit_name }}</td>
-                                        <td class="py-3 px-4 border-b">{{ $kit->description }}</td>
-                                        <td class="py-3 px-4 border-b">{{ $kit->quantity }}</td>
-                                        <td class="py-3 px-4 border-b">
-                                            <form class="add-to-cart-form" data-kit-id="{{ $kit->id }}"
-                                                data-kit-name="{{ $kit->kit_name }}"
-                                                data-kit-quantity="{{ $kit->quantity }}">
-                                                @csrf
-                                                <div class="flex items-center space-x-2">
-                                                    <input type="number" name="quantity" value="1" min="1"
-                                                        max="{{ $kit->quantity }}"
-                                                        class="w-16 p-2 border border-gray-300 rounded">
-                                                    <button type="button"
-                                                        class="add-to-cart bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
-                                                        &#43;
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                        @foreach ($kits as $kit)
+                            <div class="bg-white border border-gray-200 rounded-lg shadow-md p-4">
+                                <h2 class="text-xl font-semibold mb-2">{{ $kit->kit_name }}</h2>
+                                <p class="text-gray-600 mb-4">{{ $kit->description }}</p>
+                                <p class="text-gray-800 mb-4">Quantity Available: {{ $kit->quantity }}</p>
+                                <form class="add-to-cart-form" data-kit-id="{{ $kit->id }}"
+                                    data-kit-name="{{ $kit->kit_name }}" data-kit-quantity="{{ $kit->quantity }}">
+                                    @csrf
+                                    <div class="flex items-center space-x-2">
+                                        <input type="number" name="quantity" value="1" min="1"
+                                            max="{{ $kit->quantity }}" class="w-16 p-2 border border-gray-300 rounded">
+                                        <button type="button"
+                                            class="add-to-cart bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
+                                            &#43;
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        @endforeach
                     </div>
 
                     <div class="mt-4">
-                        {{ $kits->links() }}
+                        <nav aria-label="Pagination">
+                            <ul class="flex items-center justify-between">
+                                @if ($kits->onFirstPage())
+                                    <li class="disabled"><span
+                                            class="bg-gray-300 text-gray-600 py-2 px-4 rounded">Previous</span></li>
+                                @else
+                                    <li>
+                                        <a href="{{ $kits->previousPageUrl() }}"
+                                            class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Previous</a>
+                                    </li>
+                                @endif
+
+                                @for ($page = 1; $page <= $kits->lastPage(); $page++)
+                                    <li>
+                                        <a href="{{ $kits->url($page) }}"
+                                            class="{{ $kits->currentPage() == $page ? 'bg-blue-700 text-white' : 'bg-white text-blue-500 hover:bg-blue-100' }} py-2 px-4 rounded">
+                                            {{ $page }}
+                                        </a>
+                                    </li>
+                                @endfor
+
+                                @if ($kits->hasMorePages())
+                                    <li>
+                                        <a href="{{ $kits->nextPageUrl() }}"
+                                            class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Next</a>
+                                    </li>
+                                @else
+                                    <li class="disabled"><span
+                                            class="bg-gray-300 text-gray-600 py-2 px-4 rounded">Next</span></li>
+                                @endif
+                            </ul>
+                        </nav>
                     </div>
             </div>
             <div>
@@ -162,11 +181,7 @@
                     let cart = JSON.parse(sessionStorage.getItem('cart')) || {};
 
                     if (cart[kitId]) {
-                        cart[kitId].quantity = parseInt(cart[kitId].quantity) + quantity;
-                        if (cart[kitId].quantity > kitQuantity) {
-                            alert('Quantity exceeds available stock.');
-                            cart[kitId].quantity = kitQuantity;
-                        }
+                        cart[kitId].quantity += quantity;
                     } else {
                         cart[kitId] = {
                             kit_name: kitName,
@@ -179,23 +194,14 @@
                 });
             });
 
-            cartItems.addEventListener('click', function(event) {
-                if (event.target.classList.contains('remove-from-cart')) {
-                    const kitId = event.target.dataset.kitId;
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-from-cart')) {
+                    const kitId = e.target.dataset.kitId;
                     let cart = JSON.parse(sessionStorage.getItem('cart')) || {};
+
                     delete cart[kitId];
                     sessionStorage.setItem('cart', JSON.stringify(cart));
                     updateCartDisplay();
-                }
-            });
-
-            borrowForm.addEventListener('submit', function(e) {
-                const cart = JSON.parse(sessionStorage.getItem('cart')) || {};
-                if (Object.keys(cart).length === 0) {
-                    e.preventDefault();
-                    alert('Your cart is empty. Please add items before checking out.');
-                } else {
-                    cartDataInput.value = JSON.stringify(cart);
                 }
             });
 
