@@ -3,6 +3,7 @@
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceLogController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BorrowedKitController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstructorController;
@@ -31,6 +32,16 @@ Route::middleware('guest')->group(function () {
     Route::post('/attendance/time-out', [AttendanceController::class, 'storeTimeOut'])->name('attendance.timeOut');
     Route::post('/fetch-sections', [AttendanceController::class, 'fetchSections'])->name('attendance.fetchSections');
     Route::post('/attendance/scan-rfid', [AttendanceController::class, 'scanRFID'])->name('attendance.scan-rfid');
+
+    Route::get('/borrowed-kits/borrow', [BorrowedKitController::class, 'borrow'])->name('borrowed-kits.borrow');
+    Route::get('/borrowed-kits/cart', [BorrowedKitController::class, 'viewCart'])->name('borrowed-kits.cart');
+    Route::post('/borrowed-kits/add-to-cart', [BorrowedKitController::class, 'addToCart'])->name('borrowed-kits.addToCart');
+    Route::post('/borrowed-kits/remove-from-cart/{kitId}', [BorrowedKitController::class, 'removeFromCart'])->name('borrowed-kits.removeFromCart');
+    Route::post('/borrowed-kits/proceed-to-borrow', [BorrowedKitController::class, 'proceedToBorrow'])->name('borrowed-kits.proceedToBorrow');
+    Route::get('/borrowed-kits/return', [BorrowedKitController::class, 'showReturnForm'])->name('borrowed-kits.return');
+    Route::post('/borrowed-kits/return', [BorrowedKitController::class, 'processReturn'])->name('borrowed-kits.return.process');
+    Route::get('/borrowed-kits/fetch-borrowed-kits', [BorrowedKitController::class, 'fetchBorrowedKits']);
+    Route::post('/borrowed-kits/return', [BorrowedKitController::class, 'returnKits'])->name('borrowed-kits.return');
 });
 
 Route::middleware('auth')->group(function () {
@@ -57,6 +68,7 @@ Route::middleware('auth')->group(function () {
         Route::post('instructors/import', [InstructorController::class, 'import'])->name('instructors.import');
         Route::resource('instructors', InstructorController::class);
         Route::resource('kits', KitController::class);
+        Route::get('/borrowed-kits', [BorrowedKitController::class, 'index'])->name('borrowed-kits');
     });
 });
 

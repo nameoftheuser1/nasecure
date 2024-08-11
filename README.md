@@ -2,7 +2,6 @@
 
 ![NASECURE](public/images/NASECURE.png)
 
-
 ## Prerequisites
 
 Ensure you have the following installed:
@@ -35,35 +34,42 @@ Ensure you have the following installed:
    npm install
    ```
 
-4. **Set Up the Environment File**
+4. **Build Frontend Assets**
+
+   Compile and minify the frontend assets:
+   ```bash
+   npm run build
+   ```
+
+5. **Set Up the Environment File**
 
    Copy the `.env.example` file to `.env` and update the environment settings as needed:
    ```bash
    cp .env.example .env
    ```
 
-5. **Generate the Application Key**
+6. **Generate the Application Key**
 
    Generate a new application key:
    ```bash
    php artisan key:generate
    ```
 
-6. **Create Storage Symlink**
+7. **Create Storage Symlink**
 
    Create a symbolic link for storage:
    ```bash
    php artisan storage:link
    ```
 
-7. **Run Migrations**
+8. **Run Migrations**
 
    Run the migrations to set up the database schema:
    ```bash
    php artisan migrate:fresh
    ```
 
-8. **Seed the Database with Admin User**
+9. **Seed the Database**
 
    Run the seeder to create an admin user:
    ```bash
@@ -73,14 +79,19 @@ Ensure you have the following installed:
    - The default password for the admin user is `admin` if you just run the `php artisan db:seed --class=AdminSeeder` command.
    - You can change the password of the admin user by modifying the `database/seeders/AdminSeeder.php` file. Look for the section where the admin user is created and update the password as needed.
 
-9. **Update `php.ini` in XAMPP**
-
-   To use FastExcel, you need to enable the `zip` extension. Open `php.ini` (found in the `php` folder of your XAMPP installation) and remove the semicolon (`;`) from the line:
-   ```ini
-   extension=zip
+   Additionally, seed the database with kit data:
+   ```bash
+   php artisan db:seed --class=KitSeeder
    ```
 
-   Restart XAMPP to apply the changes.
+10. **Update `php.ini` in XAMPP**
+
+    To use FastExcel, you need to enable the `zip` extension. Open `php.ini` (found in the `php` folder of your XAMPP installation) and remove the semicolon (`;`) from the line:
+    ```ini
+    extension=zip
+    ```
+
+    Restart XAMPP to apply the changes.
 
 ## Additional Notes
 
@@ -90,3 +101,5 @@ Ensure you have the following installed:
 ---
 
 For more details, refer to the [Laravel Documentation](https://laravel.com/docs/11.x) or consult the README file provided with the application.
+
+---

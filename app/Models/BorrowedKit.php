@@ -20,6 +20,12 @@ class BorrowedKit extends Model
         'status',
     ];
 
+    protected $casts = [
+        'borrowed_at' => 'datetime',
+        'due_date' => 'datetime',
+        'returned_at' => 'datetime',
+    ];
+
     public function kit(): BelongsTo
     {
         return $this->belongsTo(Kit::class);
