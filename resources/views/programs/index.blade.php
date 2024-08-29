@@ -46,7 +46,6 @@
                     <tr class="bg-gray-200">
                         <th class="py-2 px-4 border-b">Program ID</th>
                         <th class="py-2 px-4 border-b">Program Name</th>
-                        <th class="py-2 px-4 border-b">Program Code</th>
                         <th class="py-2 px-4 border-b w-40">Actions</th>
                     </tr>
                 </thead>
@@ -55,7 +54,6 @@
                         <tr class="hover:bg-blue-50">
                             <td class="py-2 px-7 border-b text-center">{{ $program->id }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $program->program_name }}</td>
-                            <td class="py-2 px-7 border-b text-center">{{ $program->program_code }}</td>
                             <td class="py-2 px-7 border-b flex justify-center w-40">
                                 <a href="{{ route('programs.edit', $program->id) }}"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">

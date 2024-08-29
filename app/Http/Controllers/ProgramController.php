@@ -17,7 +17,6 @@ class ProgramController extends Controller
         $search = $request->input('search');
         $programs = Program::query()
             ->where('program_name', 'like', "%{$search}%")
-            ->orWhere('program_code', 'like', "%{$search}%")
             ->latest()
             ->paginate(10);
 
@@ -39,7 +38,6 @@ class ProgramController extends Controller
     {
         $fields = $request->validate([
             'program_name' => ['required', 'max:50'],
-            'program_code' => ['required', 'max:50', 'unique:programs'],
         ]);
 
         Program::create($fields);
@@ -69,7 +67,6 @@ class ProgramController extends Controller
     {
         $fields = $request->validate([
             'program_name' => ['required', 'max:50'],
-            'program_code' => ['required', 'max:50', 'unique:programs,program_code,' . $program->id],
         ]);
 
         $program->update($fields);

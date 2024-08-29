@@ -10,7 +10,7 @@
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
                     <option value="" disabled selected>Select a program</option>
                     @foreach($programs as $program)
-                        <option value="{{ $program->id }}">{{ $program->program_code }} - {{ $program->program_name }}</option>
+                        <option value="{{ $program->id }}">{{ $program->program_name }}</option>
                     @endforeach
                 </select>
             </div>

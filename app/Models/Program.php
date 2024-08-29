@@ -12,7 +12,6 @@ class Program extends Model
 
     protected $fillable = [
         'program_name',
-        'program_code'
     ];
 
     public function course():HasMany
