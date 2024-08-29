@@ -1,6 +1,5 @@
 <x-layout>
     <x-sidebar />
-
     <div class="container mx-auto  border p-5 w-1/2 rounded-lg border-blue-600 bg-gray-100">
         <h2 id="month-year" class="mx-4 text-lg font-bold"></h2>
 
@@ -37,7 +36,7 @@
                     @foreach ($sections as $section)
                         <tr class="cursor-pointer hover:bg-blue-100" data-section-id="{{ $section->id }}">
                             <td class="py-2 text-center">{{ $section->section_name }}</td>
-                            <td class="py-2 text-center">{{ $section->course_name }}</td>
+                            <td class="py-2 text-center">{{ $section->course->course_name ?? 'N/A' }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -62,9 +61,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.4/plugin/utc.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.4/plugin/timezone.min.js"></script> --}}
 
-    <script src="{{asset('date/dayjs.min.js')}}"></script>
-    <script src="{{asset('date/utc.min.js')}}"></script>
-    <script src="{{asset('date/timezone.min.js')}}"></script>
+    <script src="{{ asset('date/dayjs.min.js') }}"></script>
+    <script src="{{ asset('date/utc.min.js') }}"></script>
+    <script src="{{ asset('date/timezone.min.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             dayjs.extend(window.dayjs_plugin_utc);

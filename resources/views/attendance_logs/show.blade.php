@@ -2,7 +2,7 @@
     <x-sidebar />
     <div class="container mx-auto p-5 bg-gray-100 rounded-3xl flex flex-col items-center">
         <div class="w-full max-w-2xl">
-            <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Section Details</h1>
+            <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Attendance Logs</h1>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-4">
                     <div class="p-4 rounded-lg border border-gray-200">
@@ -34,6 +34,13 @@
                     onchange="filterAttendanceByDate(this.value)">
             </div>
 
+            <div id="error-container" class="w-full mt-4 hidden">
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <strong class="font-bold">Error!</strong>
+                    <span class="block sm:inline" id="error-message"></span>
+                </div>
+            </div>
+
             <div id="attendance-container" class="w-full mt-10">
                 <h2 class="text-2xl font-bold mb-4 text-gray-800">Attendance Logs by Date</h2>
                 <div class="text-center py-6">
@@ -56,22 +63,41 @@
     </div>
 
     <script>
+        function formatTime(time) {
+            if (!time) return 'N/A';
+            const [hours, minutes] = time.split(':');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const formattedHours = hours % 12 || 12;
+            return `${formattedHours}:${minutes} ${ampm}`;
+        }
+
         function filterAttendanceByDate(date) {
             const sectionId = {{ $section->id }};
+            const errorContainer = document.getElementById('error-container');
+            const errorMessage = document.getElementById('error-message');
+            const attendanceContainer = document.getElementById('attendance-container');
+
             fetch(`/sections/${sectionId}/attendance?date=${date}`)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    const container = document.getElementById('attendance-container');
+                    errorContainer.classList.add('hidden');
+                    let html;
                     if (data.logs.length > 0) {
-                        let html = `
+                        html = `
                             <h2 class="text-2xl font-bold mb-4 text-gray-800">Attendance Logs for ${data.date}</h2>
-                            <p class="text-gray-600 mb-4">Present: ${data.present}/${data.studentCount}</p>
+                            <p class="text-gray-600 mb-4">Total Attendance Logs for ${data.date}: ${data.logs.length} / ${data.studentCount}</p>
                             <div class="overflow-x-auto bg-white rounded-lg shadow-md">
                                 <table class="min-w-full bg-white">
                                     <thead class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                                         <tr>
                                             <th class="py-3 px-6 text-left">Student Name</th>
-                                            <th class="py-3 px-6 text-left">Present</th>
+                                            <th class="py-3 px-6 text-left">Time In</th>
+                                            <th class="py-3 px-6 text-left">Time Out</th>
                                         </tr>
                                     </thead>
                                     <tbody class="text-gray-600 text-sm font-light">
@@ -79,21 +105,30 @@
                         data.logs.forEach(log => {
                             html += `
                                 <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                    <td class="py-3 px-6 text-left whitespace-nowrap">${log.student.name}</td>
-                                    <td class="py-3 px-6 text-left">${log.present ? 'Yes' : 'No'}</td>
+                                    <td class="py-3 px-6 text-left whitespace-nowrap">${log.student ? log.student.name : 'N/A'}</td>
+                                    <td class="py-3 px-6 text-left">${formatTime(log.time_in)}</td>
+                                    <td class="py-3 px-6 text-left">${formatTime(log.time_out)}</td>
                                 </tr>
                             `;
                         });
                         html += `</tbody></table></div>`;
-                        container.innerHTML = html;
                     } else {
-                        container.innerHTML = `
+                        html = `
                             <div class="text-center py-6">
                                 <p class="text-gray-600">No attendance logs available for ${data.date}.</p>
                             </div>
                         `;
                     }
+                    attendanceContainer.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    errorMessage.textContent =
+                        `Failed to load attendance data: ${error.message}. Please try again later.`;
+                    errorContainer.classList.remove('hidden');
+                    attendanceContainer.innerHTML = '';
                 });
         }
     </script>
+
 </x-layout>

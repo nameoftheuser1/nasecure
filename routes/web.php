@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::redirect('/', 'dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/attendance-logs', [DashboardController::class, 'fetchAttendanceLogs']);
-    Route::get('/sections/{id}/attendance', [SectionController::class, 'attendanceByDate']);
+    Route::get('/sections/{id}/attendance', [AttendanceLogController::class, 'attendanceByDate']);
 
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

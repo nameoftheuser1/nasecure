@@ -29,7 +29,7 @@ class DashboardController extends Controller
             $sectionsQuery->where('created_by', $user->id);
         }
 
-        $sections = $sectionsQuery->latest();
+        $sections = $sectionsQuery->latest()->get();
 
         return view('dashboard.index', ['sections' => $sections]);
     }

@@ -51,7 +51,7 @@ class AttendanceLogController extends Controller
 
     public function attendanceByDate(Request $request, $id)
     {
-        $section = Section::with(['attendanceLogs.student'])->findOrFail($id);
+        $section = Section::findOrFail($id);
         $date = $request->query('date');
 
         if (!$date) {
@@ -59,6 +59,7 @@ class AttendanceLogController extends Controller
         }
 
         $attendanceLogs = $section->attendanceLogs()
+            ->with('student')
             ->whereDate('created_at', $date)
             ->get();
 
