@@ -1,13 +1,6 @@
 <x-layout>
     <div class="container mx-auto p-6">
         <h1 class="text-3xl font-bold mb-6">Borrow Kits</h1>
-        <a href="{{ route('borrowed-kits.return') }}"
-            class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded w-64 mr-4">
-            Return Kits
-        </a>
-        <a href="{{ route('borrowed-kits') }}" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded w-64">
-            Back
-        </a>
         <div>
             @if (session('success'))
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
@@ -20,7 +13,13 @@
                 </div>
             @endif
         </div>
-
+        <a href="{{ route('borrowed-kits.return') }}"
+            class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded w-64 mr-4">
+            Return Kits
+        </a>
+        <a href="{{ route('borrowed-kits') }}" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded w-64">
+            Back
+        </a>
         <div class="flex gap-2">
             <div>
                 <div class="w-full mt-6">
