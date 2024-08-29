@@ -14,12 +14,14 @@ class DashboardController extends Controller
         $search = $request->input('search');
         $user = Auth::user();
 
-        $sectionsQuery = Section::with('students')
+        $sectionsQuery = Section::with(['students', 'course'])
             ->where(function ($query) use ($search) {
                 $query->where('section_name', 'like', "%{$search}%")
-                    ->orWhere('subject', 'like', "%{$search}%")
                     ->orWhereHas('students', function ($query) use ($search) {
                         $query->where('name', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('course', function ($query) use ($search) {
+                        $query->where('course_name', 'like', "%{$search}%");
                     });
             });
 
@@ -31,6 +33,7 @@ class DashboardController extends Controller
 
         return view('dashboard.index', ['sections' => $sections]);
     }
+
 
 
     public function fetchAttendanceLogs(Request $request)
