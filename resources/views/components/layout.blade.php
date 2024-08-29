@@ -17,19 +17,16 @@
         {{ $slot }}
     @endguest
     <div class="py-5">
-
-
     </div>
 
-
     @auth
-        <div class="ps-80 pe-10">
+        <div
+            class="{{ request()->is('borrowed-kits/borrow') || request()->is('borrowed-kits/return') ? 'pe-10' : 'ps-80 pe-10' }}">
             <main>
                 {{ $slot }}
             </main>
         </div>
     @endauth
-
 
 </body>
 

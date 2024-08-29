@@ -8,6 +8,7 @@ use App\Models\Kit;
 use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class BorrowedKitController extends Controller
@@ -103,12 +104,14 @@ class BorrowedKitController extends Controller
 
         $borrowedKits = BorrowedKit::where('student_id', $student->id)
             ->with('kit')
+            ->select('kit_id', DB::raw('SUM(quantity_borrowed) as total_quantity_borrowed'))
+            ->groupBy('kit_id')
             ->get()
             ->map(function ($borrowedKit) {
                 return [
                     'kit_id' => $borrowedKit->kit->id,
                     'kit_name' => $borrowedKit->kit->kit_name,
-                    'quantity_borrowed' => $borrowedKit->quantity_borrowed,
+                    'quantity_borrowed' => $borrowedKit->total_quantity_borrowed,
                 ];
             });
 
@@ -160,35 +163,45 @@ class BorrowedKitController extends Controller
         }
 
         foreach ($kits as $kitId => $quantityToReturn) {
-            $borrowedKit = BorrowedKit::where('kit_id', $kitId)
+            $borrowedKits = BorrowedKit::where('kit_id', $kitId)
                 ->where('student_id', $student->id)
                 ->where('status', 'borrowed')
-                ->first();
+                ->orderBy('id', 'asc')
+                ->get();
 
-            if (!$borrowedKit) {
-                continue;
+            $remainingToReturn = $quantityToReturn;
+
+            foreach ($borrowedKits as $borrowedKit) {
+                if ($remainingToReturn <= 0) {
+                    break;
+                }
+
+                $returnableQuantity = min($remainingToReturn, $borrowedKit->quantity_borrowed);
+
+                $borrowedKit->quantity_borrowed -= $returnableQuantity;
+                $remainingToReturn -= $returnableQuantity;
+
+                if ($borrowedKit->quantity_borrowed == 0) {
+                    $borrowedKit->status = 'returned';
+                    $borrowedKit->returned_at = Carbon::now();
+                    $borrowedKit->save();
+                } else {
+                    $borrowedKit->save();
+                }
+
+                $kit = Kit::find($kitId);
+                $kit->quantity += $returnableQuantity;
+                $kit->save();
             }
 
-            if ($quantityToReturn > $borrowedKit->quantity_borrowed) {
-                return redirect()->back()->with('error', "Return quantity for {$borrowedKit->kit->kit_name} exceeds the borrowed quantity.");
+            if ($remainingToReturn > 0) {
+                return redirect()->back()->with('error', "Return quantity for Kit ID {$kitId} exceeds the total borrowed quantity.");
             }
-
-            $kit = $borrowedKit->kit;
-            $kit->quantity += $quantityToReturn;
-            $kit->save();
-
-            $borrowedKit->quantity_borrowed -= $quantityToReturn;
-
-            if ($borrowedKit->quantity_borrowed == 0) {
-                $borrowedKit->status = 'returned';
-                $borrowedKit->returned_at = Carbon::now();
-            }
-
-            $borrowedKit->save();
         }
 
         return redirect()->back()->with('success', 'Kits returned successfully!');
     }
+
 
 
     /**
