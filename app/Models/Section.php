@@ -15,7 +15,6 @@ class Section extends Model
         'section_name',
         'student_count',
         'course_id',
-        'subject',
         'created_by',
         'time_in',
         'time_out',
