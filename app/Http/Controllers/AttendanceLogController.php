@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AttendanceLog;
 use App\Http\Requests\StoreAttendanceLogRequest;
 use App\Http\Requests\UpdateAttendanceLogRequest;
+use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,78 +17,58 @@ class AttendanceLogController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $user = Auth::user();
-
-        $attendanceLogsQuery = AttendanceLog::with('student', 'section')
-            ->when($user->role->name !== 'admin', function ($query) use ($user) {
-                $query->whereHas('student', function ($query) use ($user) {
-                    $query->where('created_by', $user->id);
-                });
-            })
+        $userId = Auth::id();
+        $sections = Section::with('course')
+            ->where('created_by', $userId)
             ->where(function ($query) use ($search) {
-                $query->whereHas('student', function ($query) use ($search) {
-                    $query->where('name', 'like', "%{$search}%")
-                        ->orWhere('email', 'like', "%{$search}%");
-                })
-                    ->orWhere('attendance_date', 'like', "%{$search}%")
-                    ->orWhere('time_in', 'like', "%{$search}%")
-                    ->orWhere('time_out', 'like', "%{$search}%")
-                    ->orWhereHas('section', function ($query) use ($search) {
-                        $query->where('subject', 'like', "%{$search}%");
+                $query->where('section_name', 'like', "%{$search}%")
+                    ->orWhere('student_count', 'like', "%{$search}%")
+                    ->orWhere('course_id', 'like', "%{$search}%")
+                    ->orWhereHas('course', function ($query) use ($search) {
+                        $query->where('course_name', 'like', "%{$search}%");
                     });
             })
             ->latest()
             ->paginate(10);
 
-        return view('attendance_logs.index', ['attendanceLogs' => $attendanceLogsQuery]);
+        return view('attendance_logs.index', ['sections' => $sections]);
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show(Request $request, $id)
     {
-        //
+        $section = Section::with(['attendanceLogs.student'])->findOrFail($id);
+
+        $attendanceByDate = $section->attendanceLogs
+            ->groupBy(function ($log) {
+                return $log->created_at->format('Y-m-d');
+            });
+
+        return view('attendance_logs.show', [
+            'section' => $section,
+            'attendanceByDate' => $attendanceByDate,
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreAttendanceLogRequest $request)
+    public function attendanceByDate(Request $request, $id)
     {
-        //
-    }
+        $section = Section::with(['attendanceLogs.student'])->findOrFail($id);
+        $date = $request->query('date');
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(AttendanceLog $attendanceLog)
-    {
-        //
-    }
+        if (!$date) {
+            return response()->json(['logs' => [], 'date' => $date, 'studentCount' => $section->student_count, 'present' => 0]);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(AttendanceLog $attendanceLog)
-    {
-        //
-    }
+        $attendanceLogs = $section->attendanceLogs()
+            ->whereDate('created_at', $date)
+            ->get();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateAttendanceLogRequest $request, AttendanceLog $attendanceLog)
-    {
-        //
-    }
+        $presentCount = $attendanceLogs->where('present', true)->count();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(AttendanceLog $attendanceLog)
-    {
-        //
+        return response()->json([
+            'logs' => $attendanceLogs,
+            'date' => $date,
+            'studentCount' => $section->student_count,
+            'present' => $presentCount,
+        ]);
     }
 }

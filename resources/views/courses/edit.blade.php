@@ -8,9 +8,10 @@
             <div>
                 <label for="program_id" class="block text-sm font-medium text-gray-700">Program</label>
                 <select id="program_id" name="program_id"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required>
                     <option value="" disabled>Select a program</option>
-                    @foreach($programs as $program)
+                    @foreach ($programs as $program)
                         <option value="{{ $program->id }}" {{ $course->program_id == $program->id ? 'selected' : '' }}>
                             {{ $program->program_code }} - {{ $program->program_name }}
                         </option>
@@ -22,6 +23,12 @@
                 <input type="text" id="course_name" name="course_name"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     value="{{ old('course_name', $course->course_name) }}" required>
+            </div>
+            <div>
+                <label for="course_code" class="block text-sm font-medium text-gray-700">Course Code</label>
+                <input type="text" id="course_code" name="course_code"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    value="{{ old('course_code', $course->course_code) }}" required>
             </div>
             <div>
                 <button type="submit"
