@@ -20,14 +20,16 @@ class CourseController extends Controller
         $courses = Course::query()
             ->leftJoin('programs', 'courses.program_id', '=', 'programs.id')
             ->where(function ($query) use ($search) {
-                $query->Where('courses.course_name', 'like', "%{$search}%");
+                $query->where('courses.course_name', 'like', "%{$search}%")
+                    ->orWhere('courses.course_code', 'like', "%{$search}%");
             })
             ->orWhereNull('courses.program_id')
-            ->latest()
+            ->orderBy('courses.created_at', 'desc')
             ->paginate(10);
 
         return view('courses.index', ['courses' => $courses]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -45,6 +47,7 @@ class CourseController extends Controller
     {
         $fields = $request->validate([
             'program_id' => ['required', 'exists:programs,id'],
+            'course_code' => ['required', 'max:100'],
             'course_name' => ['required', 'max:100'],
         ]);
 
@@ -77,6 +80,7 @@ class CourseController extends Controller
     {
         $fields = $request->validate([
             'program_id' => ['required', 'exists:programs,id'],
+            'course_code' => ['required', 'max:100'],
             'course_name' => ['required', 'max:100'],
         ]);
 

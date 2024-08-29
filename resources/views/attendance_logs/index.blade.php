@@ -9,8 +9,8 @@
     </div>
     <div class="container mx-auto p-5 bg-gray-200 rounded-3xl">
         <div class="items-center mb-3">
-            <h1 class="text-xl font-bold ps-4 mb-4">Attendance Logs</h1>
-            <p class="text-sm ps-8">View and manage attendance logs here.</p>
+            <h1 class="text-xl font-bold ps-4 mb-4">Attendance Log</h1>
+            <p class="text-sm ps-8">Select section to check its attendance.</p>
         </div>
         <div class="w-full mt-6">
             <form method="GET" action="{{ route('attendance_logs.index') }}" class="flex items-center">
@@ -32,36 +32,26 @@
             <table class="min-w-full bg-gray-200 rounded-2xl border-gray-300">
                 <thead>
                     <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border-b">ID</th>
-                        <th class="py-2 px-4 border-b">Student Name</th>
-                        <th class="py-2 px-4 border-b">Section Subject</th>
-                        <th class="py-2 px-4 border-b">Attendance Date</th>
-                        <th class="py-2 px-4 border-b">Time In</th>
-                        <th class="py-2 px-4 border-b">Time Out</th>
+                        <th class="py-2 px-4 border-b">Section Name</th>
+                        <th class="py-2 px-4 border-b">Student Count</th>
+                        <th class="py-2 px-4 border-b">Course</th>
+                        <th class="py-2 px-4 border-b w-40">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($attendanceLogs as $log)
-                        <tr class="hover:bg-blue-50">
-                            <td class="py-2 px-4 border-b text-center">{{ $log->id }}</td>
-                            <td class="py-2 px-4 border-b text-center">{{ $log->student->name }}</td>
-                            <td class="py-2 px-4 border-b text-center">{{ $log->section->subject ?? 'N/A' }}</td>
-                            <td class="py-2 px-4 border-b text-center">
-                                {{ \Carbon\Carbon::parse($log->attendance_date)->format('Y-m-d') }}
-                            </td>
-                            <td class="py-2 px-4 border-b text-center">
-                                {{ $log->time_in ? \Carbon\Carbon::parse($log->time_in)->format('H:i') : 'N/A' }}
-                            </td>
-                            <td class="py-2 px-4 border-b text-center">
-                                {{ $log->time_out ? \Carbon\Carbon::parse($log->time_out)->format('H:i') : 'N/A' }}
+                    @foreach ($sections as $section)
+                        <tr class="hover:bg-blue-50 cursor-pointer"
+                            onclick="window.location='{{ route('attendance_logs.show', $section->id) }}';">
+                            <td class="py-2 px-7 border-b text-center">{{ $section->section_name }}</td>
+                            <td class="py-2 px-7 border-b text-center">{{ $section->student_count }}</td>
+                            <td class="py-2 px-7 border-b text-center">{{ $section->course->course_name ?? 'N/A' }}</td>
+                            <td class="py-2 px-7 border-b flex justify-center w-40">
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-        <div class="mt-4">
-            {{ $attendanceLogs->links() }}
-        </div>
+        <x-paginator :paginator="$sections" />
     </div>
 </x-layout>

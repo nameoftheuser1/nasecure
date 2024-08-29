@@ -14,6 +14,7 @@ class Course extends Model
     protected $fillable = [
         'program_id',
         'course_name',
+        'course_code',
     ];
 
     public function section(): HasMany

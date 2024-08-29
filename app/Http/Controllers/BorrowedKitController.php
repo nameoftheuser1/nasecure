@@ -204,35 +204,4 @@ class BorrowedKitController extends Controller
 
 
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(BorrowedKit $borrowedKit)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(BorrowedKit $borrowedKit)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateBorrowedKitRequest $request, BorrowedKit $borrowedKit)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(BorrowedKit $borrowedKit)
-    {
-        //
-    }
 }

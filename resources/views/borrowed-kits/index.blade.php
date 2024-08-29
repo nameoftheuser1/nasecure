@@ -73,8 +73,6 @@
                 </tbody>
             </table>
         </div>
-        <div class="mt-4">
-            {{ $borrowedKits->links() }}
-        </div>
+        <x-paginator :paginator="$borrowedKits" />
     </div>
 </x-layout>

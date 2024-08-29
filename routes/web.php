@@ -38,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::redirect('/', 'dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/attendance-logs', [DashboardController::class, 'fetchAttendanceLogs']);
+    Route::get('/sections/{id}/attendance', [SectionController::class, 'attendanceByDate']);
+
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
@@ -55,8 +57,6 @@ Route::middleware('auth')->group(function () {
     Route::middleware('admin')->group(function () {
         Route::get('/users', [AuthController::class, 'index'])->name('users');
         Route::post('/users/{user}/reset-password', [AuthController::class, 'resetPassword'])->name('users.resetPassword');
-        Route::post('instructors/import', [InstructorController::class, 'import'])->name('instructors.import');
-        Route::resource('instructors', InstructorController::class);
         Route::resource('kits', KitController::class);
         Route::get('/borrowed-kits', [BorrowedKitController::class, 'index'])->name('borrowed-kits');
         Route::get('/borrowed-kits/borrow', [BorrowedKitController::class, 'borrow'])->name('borrowed-kits.borrow');
