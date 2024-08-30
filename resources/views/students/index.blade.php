@@ -51,8 +51,48 @@
             <table class="min-w-full bg-gray-200 rounded-2xl border-gray-300">
                 <thead>
                     <tr class="bg-gray-200">
-                        <th class="py-2 px-4 text-center border-b">ID</th>
-                        <th class="py-2 px-4 text-center border-b">Name</th>
+                        <th class="py-2 px-4 text-center border-b">
+                            <a href="{{ route('students.index', array_merge(request()->query(), ['sort' => 'id', 'direction' => request('direction', 'asc') === 'asc' ? 'desc' : 'asc'])) }}"
+                                class="flex items-center">
+                                ID
+                                @if (request('sort') === 'id')
+                                    @if (request('direction') === 'asc')
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                                        </svg>
+                                    @else
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    @endif
+                                @endif
+                            </a>
+                        </th>
+                        <th class="py-2 px-4 text-center border-b">
+                            <a href="{{ route('students.index', array_merge(request()->query(), ['sort' => 'name', 'direction' => request('direction', 'asc') === 'asc' ? 'desc' : 'asc'])) }}"
+                                class="flex items-center">
+                                Name
+                                @if (request('sort') === 'name')
+                                    @if (request('direction') === 'asc')
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                                        </svg>
+                                    @else
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                        </svg>
+                                    @endif
+                                @endif
+                            </a>
+                        </th>
                         <th class="py-2 px-4 text-center border-b">Student ID</th>
                         <th class="py-2 px-4 text-center border-b">Email</th>
                         <th class="py-2 px-4 text-center border-b">RFID</th>

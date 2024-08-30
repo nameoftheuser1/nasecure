@@ -22,6 +22,9 @@ class StudentController extends Controller
         $search = $request->input('search');
         $user = Auth::user();
 
+        $sort = $request->input('sort', 'id');
+        $direction = $request->input('direction', 'asc');
+
         $studentsQuery = Student::with('section');
 
         if ($user->role->name !== 'admin') {
@@ -35,8 +38,10 @@ class StudentController extends Controller
                 ->orWhere('rfid', 'like', "%{$search}%")
                 ->orWhere('section_id', 'like', "%{$search}%");
         })
-            ->latest()
+            ->orderBy($sort, $direction)
+            ->oldest()
             ->paginate(10);
+
 
         return view('students.index', ['students' => $students]);
     }
