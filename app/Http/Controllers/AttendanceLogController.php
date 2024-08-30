@@ -6,6 +6,8 @@ use App\Models\AttendanceLog;
 use App\Http\Requests\StoreAttendanceLogRequest;
 use App\Http\Requests\UpdateAttendanceLogRequest;
 use App\Models\Section;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -71,5 +73,39 @@ class AttendanceLogController extends Controller
             'studentCount' => $section->student_count,
             'present' => $presentCount,
         ]);
+    }
+
+    public function generatePdf(Request $request, $id)
+    {
+        $section = Section::findOrFail($id);
+        $date = $request->query('date');
+        if (!$date) {
+            Log::warning('No date selected for PDF generation');
+            return redirect()->back()->with('error', 'No date selected.');
+        }
+        $attendanceLogs = $section->attendanceLogs()
+            ->with('student')
+            ->whereDate('created_at', $date)
+            ->get();
+
+        try {
+
+            $pdf = PDF::loadView('attendance_logs.pdf', [
+                'section' => $section,
+                'date' => $date,
+                'attendanceLogs' => $attendanceLogs,
+            ]);
+
+            $filename = 'attendance-logs-' . $date . '.pdf';
+            $pdfContent = $pdf->output();
+
+            return response($pdfContent)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+        } catch (\Exception $e) {
+            Log::error('PDF Generation Error: ' . $e->getMessage());
+            Log::error($e->getTraceAsString());
+            return back()->with('error', 'Error generating PDF: ' . $e->getMessage());
+        }
     }
 }

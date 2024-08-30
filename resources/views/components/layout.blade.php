@@ -21,7 +21,7 @@
 
     @auth
         <div
-            class="{{ request()->is('borrowed-kits/borrow') || request()->is('borrowed-kits/return') ? 'pe-10' : 'ps-80 pe-10' }}">
+            class="{{ request()->is('borrowed-kits/borrow') || request()->is('borrowed-kits/return') || request()->is('attendance_logs.pdf ') ? 'pe-10' : 'ps-80 pe-10' }}">
             <main>
                 {{ $slot }}
             </main>

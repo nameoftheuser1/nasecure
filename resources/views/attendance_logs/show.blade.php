@@ -1,5 +1,12 @@
 <x-layout>
     <x-sidebar />
+    @if (session('success'))
+        <x-flashMsg msg="{{ session('success') }}" bg="bg-yellow-500" />
+    @elseif(session('deleted'))
+        <x-flashMsg msg="{{ session('deleted') }}" bg="bg-red-500" />
+    @elseif(session('error'))
+        <x-flashMsg msg="{{ session('error') }}" bg="bg-red-500" />
+    @endif
     <div class="container mx-auto p-5 bg-gray-100 rounded-3xl flex flex-col items-center">
         <div class="w-full max-w-2xl">
             <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">Attendance Logs</h1>
@@ -49,6 +56,18 @@
             </div>
 
             <div class="mt-8 text-center">
+                <a href="#" id="download-pdf-link"
+                    class="inline-flex items-center px-6 py-3 border border-transparent rounded-full shadow-sm text-base font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6 me-2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+                    Download PDF
+                </a>
+            </div>
+
+            <div class="mt-8 text-center">
                 <a href="{{ route('sections.index') }}"
                     class="inline-flex items-center px-6 py-3 border border-transparent rounded-full shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -71,11 +90,19 @@
             return `${formattedHours}:${minutes} ${ampm}`;
         }
 
+        function updatePdfLink(date) {
+            const downloadLink = document.getElementById('download-pdf-link');
+            const sectionId = {{ $section->id }};
+            downloadLink.href = `/attendance_logs/${sectionId}/pdf?date=${date}`;
+        }
+
         function filterAttendanceByDate(date) {
             const sectionId = {{ $section->id }};
             const errorContainer = document.getElementById('error-container');
             const errorMessage = document.getElementById('error-message');
             const attendanceContainer = document.getElementById('attendance-container');
+
+            updatePdfLink(date);
 
             fetch(`/sections/${sectionId}/attendance?date=${date}`)
                 .then(response => {
@@ -129,6 +156,12 @@
                     attendanceContainer.innerHTML = '';
                 });
         }
-    </script>
 
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('attendance-date');
+            if (dateInput.value) {
+                updatePdfLink(dateInput.value);
+            }
+        });
+    </script>
 </x-layout>

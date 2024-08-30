@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('courses', CourseController::class);
     Route::resource('sections', SectionController::class);
     Route::resource('attendance_logs', AttendanceLogController::class);
+    Route::get('/attendance_logs/{id}/pdf', [AttendanceLogController::class, 'generatePdf'])->name('attendance_logs.pdf');
 
     Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
 

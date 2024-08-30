@@ -35,7 +35,6 @@
                         <th class="py-2 px-4 border-b">Section Name</th>
                         <th class="py-2 px-4 border-b">Student Count</th>
                         <th class="py-2 px-4 border-b">Course</th>
-                        <th class="py-2 px-4 border-b w-40">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,8 +44,6 @@
                             <td class="py-2 px-7 border-b text-center">{{ $section->section_name }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $section->student_count }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $section->course->course_name ?? 'N/A' }}</td>
-                            <td class="py-2 px-7 border-b flex justify-center w-40">
-                            </td>
                         </tr>
                     @endforeach
                 </tbody>
