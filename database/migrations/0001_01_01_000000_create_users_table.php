@@ -30,6 +30,12 @@ return new class extends Migration
             'updated_at' => now(),
         ]);
 
+        DB::table('roles')->insert([
+            'name' => 'student',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
 
         Schema::create('users', function (Blueprint $table) {
             $table->id();
@@ -40,7 +46,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('pin_code')->nullable();
             $table->string('rfid')->nullable();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('verified_at')->nullable();
             $table->string('password');
             $table->foreignId('role_id')->nullable()->constrained('roles')->onDelete('set null');
             $table->rememberToken();

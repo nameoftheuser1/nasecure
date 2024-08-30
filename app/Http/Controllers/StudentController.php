@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Rap2hpoutre\FastExcel\FastExcel;
 use Illuminate\Support\Facades\Auth;
 
+
 class StudentController extends Controller
 {
     /**
@@ -73,15 +74,20 @@ class StudentController extends Controller
             'student_id' => ['required', 'string', 'max:50', 'unique:students,student_id'],
             'email' => ['required', 'email', 'unique:students,email', new EmailDomain],
             'rfid' => ['nullable', 'string', 'max:50'],
-            'section_id' => ['nullable', 'string', 'max:50'],
+            'section_id' => ['required', 'string', 'max:50'],
         ]);
 
         $fields['created_by'] = Auth::id();
 
-        Student::create($fields);
+        $student = Student::create($fields);
+
+        if ($student->section_id) {
+            Section::where('id', $student->section_id)->increment('student_count');
+        }
 
         return redirect()->route('students.index')->with('success', 'Student added successfully.');
     }
+
 
     /**
      * Display the specified resource.
@@ -124,7 +130,7 @@ class StudentController extends Controller
             'student_id' => ['required', 'string', 'max:50', 'unique:students,student_id,' . $student->id],
             'email' => ['required', 'email', 'unique:students,email,' . $student->id, new EmailDomain],
             'rfid' => ['nullable', 'string', 'max:50'],
-            'section_id' => ['nullable', 'string', 'max:50'],
+            'section_id' => ['required', 'string', 'max:50'],
         ]);
 
         $student->update($fields);
@@ -137,10 +143,18 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
+        $section = $student->section;
+
         $student->delete();
+
+        if ($section) {
+            $section->student_count = $section->students()->count();
+            $section->save();
+        }
 
         return back()->with('deleted', 'The student is deleted');
     }
+
 
     public function import(Request $request)
     {
@@ -150,26 +164,65 @@ class StudentController extends Controller
 
         try {
             $file = $request->file('file');
-
             Log::info('File received: ' . $file->getClientOriginalName());
+            $sectionStudentCounts = [];
+            $errors = [];
+            $emailRule = new EmailDomain();
 
-            (new FastExcel)->import($file, function ($line) {
-                Student::updateOrCreate(
+            (new FastExcel)->import($file, function ($line) use (&$sectionStudentCounts, &$errors, $emailRule) {
+                if (empty($line['Section ID'])) {
+                    $errors[] = "Student with ID {$line['Student ID']} is missing a Section ID.";
+                    return;
+                }
+
+                $section = Section::find($line['Section ID']);
+                if (!$section) {
+                    $errors[] = "Section with ID {$line['Section ID']} does not exist for student {$line['Student ID']}.";
+                    return;
+                }
+
+                $emailError = null;
+                $emailRule->validate('email', $line['Email'] ?? '', function ($error) use (&$emailError) {
+                    $emailError = $error;
+                });
+
+                if ($emailError) {
+                    $errors[] = "Invalid email for student {$line['Student ID']}: {$emailError}";
+                    return;
+                }
+
+                $student = Student::updateOrCreate(
                     ['student_id' => $line['Student ID']],
                     [
                         'name' => $line['Name'] ?? null,
                         'email' => $line['Email'] ?? null,
                         'rfid' => $line['RFID'] ?? null,
-                        'section_id' => $line['Section ID'] ?? null,
+                        'section_id' => $line['Section ID'],
                         'created_by' => Auth::id(),
                     ]
                 );
+
+                if ($student->wasRecentlyCreated) {
+                    $sectionId = $student->section_id;
+                    $sectionStudentCounts[$sectionId] = ($sectionStudentCounts[$sectionId] ?? 0) + 1;
+                }
             });
+
+            if (!empty($errors)) {
+                $errorMessage = "The following errors occurred during import:\n" . implode("\n", $errors);
+                Log::error($errorMessage);
+                return redirect()->back()->with('error', $errorMessage);
+            }
+
+            foreach ($sectionStudentCounts as $sectionId => $count) {
+                Section::where('id', $sectionId)->increment('student_count', $count);
+            }
 
             return redirect()->route('students.index')->with('success', 'Students imported successfully.');
         } catch (\Exception $e) {
-            $msg = Log::error('Error importing students: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'There was an error importing the students. Please check the file and try again.' . $msg);
+            $errorMessage = 'Error importing students: ' . $e->getMessage();
+            Log::error($errorMessage);
+            return redirect()->back()->with('error', $errorMessage);
         }
     }
 }

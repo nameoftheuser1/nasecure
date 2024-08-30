@@ -22,7 +22,6 @@ class SectionController extends Controller
             ->where('created_by', $userId)
             ->where(function ($query) use ($search) {
                 $query->where('section_name', 'like', "%{$search}%")
-                    ->orWhere('student_count', 'like', "%{$search}%")
                     ->orWhere('course_id', 'like', "%{$search}%")
                     ->orWhereHas('course', function ($query) use ($search) {
                         $query->where('course_name', 'like', "%{$search}%");
@@ -50,7 +49,6 @@ class SectionController extends Controller
     {
         $fields = $request->validate([
             'section_name' => ['required', 'max:50'],
-            'student_count' => ['required', 'integer'],
             'course_id' => ['nullable', 'exists:courses,id'],
             'time_in' => ['nullable', 'date_format:H:i'],
             'time_out' => ['nullable', 'date_format:H:i'],
@@ -88,7 +86,6 @@ class SectionController extends Controller
     {
         $fields = $request->validate([
             'section_name' => ['required', 'max:50'],
-            'student_count' => ['required', 'integer'],
             'course_id' => ['required', 'exists:courses,id'],
             'time_in' => ['nullable', 'date_format:H:i'],
             'time_out' => ['nullable', 'date_format:H:i'],

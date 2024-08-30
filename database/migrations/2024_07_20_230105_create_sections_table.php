@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
             $table->string('section_name');
-            $table->integer('student_count');
+            $table->integer('student_count')->default(0);
             $table->unsignedBigInteger('course_id')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->time('time_in')->nullable();

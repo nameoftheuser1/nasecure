@@ -17,7 +17,6 @@ return new class extends Migration
         });
 
         Schema::table('class_sessions', function (Blueprint $table) {
-            $table->foreign('instructor_id')->references('id')->on('instructors')->onDelete('cascade');
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
         });
 

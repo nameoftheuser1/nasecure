@@ -11,6 +11,7 @@ use App\Http\Controllers\KitController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,29 +36,36 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::redirect('/', 'dashboard');
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    Route::get('/attendance-logs', [DashboardController::class, 'fetchAttendanceLogs']);
-    Route::get('/sections/{id}/attendance', [AttendanceLogController::class, 'attendanceByDate']);
+
+    Route::middleware('instructor')->group(function () {
+        Route::redirect('/', 'dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::get('/attendance-logs', [DashboardController::class, 'fetchAttendanceLogs']);
+        Route::get('/sections/{id}/attendance', [AttendanceLogController::class, 'attendanceByDate']);
 
 
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
-    Route::post('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+        Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+        Route::post('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
 
-    Route::resource('students', StudentController::class);
-    Route::resource('programs', ProgramController::class);
-    Route::resource('courses', CourseController::class);
-    Route::resource('sections', SectionController::class);
-    Route::resource('attendance_logs', AttendanceLogController::class);
-    Route::get('/attendance_logs/{id}/pdf', [AttendanceLogController::class, 'generatePdf'])->name('attendance_logs.pdf');
+        Route::resource('students', StudentController::class);
+        Route::resource('programs', ProgramController::class);
+        Route::resource('courses', CourseController::class);
+        Route::resource('sections', SectionController::class);
+        Route::resource('attendance_logs', AttendanceLogController::class);
+        Route::get('/attendance_logs/{id}/pdf', [AttendanceLogController::class, 'generatePdf'])->name('attendance_logs.pdf');
 
-    Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
+        Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
+    });
 
 
     Route::middleware('admin')->group(function () {
         Route::get('/users', [AuthController::class, 'index'])->name('users');
         Route::post('/users/{user}/reset-password', [AuthController::class, 'resetPassword'])->name('users.resetPassword');
+        Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+        Route::put('/users/{id}/verify', [UserController::class, 'verify'])->name('users.verify');
+
         Route::resource('kits', KitController::class);
         Route::get('/borrowed-kits', [BorrowedKitController::class, 'index'])->name('borrowed-kits');
         Route::get('/borrowed-kits/borrow', [BorrowedKitController::class, 'borrow'])->name('borrowed-kits.borrow');

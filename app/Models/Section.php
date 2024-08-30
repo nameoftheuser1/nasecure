@@ -13,7 +13,6 @@ class Section extends Model
 
     protected $fillable = [
         'section_name',
-        'student_count',
         'course_id',
         'created_by',
         'time_in',

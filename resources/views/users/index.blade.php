@@ -40,6 +40,8 @@
                         <th class="py-2 px-4 text-center border-b">Contact</th>
                         <th class="py-2 px-4 text-center border-b">Email</th>
                         <th class="py-2 px-4 text-center border-b">Role</th>
+                        <th class="py-2 px-4 text-center border-b">Action</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -52,6 +54,12 @@
                             <td class="py-2 px-4 text-center border-b">{{ $user->email }}</td>
                             <td class="py-2 px-4 text-center border-b">
                                 {{ $user->role ? $user->role->name : 'No Role' }}
+                            </td>
+                            <td class="py-2 px-4 text-center border-b flex justify-center gap-2">
+                                <a href="{{ route('users.edit', $user->id) }}"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
+                                    Edit
+                                </a>
                             </td>
                             <td class="py-2 px-4 text-center border-b">
                                 <form action="{{ route('users.resetPassword', $user) }}" method="POST">

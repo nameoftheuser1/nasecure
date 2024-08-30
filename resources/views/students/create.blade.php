@@ -1,20 +1,20 @@
 <x-layout>
     <x-sidebar />
-    @if (session('error'))
-        <x-flashMsg msg="{{ session('error') }}" bg="bg-red-500" />
-    @endif
-
-    @if (session('success'))
-        <x-flashMsg msg="{{ session('success') }}" bg="bg-green-500" />
-    @endif
-
-    @if (session('deleted'))
-        <x-flashMsg msg="{{ session('deleted') }}" bg="bg-red-500" />
-    @endif
     <div class="container mx-auto w-full p-5 bg-gray-200 rounded-3xl flex">
 
         <div class="w-full m-5">
             <h1 class="text-xl font-bold mb-4">Add Student</h1>
+            @if (session('error'))
+                <x-flashMsg msg="{{ session('error') }}" bg="bg-red-500" />
+            @endif
+
+            @if (session('success'))
+                <x-flashMsg msg="{{ session('success') }}" bg="bg-green-500" />
+            @endif
+
+            @if (session('deleted'))
+                <x-flashMsg msg="{{ session('deleted') }}" bg="bg-red-500" />
+            @endif
             <form action="{{ route('students.store') }}" method="POST" class="space-y-4">
                 @csrf
                 <div>
@@ -66,6 +66,9 @@
                                 {{ $section->section_name }}</option>
                         @endforeach
                     </select>
+                    @error('section_id')
+                        <p class="text-red-700 text-sm">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div>
                     <button type="submit"
