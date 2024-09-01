@@ -1,3 +1,9 @@
+@php
+    $imgUrl = Auth::user()->img_url;
+    $defaultImage = 'images/profile.png';
+    $imageSource = $imgUrl === $defaultImage ? asset($defaultImage) : asset('storage/' . $imgUrl);
+@endphp
+
 <head>
     <title>Student Profile</title>
     <script src="{{ asset('js/index.global.min.js') }}"></script>
@@ -20,16 +26,32 @@
         <div class="container mx-auto px-4 py-8">
             <div class="flex justify-between">
                 <h1 class="text-3xl font-bold text-gray-800 mb-6">Student Profile</h1>
-                <form action="{{ route('logout') }}" method="post">
-                    @csrf
-                    <button
-                        class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out">
-                        Logout
-                    </button>
-                </form>
+                <div class="flex space-x-4 p-4">
+
+                    <form action="{{ route('logout') }}" method="post">
+                        @csrf
+                        <button type="submit"
+                            class="inline-block bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+                            Logout
+                        </button>
+                    </form>
+                </div>
             </div>
+            <a href="{{ route('profile') }}"
+                class="inline-block bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 w-full text-center">
+                Edit Profile
+            </a>
             <div class="bg-white shadow-md rounded-lg p-6">
-                <h2 class="text-2xl font-semibold text-gray-700 mb-4 uppercase">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h2>
+                <div class="flex items-center mb-4">
+
+                    <div class="flex-1 text-center">
+                        <img src="{{ $imageSource }}" alt="Profile Picture"
+                            class="w-40 h-40 rounded-full mx-auto mb-4">
+                        <h2 class="text-2xl font-semibold text-gray-700 mb-4 uppercase">{{ Auth::user()->first_name }}
+                            {{ Auth::user()->last_name }}</h2>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <p><strong class="font-medium">Student ID:</strong> {{ $student->student_id }}</p>
                     <p><strong class="font-medium">Email:</strong> {{ $student->email }}</p>

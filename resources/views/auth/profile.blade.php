@@ -68,14 +68,17 @@
                 </div>
             </div>
 
-            <div class="mb-4">
-                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}"
-                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                @error('email')
-                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+            @unless (Auth::user()->role->name === 'student')
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}"
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    @error('email')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+            @endunless
+
 
             <div class="mb-4">
                 <label for="contact" class="block text-sm font-medium text-gray-700">Contact</label>
@@ -94,24 +97,25 @@
                     <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
+            @unless (Auth::user()->role->name === 'student')
+                <div class="mb-4">
+                    <label for="pin_code" class="block text-sm font-medium text-gray-700">Pin Code</label>
+                    <input type="number" name="pin_code" id="pin_code" value="{{ old('contact', $user->pin_code) }}"
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2">
+                    @error('pin_code')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-            <div class="mb-4">
-                <label for="pin_code" class="block text-sm font-medium text-gray-700">Pin Code</label>
-                <input type="number" name="pin_code" id="pin_code" value="{{ old('contact', $user->pin_code) }}"
-                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2">
-                @error('pin_code')
-                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div class="mb-4">
-                <label for="rfid" class="block text-sm font-medium text-gray-700">RFID</label>
-                <input type="text" name="rfid" id="rfid" value="{{ old('contact', $user->rfid) }}"
-                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2">
-                @error('rfid')
-                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
+                <div class="mb-4">
+                    <label for="rfid" class="block text-sm font-medium text-gray-700">RFID</label>
+                    <input type="text" name="rfid" id="rfid" value="{{ old('contact', $user->rfid) }}"
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2">
+                    @error('rfid')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+            @endunless
 
             <div class="mb-4">
                 <label for="password" class="block text-sm font-medium text-gray-700">Password</label>

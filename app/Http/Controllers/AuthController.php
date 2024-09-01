@@ -45,10 +45,15 @@ class AuthController extends Controller
     {
         $user = Auth::user();
 
+        $emailValidationRules = ['max:255', 'email', 'unique:users,email,' . $user->id, new EmailDomain];
+        if ($user->role->name !== 'student') {
+            array_unshift($emailValidationRules, 'required');
+        }
+
         $fields = $request->validate([
             'first_name' => ['required', 'max:50', 'min:3', 'regex:/^[a-zA-Z\s]+$/'],
             'last_name' => ['required', 'max:50', 'min:3', 'regex:/^[a-zA-Z\s]+$/'],
-            'email' => ['required', 'max:255', 'email', 'unique:users,email,' . $user->id, new EmailDomain],
+            'email' => $emailValidationRules,
             'contact' => ['required', 'max:11', new ValidPhoneNumber],
             'password' => ['nullable', 'min:8', 'confirmed'],
             'img_url' => ['nullable', 'image', 'mimes:jpg,png,jpeg,gif,svg', 'max:2048'],
@@ -78,6 +83,7 @@ class AuthController extends Controller
 
         return redirect()->route('profile')->with('success', 'Profile updated successfully!');
     }
+
 
     public function registerInstructor(Request $request)
     {
