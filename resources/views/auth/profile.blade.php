@@ -5,12 +5,23 @@
 @endphp
 
 <x-layout>
-    <a href="{{ route('dashboard.index') }}" class="text-blue-500 hover:text-blue-700 mr-4">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
-        Back to Dashboard
-    </a>
+    @if (Auth::user()->role->name === 'instructor' || Auth::user()->role->name === 'admin')
+        <a href="{{ route('dashboard.index') }}" class="text-blue-500 hover:text-blue-700 mr-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Dashboard
+        </a>
+    @else
+        <a href="{{ route('studentprofile') }}" class="text-blue-500 hover:text-blue-700 mr-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Student Profile
+        </a>
+    @endif
+
     <div class="container p-4 w-1/2 ms-60">
         <div class="flex items-center mb-4">
 

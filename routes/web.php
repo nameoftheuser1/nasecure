@@ -11,13 +11,18 @@ use App\Http\Controllers\KitController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\StudentUIController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    Route::view('/register', 'auth.register')->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::view('/registerinstructor', 'auth.register-instructor')->name('registerinstructor');
+    Route::post('/registerinstructor', [AuthController::class, 'registerInstructor']);
+
+    Route::view('/registerstudent', 'auth.register-student')->name('registerstudent');
+    Route::post('/registerstudent', [AuthController::class, 'registerStudent']);
+
 
     Route::view('/login', 'auth.login')->name('login');
     Route::post('/login', [AuthController::class, 'login']);
@@ -30,10 +35,15 @@ Route::middleware('guest')->group(function () {
 
     Route::view('/attendance', 'attendance.attendance')->name('attendance');
     Route::post('/attendance/time-in', [AttendanceController::class, 'storeTimeIn'])->name('attendance.timeIn');
-    Route::post('/attendance/time-out', [AttendanceController::class, 'storeTimeOut'])->name('attendance.timeOut');
     Route::post('/fetch-sections', [AttendanceController::class, 'fetchSections'])->name('attendance.fetchSections');
     Route::post('/attendance/scan-rfid', [AttendanceController::class, 'scanRFID'])->name('attendance.scan-rfid');
 });
+
+Route::get('/studentprofile', [StudentUIController::class, 'profileDetails'])->name('studentprofile')->middleware('auth');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+Route::post('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
+Route::view('/errorpage', 'dashboard.error')->name('errorpage');
 
 Route::middleware('auth')->group(function () {
 
@@ -44,9 +54,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/sections/{id}/attendance', [AttendanceLogController::class, 'attendanceByDate']);
 
 
-        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-        Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
-        Route::post('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
+
 
         Route::resource('students', StudentController::class);
         Route::resource('programs', ProgramController::class);

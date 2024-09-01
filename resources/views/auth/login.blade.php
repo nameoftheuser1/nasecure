@@ -43,7 +43,7 @@
                 <a href="{{ route('resetpasswordguide') }}"
                     class="text-center no-underline block text-sm mt-2.5 hover:underline">Reset
                     Password</a>
-                <a href="{{ route('register') }}"
+                <a href="{{ route('registerstudent') }}"
                     class="text-center no-underline block text-sm mt-2.5 hover:underline mb-5">Don't have an account?
                     <span class="text-blue-700">Register here.</span></a>
                 <a href="{{ route('attendance') }}"

@@ -56,32 +56,7 @@
                         class="w-full p-1.5 border-none rounded-md bg-gray-300 cursor-pointer mb-1 hover:bg-blue-700 transition-colors duration-300">Record
                         Time In</button>
                 </form>
-            </div>
 
-            <div class="mb-6 w-full">
-                <h2 class="font-semibold mb-4 text-center">Record Time Out</h2>
-                <form action="{{ route('attendance.timeOut') }}" method="POST" id="timeOutForm">
-                    @csrf
-                    <div class="mb-4">
-                        <label for="email_out" class="block text-sm font-medium text-gray-700 text-center">Student
-                            Email</label>
-                        <input type="text" id="email_out" name="email"
-                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
-                            placeholder="Enter Email" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="section_out" class="block text-sm font-medium text-gray-700 text-center">Select
-                            Section</label>
-                        <select id="section_out" name="section_id"
-                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
-                            required>
-                            <option value="" disabled selected>Select Section</option>
-                        </select>
-                    </div>
-                    <button type="submit"
-                        class="w-full p-1.5 border-none rounded-md bg-gray-300 cursor-pointer mb-1 hover:bg-blue-700 transition-colors duration-300">Record
-                        Time Out</button>
-                </form>
                 <a href="{{ route('login') }}" class="text-center no-underline block text-sm mt-2.5 hover:underline">Do
                     you want to login? <span class="text-blue-700">Login here.</span> </a>
             </div>

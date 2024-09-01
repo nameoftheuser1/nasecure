@@ -93,8 +93,6 @@ class AttendanceController extends Controller
      * 5. The Laravel application can then send a response back to the Arduino Mega, which can be used to trigger
      *    a buzzer or some other output based on the attendance status (e.g., successful check-in, check-out, or error).
      *
-     * By integrating the Arduino Mega with the Laravel application, you can create a robust and automated
-     * attendance tracking system that leverages the RFID technology and the capabilities of the Laravel framework.
      */
 
     public function scanRFID(Request $request)
@@ -123,29 +121,20 @@ class AttendanceController extends Controller
                 ->first();
 
             if ($attendanceLog) {
-                if ($attendanceLog->time_out === null) {
-                    $attendanceLog->update(['time_out' => $currentTime]);
-                    Log::info('Time out recorded successfully for Section ' . $section->id);
-                    return response()->json([
-                        'success' => 'Time out recorded successfully for Section ' . $section->id,
-                    ]);
-                } else {
-                    Log::warning('Time out has already been recorded for Section ' . $section->id . ' today.');
-                    return response()->json([
-                        'error' => 'Time out has already been recorded for Section ' . $section->id . ' today.',
-                    ], 400);
-                }
+                Log::warning('Attendance already recorded for Section ' . $section->id . ' today.');
+                return response()->json([
+                    'error' => 'Attendance already recorded for Section ' . $section->id . ' today.',
+                ], 400);
             } else {
                 $attendanceLog = AttendanceLog::create([
                     'student_id' => $student->id,
                     'section_id' => $section->id,
                     'attendance_date' => $currentTime,
                     'time_in' => $currentTime,
-                    'time_out' => null,
                 ]);
-                Log::info('Time in recorded successfully for Section ' . $section->id);
+                Log::info('Attendance recorded successfully for Section ' . $section->id);
                 return response()->json([
-                    'success' => 'Time in recorded successfully for Section ' . $section->id,
+                    'success' => 'Attendance recorded successfully for Section ' . $section->id,
                 ]);
             }
         } catch (ModelNotFoundException $e) {

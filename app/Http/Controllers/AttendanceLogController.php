@@ -42,7 +42,7 @@ class AttendanceLogController extends Controller
 
         $attendanceByDate = $section->attendanceLogs
             ->groupBy(function ($log) {
-                return $log->created_at->format('Y-m-d');
+                return $log->attendance_date ? $log->attendance_date->format('Y-m-d') : 'Unknown Date';
             });
 
         return view('attendance_logs.show', [
@@ -62,7 +62,7 @@ class AttendanceLogController extends Controller
 
         $attendanceLogs = $section->attendanceLogs()
             ->with('student')
-            ->whereDate('created_at', $date)
+            ->whereDate('attendance_date', $date)
             ->get();
 
         $presentCount = $attendanceLogs->where('present', true)->count();
@@ -85,7 +85,7 @@ class AttendanceLogController extends Controller
         }
         $attendanceLogs = $section->attendanceLogs()
             ->with('student')
-            ->whereDate('created_at', $date)
+            ->whereDate('attendance_date', $date)
             ->get();
 
         try {

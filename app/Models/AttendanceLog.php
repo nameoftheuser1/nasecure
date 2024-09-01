@@ -15,7 +15,6 @@ class AttendanceLog extends Model
         'section_id',
         'attendance_date',
         'time_in',
-        'time_out',
     ];
 
     public function student(): BelongsTo
@@ -31,6 +30,5 @@ class AttendanceLog extends Model
     protected $casts = [
         'attendance_date' => 'datetime',
         'time_in' => 'datetime',
-        'time_out' => 'datetime',
     ];
 }

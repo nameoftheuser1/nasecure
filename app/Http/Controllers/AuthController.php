@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
+use App\Models\Student;
 use App\Models\User;
 use App\Rules\EmailDomain;
 use Illuminate\Support\Str;
 use App\Rules\ValidPhoneNumber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -80,7 +79,27 @@ class AuthController extends Controller
         return redirect()->route('profile')->with('success', 'Profile updated successfully!');
     }
 
-    public function register(Request $request)
+    public function registerInstructor(Request $request)
+    {
+        $fields = $request->validate([
+            'first_name' => ['required', 'max:50', 'min:3', 'regex:/^[a-zA-Z\s]+$/'],
+            'last_name' => ['required', 'max:50', 'min:3', 'regex:/^[a-zA-Z\s]+$/'],
+            'email' => ['required', 'max:50', 'email', 'unique:users', new EmailDomain],
+            'contact' => ['required', 'max:11', new ValidPhoneNumber],
+            'password' => ['required', 'min:8', 'confirmed', 'max:50'],
+            'confirm_instructor' => ['required'],
+        ], [
+            'confirm_instructor.required' => 'You must confirm that you are an instructor.'
+        ]);
+
+        $fields['role_id'] = 1;
+
+        User::create($fields);
+
+        return redirect()->intended('/');
+    }
+
+    public function registerStudent(Request $request)
     {
         $fields = $request->validate([
             'first_name' => ['required', 'max:50', 'min:3', 'regex:/^[a-zA-Z\s]+$/'],
@@ -90,9 +109,15 @@ class AuthController extends Controller
             'password' => ['required', 'min:8', 'confirmed', 'max:50'],
         ]);
 
-        $fields['role_id'] = 1;
+        $student = Student::where('email', $fields['email'])->first();
 
-        $user = User::create($fields);
+        if (!$student) {
+            return back()->withInput()->with(['error' => 'This email is not found in the list of students.']);
+        }
+
+        $fields['role_id'] = 3;
+
+        User::create($fields);
 
         return redirect()->intended('/');
     }
@@ -111,10 +136,10 @@ class AuthController extends Controller
             $rules['email'][] = new EmailDomain;
         }
 
-        $fields = $request->validate($rules);
+        $request->validate($rules);
 
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
-            return redirect()->intended('/');
+            return redirect()->intended('/studentprofile');
         } else {
             return back()->withInput()->withErrors([
                 'email' => 'Invalid email or password.',
@@ -188,7 +213,7 @@ class AuthController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
 
-        $data = array_filter($data, fn ($entry) => $entry['token'] !== $request->token);
+        $data = array_filter($data, fn($entry) => $entry['token'] !== $request->token);
         file_put_contents($filePath, json_encode($data, JSON_PRETTY_PRINT));
 
         return redirect()->route('login')->with('success', 'Password has been reset successfully.');

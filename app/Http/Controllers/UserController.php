@@ -39,7 +39,6 @@ class UserController extends Controller
 
     public function verify($id)
     {
-
         $user = User::findOrFail($id);
 
         $user->verified_at = now();

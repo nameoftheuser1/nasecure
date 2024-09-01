@@ -83,7 +83,6 @@
             <tr>
                 <th>Student Name</th>
                 <th>Time In</th>
-                <th>Time Out</th>
             </tr>
         </thead>
         <tbody>
@@ -91,13 +90,6 @@
                 <tr>
                     <td>{{ $log->student ? $log->student->name : 'N/A' }}</td>
                     <td>{{ date('h:i a', strtotime($log->time_in)) }}</td>
-                    <td>
-                        @if ($log->time_out)
-                            {{ date('h:i a', strtotime($log->time_out)) }}
-                        @else
-                            Time Out Not Registered
-                        @endif
-                    </td>
                 </tr>
             @endforeach
         </tbody>

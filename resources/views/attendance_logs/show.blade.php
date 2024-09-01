@@ -124,7 +124,6 @@
                                         <tr>
                                             <th class="py-3 px-6 text-left">Student Name</th>
                                             <th class="py-3 px-6 text-left">Time In</th>
-                                            <th class="py-3 px-6 text-left">Time Out</th>
                                         </tr>
                                     </thead>
                                     <tbody class="text-gray-600 text-sm font-light">
@@ -134,7 +133,6 @@
                                 <tr class="border-b border-gray-200 hover:bg-gray-100">
                                     <td class="py-3 px-6 text-left whitespace-nowrap">${log.student ? log.student.name : 'N/A'}</td>
                                     <td class="py-3 px-6 text-left">${formatTime(log.time_in)}</td>
-                                    <td class="py-3 px-6 text-left">${formatTime(log.time_out)}</td>
                                 </tr>
                             `;
                         });
@@ -159,9 +157,12 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             const dateInput = document.getElementById('attendance-date');
-            if (dateInput.value) {
-                updatePdfLink(dateInput.value);
-            }
+
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+
+            filterAttendanceByDate(today);
         });
     </script>
+
 </x-layout>
