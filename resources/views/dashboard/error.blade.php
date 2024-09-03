@@ -13,9 +13,9 @@
             @elseif (Auth()->user()->role->name === 'instructor')
                 <p class="mb-10 text-white p-2 border-red-500 bg-red-500 rounded-lg ">Maybe you registered as an instructor, but your account has not been verified. Please
                     contact the admin to verify your account.</p>
-                <a href="{{ route('dashboard.index') }}"
+                <a href="{{ route('students.index') }}"
                     class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                    Go to Instructor Dashboard
+                    Go to Student list
                 </a>
             @else
                 <p class="text-red-500 font-semibold">Your role does not have a specific redirect link. Please contact

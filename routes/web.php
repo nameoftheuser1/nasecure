@@ -48,8 +48,8 @@ Route::view('/errorpage', 'dashboard.error')->name('errorpage');
 Route::middleware('auth')->group(function () {
 
     Route::middleware('instructor')->group(function () {
-        Route::redirect('/', 'dashboard');
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::redirect('/', 'students');
+        // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
         Route::get('/attendance-logs', [DashboardController::class, 'fetchAttendanceLogs']);
         Route::get('/sections/{id}/attendance', [AttendanceLogController::class, 'attendanceByDate']);
 
