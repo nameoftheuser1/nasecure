@@ -18,10 +18,6 @@ class ClassSession extends Model
         'is_makeup',
     ];
 
-    public function instructor(): BelongsTo
-    {
-        return $this->belongsTo(Instructor::class);
-    }
 
     public function course(): BelongsTo
     {

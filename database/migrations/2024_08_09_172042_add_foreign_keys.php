@@ -20,6 +20,10 @@ return new class extends Migration
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
         });
 
+        Schema::table('courses', function (Blueprint $table) {
+            $table->foreign('program_id')->references('id')->on('programs')->onDelete('set null');
+        });
+
         Schema::table('attendance_logs', function (Blueprint $table) {
             $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade');
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');

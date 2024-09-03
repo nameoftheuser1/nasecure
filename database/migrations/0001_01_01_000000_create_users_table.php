@@ -44,8 +44,8 @@ return new class extends Migration
             $table->string('contact');
             $table->string('img_url')->default('images/profile.png');
             $table->string('email')->unique();
-            $table->string('pin_code')->nullable();
-            $table->string('rfid')->nullable();
+            $table->string('pin_code')->unique()->nullable();
+            $table->string('rfid')->unique()->nullable();
             $table->timestamp('verified_at')->nullable();
             $table->string('password');
             $table->foreignId('role_id')->nullable()->constrained('roles')->onDelete('set null');
