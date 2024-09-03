@@ -21,7 +21,7 @@ class StudentMiddleware
     {
         $user = Auth::user();
 
-        if ($user && $user->role->name === 'student' && $user->verified_at) {
+        if ($user && $user->role->name === 'student') {
             return $next($request);
         }
 
