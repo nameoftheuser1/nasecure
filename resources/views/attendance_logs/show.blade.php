@@ -82,14 +82,6 @@
     </div>
 
     <script>
-        function formatTime(time) {
-            if (!time) return 'N/A';
-            const [hours, minutes] = time.split(':');
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            const formattedHours = hours % 12 || 12;
-            return `${formattedHours}:${minutes} ${ampm}`;
-        }
-
         function updatePdfLink(date) {
             const downloadLink = document.getElementById('download-pdf-link');
             const sectionId = {{ $section->id }};
@@ -132,7 +124,7 @@
                             html += `
                                 <tr class="border-b border-gray-200 hover:bg-gray-100">
                                     <td class="py-3 px-6 text-left whitespace-nowrap">${log.student ? log.student.name : 'N/A'}</td>
-                                    <td class="py-3 px-6 text-left">${formatTime(log.time_in)}</td>
+                                    <td class="py-3 px-6 text-left">${new Date(log.time_in).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})}</td>
                                 </tr>
                             `;
                         });
