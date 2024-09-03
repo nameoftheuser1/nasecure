@@ -11,6 +11,8 @@
                     Go to Student Profile
                 </a>
             @elseif (Auth()->user()->role->name === 'instructor')
+                <p class="mb-10 text-white p-2 border-red-500 bg-red-500 rounded-lg ">Maybe you registered as an instructor, but your account has not been verified. Please
+                    contact the admin to verify your account.</p>
                 <a href="{{ route('dashboard.index') }}"
                     class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                     Go to Instructor Dashboard
@@ -19,6 +21,15 @@
                 <p class="text-red-500 font-semibold">Your role does not have a specific redirect link. Please contact
                     the administrator.</p>
             @endif
+        </div>
+        <div class="mv-3">
+            <form action="{{ route('logout') }}" method="post">
+                @csrf
+                <button type="submit"
+                    class="inline-block bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+                    Logout
+                </button>
+            </form>
         </div>
     </div>
 </x-layout>
