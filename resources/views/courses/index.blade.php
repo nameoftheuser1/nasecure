@@ -56,11 +56,11 @@
                             <td class="py-2 px-4 text-center border-b">{{ $course->course_code }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $course->course_name }}</td>
                             <td class="py-2 px-4 text-center border-b flex justify-center">
-                                <a href="{{ route('courses.edit', $course->id) }}"
+                                <a href="{{ route('courses.edit', $course) }}"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
                                     Edit
                                 </a>
-                                <form action="{{ route('courses.destroy', $course->id) }}" method="POST">
+                                <form action="{{ route('courses.destroy', $course) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
@@ -75,51 +75,6 @@
                 </tbody>
             </table>
         </div>
-        @if ($courses->hasPages())
-            <div class="mt-4">
-                <ul class="flex justify-center space-x-2">
-                    <li>
-                        <a href="{{ $courses->url(1) }}" aria-label="First"
-                            class="px-3 py-1 border rounded-md hover:bg-gray-200
-                    {{ $courses->onFirstPage() ? 'cursor-not-allowed text-gray-400' : '' }}">
-                            << </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ $courses->previousPageUrl() }}" aria-label="Previous"
-                            class="px-3 py-1 border rounded-md hover:bg-gray-200
-                    {{ $courses->onFirstPage() ? 'cursor-not-allowed text-gray-400' : '' }}">
-                            Previous
-                        </a>
-                    </li>
-
-                    @for ($page = 1; $page <= $courses->lastPage(); $page++)
-                        <li>
-                            <a href="{{ $courses->url($page) }}"
-                                class="px-3 py-1 border rounded-md hover:bg-gray-200
-                        {{ $courses->currentPage() == $page ? 'bg-gray-300 text-gray-700' : '' }}">
-                                {{ $page }}
-                            </a>
-                        </li>
-                    @endfor
-
-                    <li>
-                        <a href="{{ $courses->nextPageUrl() }}" aria-label="Next"
-                            class="px-3 py-1 border rounded-md hover:bg-gray-200
-                    {{ $courses->hasMorePages() ? '' : 'cursor-not-allowed text-gray-400' }}">
-                            Next
-                        </a>
-                    </li>
-
-                    <li>
-                        <a href="{{ $courses->url($courses->lastPage()) }}" aria-label="Last"
-                            class="px-3 py-1 border rounded-md hover:bg-gray-200
-                    {{ $courses->hasMorePages() ? '' : 'cursor-not-allowed text-gray-400' }}">
-                            >>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        @endif
+        <x-paginator :paginator="$courses" />
     </div>
 </x-layout>
