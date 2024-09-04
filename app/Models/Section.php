@@ -17,6 +17,7 @@ class Section extends Model
         'created_by',
         'time_in',
         'time_out',
+        'schedule'
     ];
 
     public function course(): BelongsTo

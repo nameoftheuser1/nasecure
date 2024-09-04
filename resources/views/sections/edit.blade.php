@@ -49,6 +49,21 @@
                 @enderror
             </div>
             <div>
+                <label for="schedule" class="block text-sm font-medium text-gray-700">Schedule</label>
+                <select id="schedule" name="schedule"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <option value="">Select Schedule</option>
+                    @foreach (['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as $day)
+                        <option value="{{ $day }}" {{ old('schedule', $section->schedule) == $day ? 'selected' : '' }}>
+                            {{ ucfirst($day) }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('schedule')
+                    <p class="text-red-700 text-sm">{{ $message }}</p>
+                @enderror
+            </div>
+            <div>
                 <button type="submit"
                     class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                     Update Section

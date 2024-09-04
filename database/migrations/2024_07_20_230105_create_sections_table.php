@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('created_by')->nullable();
             $table->time('time_in')->nullable();
             $table->time('time_out')->nullable();
+            $table->enum('schedule', ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'])->nullable();
             $table->timestamps();
         });
     }

@@ -18,7 +18,7 @@ class SectionController extends Controller
     {
         $search = $request->input('search');
         $userId = Auth::id();
-        $sections = Section::with('course')
+        $sections = Section::with('course', 'creator')
             ->where('created_by', $userId)
             ->where(function ($query) use ($search) {
                 $query->where('section_name', 'like', "%{$search}%")
@@ -52,6 +52,7 @@ class SectionController extends Controller
             'course_id' => ['nullable', 'exists:courses,id'],
             'time_in' => ['nullable', 'date_format:H:i'],
             'time_out' => ['nullable', 'date_format:H:i'],
+            'schedule' => ['nullable', 'in:monday,tuesday,wednesday,thursday,friday,saturday,sunday'],
         ]);
 
         $fields['created_by'] = Auth::id();
@@ -89,6 +90,7 @@ class SectionController extends Controller
             'course_id' => ['required', 'exists:courses,id'],
             'time_in' => ['nullable', 'date_format:H:i'],
             'time_out' => ['nullable', 'date_format:H:i'],
+            'schedule' => ['nullable', 'in:monday,tuesday,wednesday,thursday,friday,saturday,sunday'],
         ]);
 
         $section->update($fields);

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('section_id');
             $table->date('attendance_date');
             $table->time('time_in')->nullable();
+            $table->time('time_out')->nullable();
             $table->timestamps();
         });
     }

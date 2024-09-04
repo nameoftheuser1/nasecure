@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
-use App\Http\Requests\StoreStudentRequest;
-use App\Http\Requests\UpdateStudentRequest;
 use App\Models\Section;
 use App\Rules\EmailDomain;
 use Illuminate\Http\Request;
@@ -82,7 +80,9 @@ class StudentController extends Controller
         $student = Student::create($fields);
 
         if ($student->section_id) {
-            Section::where('id', $student->section_id)->increment('student_count');
+            $studentCount = Student::where('section_id', $student->section_id)->count();
+
+            Section::where('id', $student->section_id)->update(['student_count' => $studentCount]);
         }
 
         return redirect()->route('students.index')->with('success', 'Student added successfully.');
@@ -215,7 +215,7 @@ class StudentController extends Controller
             }
 
             foreach ($sectionStudentCounts as $sectionId => $count) {
-                Section::where('id', $sectionId)->increment('student_count', $count);
+                Section::where('id', $sectionId)->update(['student_count' => Student::where('section_id', $sectionId)->count()]);
             }
 
             return redirect()->route('students.index')->with('success', 'Students imported successfully.');

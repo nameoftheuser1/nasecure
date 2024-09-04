@@ -15,6 +15,7 @@ class AttendanceLog extends Model
         'section_id',
         'attendance_date',
         'time_in',
+        'time_out'
     ];
 
     public function student(): BelongsTo

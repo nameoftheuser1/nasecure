@@ -1,3 +1,5 @@
+<!-- resources/views/sections/index.blade.php -->
+
 <x-layout>
     <x-sidebar />
     <div>
@@ -46,6 +48,9 @@
                     <tr class="bg-gray-200">
                         <th class="py-2 px-4 border-b">Section ID</th>
                         <th class="py-2 px-4 border-b">Section Name</th>
+                        @if (Auth::user()->role->name === 'admin')
+                            <th class="py-2 px-4 border-b">Instructor</th>
+                        @endif
                         <th class="py-2 px-4 border-b">Student Count</th>
                         <th class="py-2 px-4 border-b">Course</th>
                         <th class="py-2 px-4 border-b">Time In</th>
@@ -58,6 +63,9 @@
                         <tr class="hover:bg-blue-50">
                             <td class="py-2 px-7 border-b text-center">{{ $section->id }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $section->section_name }}</td>
+                            @if (Auth::user()->role->name === 'admin')
+                                <td class="py-2 px-7 border-b text-center">{{ $section->creator->name ?? 'N/A' }}</td>
+                            @endif
                             <td class="py-2 px-7 border-b text-center">{{ $section->student_count }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $section->course->course_name ?? 'N/A' }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $section->time_in }}</td>
