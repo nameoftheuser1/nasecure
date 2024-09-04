@@ -1,5 +1,3 @@
-<!-- resources/views/sections/index.blade.php -->
-
 <x-layout>
     <x-sidebar />
     <div>
@@ -53,6 +51,7 @@
                         @endif
                         <th class="py-2 px-4 border-b">Student Count</th>
                         <th class="py-2 px-4 border-b">Course</th>
+                        <th class="py-2 px-4 border-b">Schedule</th>
                         <th class="py-2 px-4 border-b">Time In</th>
                         <th class="py-2 px-4 border-b">Time Out</th>
                         <th class="py-2 px-4 border-b w-40">Actions</th>
@@ -64,12 +63,22 @@
                             <td class="py-2 px-7 border-b text-center">{{ $section->id }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $section->section_name }}</td>
                             @if (Auth::user()->role->name === 'admin')
-                                <td class="py-2 px-7 border-b text-center">{{ $section->creator->name ?? 'N/A' }}</td>
+                                <td class="py-2 px-7 border-b text-center">
+                                    {{ $section->creator->first_name ?? 'N/A' }}
+                                    {{ $section->creator->last_name ?? '' }}
+                                </td>
                             @endif
                             <td class="py-2 px-7 border-b text-center">{{ $section->student_count }}</td>
-                            <td class="py-2 px-7 border-b text-center">{{ $section->course->course_name ?? 'N/A' }}</td>
-                            <td class="py-2 px-7 border-b text-center">{{ $section->time_in }}</td>
-                            <td class="py-2 px-7 border-b text-center">{{ $section->time_out }}</td>
+                            <td class="py-2 px-7 border-b text-center">{{ $section->course->course_name ?? 'N/A' }}
+                            </td>
+                            <td class="py-2 px-7 border-b text-center">{{ $section->schedule }}</td>
+                            <td class="py-2 px-7 border-b text-center">
+                                {{ optional($section->time_in)->format('h:i A') ?? '' }}
+                            </td>
+                            <td class="py-2 px-7 border-b text-center">
+                                {{ optional($section->time_out)->format('h:i A') ?? '' }}
+                            </td>
+
                             <td class="py-2 px-7 border-b flex justify-center w-40">
                                 <a href="{{ route('sections.edit', $section->id) }}"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">

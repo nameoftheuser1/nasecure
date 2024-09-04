@@ -40,6 +40,7 @@
                             <tr>
                                 <th class="py-3 px-6 text-left">Date</th>
                                 <th class="py-3 px-6 text-left">Time In</th>
+                                <th class="py-3 px-6 text-left">Time Out</th>
                             </tr>
                         </thead>
                         <tbody class="text-gray-600 text-sm font-light">
@@ -49,6 +50,9 @@
                                         {{ $log->attendance_date->format('Y-m-d') }}</td>
                                     <td class="py-3 px-6 text-left">
                                         {{ optional($log->time_in)->format('H:i:s') ?? '' }}
+                                    </td>
+                                    <td class="py-3 px-6 text-left">
+                                        {{ optional($log->time_out)->format('H:i:s') ?? '' }}
                                     </td>
                                 </tr>
                             @empty

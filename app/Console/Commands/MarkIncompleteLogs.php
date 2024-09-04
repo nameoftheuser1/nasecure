@@ -27,16 +27,18 @@ class MarkIncompleteLogs extends Command
      *
      * @return int
      */
-    public function handle()
-    {
-        $threeHoursAgo = Carbon::now()->subHours(3);
 
-        $updated = AttendanceLog::where('time_in', '<=', $threeHoursAgo)
-            ->whereNull('time_out')
-            ->update(['time_out' => null]);
+     /*unused*/
+    // public function handle()
+    // {
+    //     $threeHoursAgo = Carbon::now()->subHours(3);
 
-        $this->info("Marked $updated incomplete logs as incomplete.");
+    //     $updated = AttendanceLog::where('time_in', '<=', $threeHoursAgo)
+    //         ->whereNull('time_out')
+    //         ->update(['time_out' => null]);
 
-        return 0;
-    }
+    //     $this->info("Marked $updated incomplete logs as incomplete.");
+
+    //     return 0;
+    // }
 }

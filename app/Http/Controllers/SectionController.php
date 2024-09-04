@@ -17,18 +17,22 @@ class SectionController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $userId = Auth::id();
-        $sections = Section::with('course', 'creator')
-            ->where('created_by', $userId)
+        $user = Auth::user();
+
+        $sectionsQuery = Section::with('course', 'creator')
             ->where(function ($query) use ($search) {
                 $query->where('section_name', 'like', "%{$search}%")
                     ->orWhere('course_id', 'like', "%{$search}%")
                     ->orWhereHas('course', function ($query) use ($search) {
                         $query->where('course_name', 'like', "%{$search}%");
                     });
-            })
-            ->latest()
-            ->paginate(10);
+            });
+
+        if ($user->role->name !== 'admin') {
+            $sectionsQuery->where('created_by', $user->id);
+        }
+
+        $sections = $sectionsQuery->latest()->paginate(10);
 
         return view('sections.index', ['sections' => $sections]);
     }

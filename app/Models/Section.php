@@ -20,6 +20,11 @@ class Section extends Model
         'schedule'
     ];
 
+    protected $casts = [
+        'time_in' => 'datetime:H:i:s',
+        'time_out' => 'datetime:H:i:s',
+    ];
+
     public function course(): BelongsTo
     {
         return $this->belongsTo(Course::class);
