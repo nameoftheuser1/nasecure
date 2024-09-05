@@ -1,26 +1,13 @@
 <x-layout>
     <x-sidebar />
+    @if (session('error'))
+        <x-flashMsg msg="{{ session('error') }}" bg="bg-red-500" />
+    @endif
     <div class="container mx-auto p-5 bg-gray-200 rounded-3xl">
         <h1 class="text-xl font-bold mb-4">Edit Schedule</h1>
         <form action="{{ route('schedules.update', $schedule->id) }}" method="POST" class="space-y-4">
             @csrf
             @method('PUT')
-
-            <div>
-                <label for="user_id" class="block text-sm font-medium text-gray-700">User</label>
-                <select id="user_id" name="user_id"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                    @foreach ($users as $user)
-                        <option value="{{ $user->id }}"
-                            {{ old('user_id', $schedule->user_id) == $user->id ? 'selected' : '' }}>
-                            {{ $user->first_name }} {{ $user->last_name }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('user_id')
-                    <p class="text-red-700 text-sm">{{ $message }}</p>
-                @enderror
-            </div>
 
             <div>
                 <label for="day" class="block text-sm font-medium text-gray-700">Day</label>

@@ -1,5 +1,8 @@
 <x-layout>
     <x-sidebar />
+    @if (session('error'))
+        <x-flashMsg msg="{{ session('error') }}" bg="bg-red-500" />
+    @endif
     <div class="container mx-auto p-5 bg-gray-200 rounded-3xl">
         <h1 class="text-xl font-bold mb-4">Add Schedule</h1>
         <form action="{{ route('schedules.store') }}" method="POST" class="space-y-4">

@@ -59,11 +59,16 @@ class ScheduleController extends Controller
             'time_out' => ['required', 'date_format:H:i'],
         ]);
 
+        if (strtotime($fields['time_out']) <= strtotime($fields['time_in'])) {
+            return back()->with('error', 'The time out must be later than the time in.')->withInput();
+        }
+
         $fields['user_id'] = Auth::id();
         Schedule::create($fields);
 
         return redirect()->route('schedules.index')->with('success', 'Schedule added successfully.');
     }
+
 
 
     /**
@@ -94,6 +99,10 @@ class ScheduleController extends Controller
             'time_out' => ['required', 'date_format:H:i'],
         ]);
 
+        if (strtotime($fields['time_out']) <= strtotime($fields['time_in'])) {
+            return back()->with('error', 'The time out must be later than the time in.')->withInput();
+        }
+
         $schedule->update($fields);
 
         return redirect()->route('schedules.index')->with('success', 'Schedule updated successfully.');
@@ -106,6 +115,6 @@ class ScheduleController extends Controller
     {
         $schedule->delete();
 
-        return redirect()->route('schedules.index')->with('success', 'Schedule deleted successfully.');
+        return redirect()->route('schedules.index')->with('deleted', 'Schedule deleted successfully.');
     }
 }

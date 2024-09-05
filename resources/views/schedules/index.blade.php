@@ -14,7 +14,7 @@
         </div>
 
         <div class="flex justify-end">
-            @if(Auth::user()->role->name === 'instructor')
+            @if (Auth::user()->role->name === 'instructor')
                 <a href="{{ route('schedules.create') }}"
                     class="ml-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-600 flex items-center focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -48,19 +48,21 @@
             <table class="min-w-full bg-gray-200 rounded-2xl border-gray-300">
                 <thead>
                     <tr class="bg-gray-200">
-                        @if(Auth::user()->role->name === 'admin')
+                        @if (Auth::user()->role->name === 'admin')
                             <th class="py-2 px-4 border-b">Name</th>
                         @endif
                         <th class="py-2 px-4 border-b">Day</th>
                         <th class="py-2 px-4 border-b">Time In</th>
                         <th class="py-2 px-4 border-b">Time Out</th>
-                        <th class="py-2 px-4 border-b w-40">Actions</th>
+                        @if (Auth::user()->role->name === 'instructor')
+                            <th class="py-2 px-4 border-b w-40">Actions</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($schedules as $schedule)
                         <tr class="hover:bg-blue-50">
-                            @if(Auth::user()->role->name === 'admin')
+                            @if (Auth::user()->role->name === 'admin')
                                 <td class="py-2 px-7 border-b text-center">
                                     {{ $schedule->user->first_name }} {{ $schedule->user->last_name }}
                                 </td>
@@ -68,21 +70,23 @@
                             <td class="py-2 px-7 border-b text-center">{{ $schedule->day }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $schedule->time_in->format('g:i A') }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $schedule->time_out->format('g:i A') }}</td>
-                            <td class="py-2 px-7 border-b flex justify-center w-40">
-                                <a href="{{ route('schedules.edit', $schedule->id) }}"
-                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
-                                    Edit
-                                </a>
-                                <form action="{{ route('schedules.destroy', $schedule->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
-                                        onclick="return confirm('Are you sure you want to delete this schedule?');">
-                                        Delete
-                                    </button>
-                                </form>
-                            </td>
+                            @if (Auth::user()->role->name === 'instructor')
+                                <td class="py-2 px-7 border-b flex justify-center w-40">
+                                    <a href="{{ route('schedules.edit', $schedule->id) }}"
+                                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">
+                                        Edit
+                                    </a>
+                                    <form action="{{ route('schedules.destroy', $schedule->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
+                                            onclick="return confirm('Are you sure you want to delete this schedule?');">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>
