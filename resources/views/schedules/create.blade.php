@@ -5,21 +5,6 @@
         <form action="{{ route('schedules.store') }}" method="POST" class="space-y-4">
             @csrf
             <div>
-                <label for="user_id" class="block text-sm font-medium text-gray-700">Instructor</label>
-                <select id="user_id" name="user_id"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    required>
-                    <option value="">Select Instructor</option>
-                    @foreach ($instructors as $instructor)
-                        <option value="{{ $instructor->id }}">{{ $instructor->first_name }} {{ $instructor->last_name }}
-                        </option>
-                    @endforeach
-                </select>
-                @error('user_id')
-                    <p class="text-red-700 text-sm">{{ $message }}</p>
-                @enderror
-            </div>
-            <div>
                 <label for="day" class="block text-sm font-medium text-gray-700">Day</label>
                 <select id="day" name="day"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"

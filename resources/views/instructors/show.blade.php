@@ -38,8 +38,8 @@
                         @forelse ($instructor->sections as $section)
                             <div class="p-4 rounded-lg border border-gray-200 mb-2">
                                 <p class="text-lg font-medium text-gray-800">{{ $section->section_name }}</p>
-                                <p class="text-sm text-gray-600">Time In: {{ $section->time_in->format('H:i:s') }}</p>
-                                <p class="text-sm text-gray-600">Time Out: {{ $section->time_out->format('H:i:s') }}</p>
+                                <p class="text-sm text-gray-600">Time In: {{ $section->time_in->format('g:i A') }}</p>
+                                <p class="text-sm text-gray-600">Time Out: {{ $section->time_out->format('g:i A') }}</p>
                             </div>
                         @empty
                             <p class="text-lg font-medium text-gray-800">No sections assigned.</p>

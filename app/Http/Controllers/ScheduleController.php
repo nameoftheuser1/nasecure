@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Schedule;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
 {
@@ -14,9 +15,14 @@ class ScheduleController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
+        $user = Auth::user();
 
         $schedulesQuery = Schedule::query()
             ->with('user');
+
+        if ($user->role->name !== 'admin') {
+            $schedulesQuery->where('user_id', $user->id);
+        }
 
         if ($search) {
             $schedulesQuery->where(function ($query) use ($search) {
@@ -39,11 +45,7 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-        $instructors = User::whereHas('role', function ($query) {
-            $query->where('name', 'instructor');
-        })->get();
-
-        return view('schedules.create', compact('instructors'));
+        return view('schedules.create');
     }
 
     /**
@@ -52,12 +54,12 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         $fields = $request->validate([
-            'user_id' => ['required', 'exists:users,id'],
             'day' => ['required', 'string', 'max:10'],
             'time_in' => ['required', 'date_format:H:i'],
             'time_out' => ['required', 'date_format:H:i'],
         ]);
 
+        $fields['user_id'] = Auth::id();
         Schedule::create($fields);
 
         return redirect()->route('schedules.index')->with('success', 'Schedule added successfully.');
@@ -77,11 +79,7 @@ class ScheduleController extends Controller
      */
     public function edit(Schedule $schedule)
     {
-        $users = User::whereHas('role', function ($query) {
-            $query->where('name', 'instructor');
-        })->get();
-
-        return view('schedules.edit', compact('schedule', 'users'));
+        return view('schedules.edit', compact('schedule'));
     }
 
 
@@ -91,7 +89,6 @@ class ScheduleController extends Controller
     public function update(Request $request, Schedule $schedule)
     {
         $fields = $request->validate([
-            'user_id' => ['required', 'exists:users,id'],
             'day' => ['required', 'string', 'max:10'],
             'time_in' => ['required', 'date_format:H:i'],
             'time_out' => ['required', 'date_format:H:i'],
