@@ -171,13 +171,13 @@ class StudentController extends Controller
 
             (new FastExcel)->import($file, function ($line) use (&$sectionStudentCounts, &$errors, $emailRule) {
                 if (empty($line['Section ID'])) {
-                    $errors[] = "Student with ID {$line['Student ID']} is missing a Section ID.";
+                    $errors[] = "A student is missing their Section ID.";
                     return;
                 }
 
                 $section = Section::find($line['Section ID']);
                 if (!$section) {
-                    $errors[] = "Section with ID {$line['Section ID']} does not exist for student {$line['Student ID']}.";
+                    $errors[] = "The section does not exist for one of the students.";
                     return;
                 }
 
@@ -187,7 +187,7 @@ class StudentController extends Controller
                 });
 
                 if ($emailError) {
-                    $errors[] = "Invalid email for student {$line['Student ID']}: {$emailError}";
+                    $errors[] = "One of the students has an invalid email address.";
                     return;
                 }
 
@@ -209,20 +209,19 @@ class StudentController extends Controller
             });
 
             if (!empty($errors)) {
-                $errorMessage = "The following errors occurred during import:\n" . implode("\n", $errors);
+                $errorMessage = "There were some issues with the import:\n" . implode("\n", $errors);
                 Log::error($errorMessage);
-                return redirect()->back()->with('error', $errorMessage);
+                return redirect()->back()->with('error', 'Some students could not be imported. Please check the file and try again.');
             }
 
             foreach ($sectionStudentCounts as $sectionId => $count) {
                 Section::where('id', $sectionId)->update(['student_count' => Student::where('section_id', $sectionId)->count()]);
             }
 
-            return redirect()->route('students.index')->with('success', 'Students imported successfully.');
+            return redirect()->route('students.index')->with('success', 'Students were imported successfully.');
         } catch (\Exception $e) {
-            $errorMessage = 'Error importing students: ' . $e->getMessage();
-            Log::error($errorMessage);
-            return redirect()->back()->with('error', $errorMessage);
+            Log::error('Error importing students: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'There was an issue importing the students. Please try again later.');
         }
     }
 }
