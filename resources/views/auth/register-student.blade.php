@@ -21,7 +21,7 @@
             @endif
             <div class="text-center mb-3">
                 <p class="text-[24px] font-semibold">Register as Student</p>
-                <a href="{{ route('registerinstructor') }}" class="text-sm">You are not student? <span class="underline text-blue-500">Click here</span></a>
+                <a href="{{ route('registerinstructor') }}" class="text-sm">Register as instructor <span class="underline text-blue-500">Click here</span></a>
             </div>
 
             <form action="{{ route('registerstudent') }}" method="post">

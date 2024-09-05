@@ -14,9 +14,14 @@
         <div class="flex-1 bg-cover bg-center rounded-l-lg"
             style="background-image: url('{{ asset('images/NASECURE.png') }}');"></div>
         <div class="p-2.5 w-11/12 max-w-sm">
+            @if (session('success'))
+                <x-flashMsg msg="{{ session('success') }}" bg="bg-yellow-500" />
+            @elseif(session('error'))
+                <x-flashMsg msg="{{ session('error') }}" bg="bg-red-500" />
+            @endif
             <div class="text-center mb-3">
                 <p class="text-[24px] font-semibold">Register as Instructor</p>
-                <a href="{{ route('registerstudent') }}" class="text-sm">You are not an instructor? <span
+                <a href="{{ route('registerstudent') }}" class="text-sm">Register as student. <span
                         class="underline text-blue-500">Click here</span></a>
             </div>
             <form action="{{ route('registerinstructor') }}" method="post">
