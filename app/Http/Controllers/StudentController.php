@@ -69,25 +69,19 @@ class StudentController extends Controller
     {
         $fields = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'student_id' => ['required', 'string', 'max:50', 'unique:students,student_id'],
             'email' => ['required', 'email', 'unique:students,email', new EmailDomain],
             'rfid' => ['nullable', 'string', 'max:50'],
             'section_id' => ['required', 'string', 'max:50'],
         ]);
 
-        $lowestAvailableId = Student::select('student_id')
-            ->orderBy('student_id')
-            ->get()
-            ->pluck('student_id')
-            ->diff(range(1, Student::count()))
-            ->first() ?? (Student::max('student_id') + 1);
-
-        $fields['student_id'] = $lowestAvailableId;
         $fields['created_by'] = Auth::id();
 
         $student = Student::create($fields);
 
         if ($student->section_id) {
             $studentCount = Student::where('section_id', $student->section_id)->count();
+
             Section::where('id', $student->section_id)->update(['student_count' => $studentCount]);
         }
 
@@ -177,13 +171,13 @@ class StudentController extends Controller
 
             (new FastExcel)->import($file, function ($line) use (&$sectionStudentCounts, &$errors, $emailRule) {
                 if (empty($line['Section ID'])) {
-                    $errors[] = "Student with name {$line['Name']} is missing a Section ID.";
+                    $errors[] = "Student with ID {$line['Student ID']} is missing a Section ID.";
                     return;
                 }
 
                 $section = Section::find($line['Section ID']);
                 if (!$section) {
-                    $errors[] = "Section with ID {$line['Section ID']} does not exist for student {$line['Name']}.";
+                    $errors[] = "Section with ID {$line['Section ID']} does not exist for student {$line['Student ID']}.";
                     return;
                 }
 
@@ -193,19 +187,12 @@ class StudentController extends Controller
                 });
 
                 if ($emailError) {
-                    $errors[] = "Invalid email for student {$line['Name']}: {$emailError}";
+                    $errors[] = "Invalid email for student {$line['Student ID']}: {$emailError}";
                     return;
                 }
 
-                $lowestAvailableId = Student::select('student_id')
-                    ->orderBy('student_id')
-                    ->get()
-                    ->pluck('student_id')
-                    ->diff(range(1, Student::count()))
-                    ->first() ?? (Student::max('student_id') + 1);
-
                 $student = Student::updateOrCreate(
-                    ['student_id' => $lowestAvailableId],
+                    ['student_id' => $line['Student ID']],
                     [
                         'name' => $line['Name'] ?? null,
                         'email' => $line['Email'] ?? null,
