@@ -52,27 +52,6 @@
                 <thead>
                     <tr class="bg-gray-200">
                         <th class="py-2 px-4 text-center border-b">
-                            <a href="{{ route('students.index', array_merge(request()->query(), ['sort' => 'id', 'direction' => request('direction', 'asc') === 'asc' ? 'desc' : 'asc'])) }}"
-                                class="flex items-center">
-                                ID
-                                @if (request('sort') === 'id')
-                                    @if (request('direction') === 'asc')
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="m4.5 15.75 7.5-7.5 7.5 7.5" />
-                                        </svg>
-                                    @else
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                                        </svg>
-                                    @endif
-                                @endif
-                            </a>
-                        </th>
-                        <th class="py-2 px-4 text-center border-b">
                             <a href="{{ route('students.index', array_merge(request()->query(), ['sort' => 'name', 'direction' => request('direction', 'asc') === 'asc' ? 'desc' : 'asc'])) }}"
                                 class="flex items-center">
                                 Name
@@ -104,7 +83,6 @@
                     @foreach ($students as $student)
                         <tr class="hover:bg-blue-50 cursor-pointer"
                             onclick="window.location='{{ route('students.show', $student->id) }}'">
-                            <td class="py-2 px-4 text-center border-b">{{ $student->id }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $student->name ?? 'Not Set' }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $student->student_id ?? 'Not Set' }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $student->email ?? 'Not Set' }}</td>
