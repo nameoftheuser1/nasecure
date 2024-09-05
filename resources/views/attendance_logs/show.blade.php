@@ -126,7 +126,9 @@
                                 <tr class="border-b border-gray-200 hover:bg-gray-100">
                                     <td class="py-3 px-6 text-left whitespace-nowrap">${log.student ? log.student.name : 'N/A'}</td>
                                     <td class="py-3 px-6 text-left">${new Date(log.time_in).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})}</td>
-                                    <td class="py-3 px-6 text-left">${new Date(log.time_out).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})}</td>
+                                    <td class="py-3 px-6 text-left">
+                                    ${log.time_out ? new Date(log.time_out).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'Time Out Not Found'}
+                                    </td>
                                 </tr>
                             `;
                         });

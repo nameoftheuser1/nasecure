@@ -83,6 +83,7 @@
             <tr>
                 <th>Student Name</th>
                 <th>Time In</th>
+                <th>Time Out</th>
             </tr>
         </thead>
         <tbody>
@@ -90,6 +91,9 @@
                 <tr>
                     <td>{{ $log->student ? $log->student->name : 'N/A' }}</td>
                     <td>{{ date('h:i a', strtotime($log->time_in)) }}</td>
+                    <td>
+                        {{ $log->time_in ? date('h:i a', strtotime($log->time_out)) : 'Time In Not Registered' }}
+                    </td>
                 </tr>
             @endforeach
         </tbody>
