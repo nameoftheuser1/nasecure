@@ -68,6 +68,16 @@ class User extends Authenticatable
         return $this->hasMany(Student::class, 'created_by');
     }
 
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(Schedule::class);
+    }
+
+    public function sections(): HasMany
+    {
+        return $this->hasMany(Section::class, 'created_by');
+    }
+
     public function isAdmin()
     {
         return $this->role->name === 'admin';

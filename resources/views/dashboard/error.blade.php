@@ -14,7 +14,7 @@
                 <p class="mb-10 text-white p-2 border-red-500 bg-red-500 rounded-lg ">Maybe you registered as an instructor, but your account has not been verified. Please
                     contact the admin to verify your account.</p>
                 <a href="{{ route('students.index') }}"
-                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded text-center">
                     Go to Student list
                 </a>
             @else

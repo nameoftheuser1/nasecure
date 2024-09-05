@@ -100,7 +100,7 @@
             @unless (Auth::user()->role->name === 'student')
                 <div class="mb-4">
                     <label for="pin_code" class="block text-sm font-medium text-gray-700">Pin Code</label>
-                    <input type="number" name="pin_code" id="pin_code" value="{{ old('contact', $user->pin_code) }}"
+                    <input type="number" name="pin_code" id="pin_code" value="{{ old('pin_code', $user->pin_code) }}"
                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-4 py-2">
                     @error('pin_code')
                         <p class="text-red-600 text-sm mt-1">{{ $message }}</p>

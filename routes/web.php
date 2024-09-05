@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\KitController;
 use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentUIController;
@@ -73,7 +74,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
         Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
         Route::put('/users/{id}/verify', [UserController::class, 'verify'])->name('users.verify');
-
+        Route::resource('/instructors', InstructorController::class);
+        Route::resource('/schedules', ScheduleController::class);
         Route::resource('kits', KitController::class);
         Route::get('/borrowed-kits', [BorrowedKitController::class, 'index'])->name('borrowed-kits');
         Route::get('/borrowed-kits/borrow', [BorrowedKitController::class, 'borrow'])->name('borrowed-kits.borrow');
