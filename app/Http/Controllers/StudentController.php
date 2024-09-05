@@ -191,12 +191,23 @@ class StudentController extends Controller
                     return;
                 }
 
+                if (empty($line['RFID'])) {
+                    $errors[] = "Student with ID {$line['Student ID']} is missing an RFID.";
+                    return;
+                }
+
+                $existingStudentWithRFID = Student::where('rfid', $line['RFID'])->first();
+                if ($existingStudentWithRFID && $existingStudentWithRFID->student_id != $line['Student ID']) {
+                    $errors[] = "RFID {$line['RFID']} is already assigned to another student.";
+                    return;
+                }
+
                 $student = Student::updateOrCreate(
                     ['student_id' => $line['Student ID']],
                     [
                         'name' => $line['Name'] ?? null,
                         'email' => $line['Email'] ?? null,
-                        'rfid' => $line['RFID'] ?? null,
+                        'rfid' => $line['RFID'],
                         'section_id' => $line['Section ID'],
                         'created_by' => Auth::id(),
                     ]
