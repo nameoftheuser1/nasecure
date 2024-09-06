@@ -182,7 +182,6 @@ class StudentController extends Controller
 
         try {
             $file = $request->file('file');
-            Log::info('File received: ' . $file->getClientOriginalName());
             $sectionStudentCounts = [];
             $errors = [];
             $emailRule = new EmailDomain();
@@ -193,39 +192,42 @@ class StudentController extends Controller
                     return;
                 }
 
-                $section = Section::find($line['Section ID']);
+                $section = Section::where('id', $line['Section ID'])
+                    ->where('created_by', Auth::id())
+                    ->first();
+
                 if (!$section) {
-                    $errors[] = "The section does not exist for one of the students.";
+                    $errors[] = "The section with ID {$line['Section ID']} does not exist in your list for one of the students.";
+                    return;
+                }
+
+                if (empty($line['Name'])) {
+                    $errors[] = "A student is missing their Name.";
+                    return;
+                }
+
+                if (empty($line['Email'])) {
+                    $errors[] = "A student is missing their Email address.";
                     return;
                 }
 
                 $emailError = null;
-                $emailRule->validate('email', $line['Email'] ?? '', function ($error) use (&$emailError) {
+                $emailRule->validate('email', $line['Email'], function ($error) use (&$emailError) {
                     $emailError = $error;
                 });
 
                 if ($emailError) {
-                    $errors[] = "One of the students has an invalid email address.";
+                    $errors[] = "One of the students has an invalid email address: {$line['Email']}.";
                     return;
                 }
 
-                if (empty($line['RFID'])) {
-                    $errors[] = "Student with ID {$line['Student ID']} is missing an RFID.";
-                    return;
-                }
-
-                $existingStudentWithRFID = Student::where('rfid', $line['RFID'])->first();
-                if ($existingStudentWithRFID && $existingStudentWithRFID->student_id != $line['Student ID']) {
-                    $errors[] = "RFID {$line['RFID']} is already assigned to another student.";
-                    return;
-                }
 
                 $student = Student::updateOrCreate(
                     ['student_id' => $line['Student ID']],
                     [
-                        'name' => $line['Name'] ?? null,
-                        'email' => $line['Email'] ?? null,
-                        'rfid' => $line['RFID'],
+                        'name' => $line['Name'],
+                        'email' => $line['Email'],
+                        'rfid' => $line['RFID'] ?? null,
                         'section_id' => $line['Section ID'],
                         'created_by' => Auth::id(),
                     ]
