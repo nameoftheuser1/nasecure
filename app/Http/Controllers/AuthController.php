@@ -132,25 +132,28 @@ class AuthController extends Controller
     {
         $email = $request->input('email');
         $password = $request->input('password');
-
         $rules = [
             'email' => ['required', 'max:255'],
             'password' => ['required'],
         ];
-
         if ($email !== 'admin') {
             $rules['email'][] = new EmailDomain;
         }
-
         $request->validate($rules);
 
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
-            return redirect()->intended('/studentprofile');
-        } else {
-            return back()->withInput()->withErrors([
-                'email' => 'Invalid email or password.',
-            ]);
+            $request->session()->regenerate();
+
+            if (Auth::user()->role->name === "student") {
+                return redirect()->intended('/studentprofile');
+            } else {
+                return redirect()->intended('/dashboard');
+            }
         }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ])->onlyInput('email');
     }
 
     public function logout(Request $request)

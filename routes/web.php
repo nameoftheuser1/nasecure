@@ -40,29 +40,26 @@ Route::middleware('guest')->group(function () {
     Route::post('/attendance/scan-rfid', [AttendanceController::class, 'scanRFID'])->name('attendance.scan-rfid');
 });
 
-Route::get('/studentprofile', [StudentUIController::class, 'profileDetails'])->name('studentprofile')->middleware('auth');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
-Route::post('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
-Route::view('/errorpage', 'dashboard.error')->name('errorpage');
-
 Route::middleware('auth')->group(function () {
 
-    Route::middleware('instructor')->group(function () {
-        Route::redirect('/', 'students');
-        // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-        Route::get('/attendance-logs', [DashboardController::class, 'fetchAttendanceLogs']);
-        Route::get('/sections/{id}/attendance', [AttendanceLogController::class, 'attendanceByDate']);
-        Route::resource('/schedules', ScheduleController::class);
-        Route::resource('students', StudentController::class);
-        Route::resource('programs', ProgramController::class);
-        Route::resource('courses', CourseController::class);
-        Route::resource('sections', SectionController::class);
-        Route::resource('attendance_logs', AttendanceLogController::class);
-        Route::get('/attendance_logs/{id}/pdf', [AttendanceLogController::class, 'generatePdf'])->name('attendance_logs.pdf');
+    Route::redirect('/', 'students');
+    // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/attendance-logs', [DashboardController::class, 'fetchAttendanceLogs']);
+    Route::get('/sections/{id}/attendance', [AttendanceLogController::class, 'attendanceByDate']);
+    Route::resource('/schedules', ScheduleController::class);
+    Route::resource('students', StudentController::class);
+    Route::resource('programs', ProgramController::class);
+    Route::resource('courses', CourseController::class);
+    Route::resource('sections', SectionController::class);
+    Route::resource('attendance_logs', AttendanceLogController::class);
+    Route::get('/attendance_logs/{id}/pdf', [AttendanceLogController::class, 'generatePdf'])->name('attendance_logs.pdf');
 
-        Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
-    });
+    Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
+    Route::get('/studentprofile', [StudentUIController::class, 'profileDetails'])->name('studentprofile');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+    Route::post('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
+    Route::view('/errorpage', 'dashboard.error')->name('errorpage');
 
 
     Route::middleware('admin')->group(function () {
