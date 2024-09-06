@@ -76,7 +76,7 @@
                     </ul>
                 </div>
 
-                <div class="p-4 bg-slate-200 rounded-lg mb-2">
+                {{-- <div class="p-4 bg-slate-200 rounded-lg mb-2">
                     <h3 class="text-xl font-semibold text-gray-700 mb-3">Borrowed Kits</h3>
                     <ul class="list-disc pl-5 mb-6 max-h-[250px] overflow-y-scroll">
                         @foreach ($student->borrowedKits as $kit)
@@ -87,7 +87,7 @@
                             </li>
                         @endforeach
                     </ul>
-                </div>
+                </div> --}}
 
 
 

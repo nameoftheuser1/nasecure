@@ -16,10 +16,10 @@
             @endif
 
             <div class="mb-6">
-                <label for="email" class="block text-sm font-medium text-gray-700">Student Email</label>
-                <input type="email"
+                <label for="borrower_name" class="block text-sm font-medium text-gray-700">Borrower Name</label>
+                <input type="text"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    id="email" name="email" placeholder="Enter student email" required>
+                    id="borrower_name" name="borrower_name" placeholder="Enter borrower name" required>
                 <button type="button"
                     class="mt-3 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     id="fetch-borrowed-kits">
@@ -29,7 +29,7 @@
 
             <form action="{{ route('borrowed-kits.return') }}" method="POST">
                 @csrf
-                <input type="hidden" name="email" id="email-hidden">
+                <input type="hidden" name="borrower_name" id="borrower_name-hidden">
 
                 <div id="borrowed-kits-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
 
@@ -44,11 +44,11 @@
 
             <script>
                 document.getElementById('fetch-borrowed-kits').addEventListener('click', function() {
-                    const email = document.getElementById('email').value;
-                    document.getElementById('email-hidden').value = email;
+                    const borrowerName = document.getElementById('borrower_name').value;
+                    document.getElementById('borrower_name-hidden').value = borrowerName;
 
-                    if (email) {
-                        fetch(`{{ url('/borrowed-kits/fetch-borrowed-kits?email=') }}${email}`)
+                    if (borrowerName) {
+                        fetch(`{{ url('/borrowed-kits/fetch-borrowed-kits?borrower_name=') }}${borrowerName}`)
                             .then(response => response.json())
                             .then(data => {
                                 const container = document.getElementById('borrowed-kits-container');
@@ -56,7 +56,7 @@
 
                                 if (data.length === 0) {
                                     container.innerHTML =
-                                        '<p class="text-gray-500">No borrowed kits found for this student.</p>';
+                                        '<p class="text-gray-500">No borrowed kits found for this borrower.</p>';
                                     return;
                                 }
 
@@ -80,7 +80,7 @@
 
                                 if (container.innerHTML === '') {
                                     container.innerHTML =
-                                        '<p class="text-gray-500">No borrowable kits with quantity greater than 0 found for this student.</p>';
+                                        '<p class="text-gray-500">No borrowable kits with quantity greater than 0 found for this borrower.</p>';
                                 }
                             })
                             .catch(error => {

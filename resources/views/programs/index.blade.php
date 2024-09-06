@@ -44,7 +44,6 @@
             <table class="min-w-full bg-gray-200 rounded-2xl border-gray-300">
                 <thead>
                     <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border-b">Program ID</th>
                         <th class="py-2 px-4 border-b">Program Name</th>
                         <th class="py-2 px-4 border-b w-40">Actions</th>
                     </tr>
@@ -52,7 +51,6 @@
                 <tbody>
                     @foreach ($programs as $program)
                         <tr class="hover:bg-blue-50">
-                            <td class="py-2 px-7 border-b text-center">{{ $program->id }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $program->program_name }}</td>
                             <td class="py-2 px-7 border-b flex justify-center w-40">
                                 <a href="{{ route('programs.edit', $program->id) }}"

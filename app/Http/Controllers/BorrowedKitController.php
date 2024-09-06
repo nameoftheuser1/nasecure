@@ -16,10 +16,8 @@ class BorrowedKitController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $borrowedKits = BorrowedKit::with(['kit', 'student'])
-            ->whereHas('student', function ($query) use ($search) {
-                $query->where('email', 'like', "%{$search}%");
-            })
+        $borrowedKits = BorrowedKit::with('kit')
+            ->where('borrower_name', 'like', "%{$search}%")
             ->orWhere(function ($query) use ($search) {
                 $query->where('kit_id', 'like', "%{$search}%")
                     ->orWhere('quantity_borrowed', 'like', "%{$search}%")
@@ -33,6 +31,7 @@ class BorrowedKitController extends Controller
 
         return view('borrowed-kits.index', ['borrowedKits' => $borrowedKits]);
     }
+
 
     public function borrow(Request $request)
     {
@@ -56,12 +55,8 @@ class BorrowedKitController extends Controller
             return redirect()->back()->with('error', 'Your cart is empty.');
         }
 
-        $studentEmail = $request->input('email');
-        $student = Student::where('email', $studentEmail)->first();
+        $borrowerName = $request->input('borrower_name');
 
-        if (!$student) {
-            return redirect()->back()->with('error', 'Student with this email does not exist.');
-        }
 
         foreach ($cartData as $kitId => $details) {
             $kit = Kit::find($kitId);
@@ -76,7 +71,7 @@ class BorrowedKitController extends Controller
 
             BorrowedKit::create([
                 'kit_id' => $kitId,
-                'student_id' => $student->id,
+                'borrower_name' => $borrowerName,
                 'quantity_borrowed' => $details['quantity'],
                 'borrowed_at' => Carbon::now(),
                 'due_date' => Carbon::now()->addDays(5),
@@ -94,15 +89,9 @@ class BorrowedKitController extends Controller
 
     public function fetchBorrowedKits(Request $request)
     {
-        $email = $request->query('email');
+        $borrowerName = $request->query('borrower_name');
 
-        $student = Student::where('email', $email)->first();
-
-        if (!$student) {
-            return response()->json([]);
-        }
-
-        $borrowedKits = BorrowedKit::where('student_id', $student->id)
+        $borrowedKits = BorrowedKit::where('borrower_name', 'like', "%{$borrowerName}%")
             ->with('kit')
             ->select('kit_id', DB::raw('SUM(quantity_borrowed) as total_quantity_borrowed'))
             ->groupBy('kit_id')
@@ -125,12 +114,13 @@ class BorrowedKitController extends Controller
 
     public function processReturn(Request $request)
     {
-        $studentEmail = $request->input('email');
+        $borrowerName = $request->input('borrower_name');
         $kitId = $request->input('kit_id');
         $quantityToReturn = $request->input('quantity');
 
-        $student = Student::where('email', $studentEmail)->first();
-        $borrowedKit = BorrowedKit::where('student_id', $student->id)->where('kit_id', $kitId)->first();
+        $borrowedKit = BorrowedKit::where('borrower_name', $borrowerName)
+            ->where('kit_id', $kitId)
+            ->first();
 
         if (!$borrowedKit || $borrowedKit->quantity_borrowed < $quantityToReturn) {
             return redirect()->back()->with('error', 'Invalid return quantity.');
@@ -153,18 +143,12 @@ class BorrowedKitController extends Controller
 
     public function returnKits(Request $request)
     {
-        $email = $request->input('email');
+        $borrowerName = $request->input('borrower_name');
         $kits = $request->input('kits');
-
-        $student = Student::where('email', $email)->first();
-
-        if (!$student) {
-            return redirect()->back()->with('error', 'Student with this email does not exist.');
-        }
 
         foreach ($kits as $kitId => $quantityToReturn) {
             $borrowedKits = BorrowedKit::where('kit_id', $kitId)
-                ->where('student_id', $student->id)
+                ->where('borrower_name', $borrowerName)
                 ->where('status', 'borrowed')
                 ->orderBy('id', 'asc')
                 ->get();
@@ -201,7 +185,4 @@ class BorrowedKitController extends Controller
 
         return redirect()->back()->with('success', 'Kits returned successfully!');
     }
-
-
-
 }

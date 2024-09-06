@@ -12,7 +12,7 @@ class BorrowedKit extends Model
 
     protected $fillable = [
         'kit_id',
-        'student_id',
+        'borrower_name',
         'quantity_borrowed',
         'borrowed_at',
         'due_date',
@@ -31,8 +31,4 @@ class BorrowedKit extends Model
         return $this->belongsTo(Kit::class);
     }
 
-    public function student(): BelongsTo
-    {
-        return $this->belongsTo(Student::class);
-    }
 }

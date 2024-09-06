@@ -44,7 +44,6 @@
             <table class="min-w-full bg-gray-200 rounded-2xl border-gray-300">
                 <thead>
                     <tr class="bg-gray-200">
-                        <th class="py-2 px-4 text-center border-b">Kit ID</th>
                         <th class="py-2 px-4 text-center border-b">Kit Name</th>
                         <th class="py-2 px-4 text-center border-b">Description</th>
                         <th class="py-2 px-4 text-center border-b">Quantity</th>
@@ -55,7 +54,6 @@
                     @foreach ($kits as $kit)
                         <tr class="hover:bg-blue-50 cursor-pointer"
                             onclick="window.location='{{ route('kits.show', $kit->id) }}';">
-                            <td class="py-2 px-4 text-center border-b">{{ $kit->id }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $kit->kit_name }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $kit->description }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $kit->quantity }}</td>

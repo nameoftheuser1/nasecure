@@ -41,10 +41,9 @@
             <table class="min-w-full bg-gray-200 rounded-2xl border-gray-300">
                 <thead>
                     <tr class="bg-gray-200">
-                        <th class="py-2 px-4 border-b">Kit ID</th>
+                        <th class="py-2 px-4 border-b">Borrower Name</th>
                         <th class="py-2 px-4 border-b">Kit Name</th>
                         <th class="py-2 px-4 border-b">Quantity Borrowed</th>
-                        <th class="py-2 px-4 border-b">Student Email</th>
                         <th class="py-2 px-4 border-b">Borrowed At</th>
                         <th class="py-2 px-4 border-b">Due Date</th>
                         <th class="py-2 px-4 border-b">Returned At</th>
@@ -54,10 +53,9 @@
                 <tbody>
                     @foreach ($borrowedKits as $borrowedKit)
                         <tr class="hover:bg-blue-50">
-                            <td class="py-2 px-7 border-b text-center">{{ $borrowedKit->kit_id }}</td>
+                            <td class="py-2 px-7 border-b text-center">{{ strtoupper($borrowedKit->borrower_name) }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $borrowedKit->kit->kit_name ?? 'N/A' }}</td>
                             <td class="py-2 px-7 border-b text-center">{{ $borrowedKit->quantity_borrowed }}</td>
-                            <td class="py-2 px-7 border-b text-center">{{ $borrowedKit->student->email ?? 'N/A' }}</td>
                             <td class="py-2 px-7 border-b text-center">
                                 {{ $borrowedKit->borrowed_at ? $borrowedKit->borrowed_at->format('Y-m-d') : '' }}
                             </td>

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('borrowed_kits', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('kit_id');
-            $table->unsignedBigInteger('student_id')->nullable();
+            $table->string('borrower_name');
             $table->integer('quantity_borrowed')->default(1);
             $table->date('borrowed_at');
             $table->date('due_date')->nullable();

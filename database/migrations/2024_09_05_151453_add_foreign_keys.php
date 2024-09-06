@@ -40,7 +40,6 @@ return new class extends Migration
 
         Schema::table('borrowed_kits', function (Blueprint $table) {
             $table->foreign('kit_id')->references('id')->on('kits')->onDelete('cascade');
-            $table->foreign('student_id')->references('id')->on('students')->onDelete('set null');
         });
     }
 
@@ -55,7 +54,6 @@ return new class extends Migration
 
         Schema::table('borrowed_kits', function (Blueprint $table) {
             $table->dropForeign(['kit_id']);
-            $table->dropForeign(['student_id']);
         });
 
         Schema::table('kits', function (Blueprint $table) {

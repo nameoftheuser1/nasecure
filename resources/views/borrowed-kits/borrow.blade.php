@@ -101,8 +101,9 @@
                         @csrf
                         <input type="hidden" name="cart" id="cartData">
                         <div class="mb-4">
-                            <label for="email" class="block text-gray-700">Student Email</label>
-                            <input type="email" id="email" name="email" placeholder="Enter student email"
+                            <label for="borrower_name" class="block text-gray-700">Borrower Name</label>
+                            <input type="text" id="borrower_name" name="borrower_name"
+                                placeholder="Enter borrower name"
                                 class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg" required>
                         </div>
                         <button type="submit"
@@ -115,7 +116,6 @@
             @endif
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const cartSection = document.getElementById('cartSection');

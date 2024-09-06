@@ -34,7 +34,6 @@
             <table class="min-w-full bg-gray-200 rounded-2xl border-gray-300">
                 <thead>
                     <tr class="bg-gray-200">
-                        <th class="py-2 px-4 text-center border-b">ID</th>
                         <th class="py-2 px-4 text-center border-b">First Name</th>
                         <th class="py-2 px-4 text-center border-b">Last Name</th>
                         <th class="py-2 px-4 text-center border-b">Contact</th>
@@ -47,7 +46,6 @@
                 <tbody>
                     @foreach ($users as $user)
                         <tr class="hover:bg-blue-50">
-                            <td class="py-2 px-4 text-center border-b">{{ $user->id }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $user->first_name }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $user->last_name }}</td>
                             <td class="py-2 px-4 text-center border-b">{{ $user->contact }}</td>
