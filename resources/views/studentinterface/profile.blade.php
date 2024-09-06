@@ -56,7 +56,7 @@
                     <p><strong class="font-medium">Student ID:</strong> {{ $student->student_id }}</p>
                     <p><strong class="font-medium">Email:</strong> {{ $student->email }}</p>
                     <p><strong class="font-medium">RFID:</strong> {{ $student->rfid }}</p>
-                    <p><strong class="font-medium">Section:</strong> {{ $student->section->name ?? 'N/A' }}</p>
+                    <p><strong class="font-medium">Section:</strong> {{ $student->section->section_name ?? 'N/A' }}</p>
                     <p><strong class="font-medium">Created By:</strong> {{ $student->created_by ?? 'N/A' }}</p>
                 </div>
 
