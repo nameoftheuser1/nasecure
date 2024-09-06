@@ -51,7 +51,7 @@ class StudentController extends Controller
      */
     public function create()
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         if ($user->role->name !== 'admin') {
             $sections = Section::where('created_by', $user->id)->get();
@@ -69,11 +69,15 @@ class StudentController extends Controller
     {
         $fields = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'student_id' => ['required', 'string', 'max:50', 'unique:students,student_id'],
-            'email' => ['required', 'email', 'unique:students,email', new EmailDomain],
+            'student_id' => ['required', 'string', 'max:50'],
+            'email' => ['required', 'email', new EmailDomain],
             'rfid' => ['nullable', 'string', 'max:50'],
             'section_id' => ['required', 'string', 'max:50'],
         ]);
+
+        if (Student::where('email', $fields['email'])->where('created_by', Auth::id())->exists()) {
+            return back()->withErrors(['email' => 'A student with this email already exists.'])->withInput();
+        }
 
         $fields['created_by'] = Auth::id();
 
@@ -81,7 +85,6 @@ class StudentController extends Controller
 
         if ($student->section_id) {
             $studentCount = Student::where('section_id', $student->section_id)->count();
-
             Section::where('id', $student->section_id)->update(['student_count' => $studentCount]);
         }
 
@@ -109,7 +112,7 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         if ($user->role->name !== 'admin') {
             $sections = Section::where('created_by', $user->id)->get();
@@ -125,10 +128,25 @@ class StudentController extends Controller
      */
     public function update(Request $request, Student $student)
     {
+        $emailUniqueForInstructor = function ($attribute, $value, $fail) use ($student) {
+            if (Student::where('email', $value)
+                ->where('created_by', Auth::id())
+                ->where('id', '!=', $student->id)
+                ->exists()
+            ) {
+                $fail('A student with this email already exists.');
+            }
+        };
+
         $fields = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'student_id' => ['required', 'string', 'max:50', 'unique:students,student_id,' . $student->id],
-            'email' => ['required', 'email', 'unique:students,email,' . $student->id, new EmailDomain],
+            'student_id' => ['required', 'string', 'max:50'],
+            'email' => [
+                'required',
+                'email',
+                new EmailDomain,
+                $emailUniqueForInstructor
+            ],
             'rfid' => ['nullable', 'string', 'max:50'],
             'section_id' => ['required', 'string', 'max:50'],
         ]);

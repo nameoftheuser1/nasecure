@@ -65,6 +65,11 @@ class DashboardController extends Controller
             return redirect()->route('studentprofile');
         }
 
+        if ($user->role->name === 'instructor' && !$user->verified_at) {
+            Auth::logout();
+            return redirect('/login')->with('error', 'You are not verified as instructor contact the admin to verified your account.');
+        }
+
         return redirect('/login');
     }
 }

@@ -12,7 +12,7 @@ class StudentUIController extends Controller
     public function profileDetails()
     {
         $user = Auth::user();
-        $student = Student::with('section', 'attendanceLogs', 'creator', 'borrowedKits')
+        $student = Student::with('section', 'attendanceLogs', 'creator')
             ->where('email', $user->email)
             ->first();
         if (!$student) {
