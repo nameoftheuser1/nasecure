@@ -45,6 +45,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
 Route::post('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
 Route::view('/errorpage', 'dashboard.error')->name('errorpage');
+Route::get('/errorpage', [DashboardController::class, 'unauthorizedAccess']);
 
 Route::middleware('auth')->group(function () {
 

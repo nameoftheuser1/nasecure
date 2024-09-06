@@ -25,6 +25,6 @@ class StudentMiddleware
             return $next($request);
         }
 
-        return redirect('/')->with('error', 'You do not have permission to access this page.');
+        return redirect('/errorpage')->with('error', 'You do not have permission to access this page.');
     }
 }

@@ -52,4 +52,19 @@ class DashboardController extends Controller
 
         return response()->json($attendanceLogs);
     }
+
+    public function unauthorizedAccess()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return redirect('/login');
+        }
+
+        if ($user->role->name === 'student') {
+            return redirect()->route('studentprofile');
+        }
+
+        return redirect('/login');
+    }
 }
