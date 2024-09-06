@@ -242,7 +242,7 @@ class StudentController extends Controller
             if (!empty($errors)) {
                 $errorMessage = "There were some issues with the import:\n" . implode("\n", $errors);
                 Log::error($errorMessage);
-                return redirect()->back()->with('error', 'Some students could not be imported. Please check the file and try again.');
+                return redirect()->back()->with('error', $errorMessage);
             }
 
             foreach ($sectionStudentCounts as $sectionId => $count) {
