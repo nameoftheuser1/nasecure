@@ -24,26 +24,26 @@ class StudentController extends Controller
         $sort = $request->input('sort', 'id');
         $direction = $request->input('direction', 'asc');
 
-        $studentsQuery = Student::with('section');
+        $studentsQuery = Student::with('section')
+            ->where('created_by', $user->id);
 
-        if ($user->role->name !== 'admin') {
-            $studentsQuery->where('created_by', $user->id);
+        if ($search) {
+            $studentsQuery->where(function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('student_id', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('rfid', 'like', "%{$search}%")
+                    ->orWhere('section_id', 'like', "%{$search}%");
+            });
         }
 
-        $students = $studentsQuery->where(function ($query) use ($search) {
-            $query->where('name', 'like', "%{$search}%")
-                ->orWhere('student_id', 'like', "%{$search}%")
-                ->orWhere('email', 'like', "%{$search}%")
-                ->orWhere('rfid', 'like', "%{$search}%")
-                ->orWhere('section_id', 'like', "%{$search}%");
-        })
+        $students = $studentsQuery
             ->orderBy($sort, $direction)
-            ->oldest()
             ->paginate(10);
-
 
         return view('students.index', ['students' => $students]);
     }
+
 
 
     /**
@@ -159,8 +159,10 @@ class StudentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Student $student)
+    public function destroy($id)
     {
+        $student = Student::findOrFail($id);
+
         $section = $student->section;
 
         $student->delete();
@@ -170,7 +172,7 @@ class StudentController extends Controller
             $section->save();
         }
 
-        return back()->with('deleted', 'The student is deleted');
+        return back()->with('deleted', 'The student has been deleted');
     }
 
 
@@ -222,16 +224,14 @@ class StudentController extends Controller
                 }
 
 
-                $student = Student::updateOrCreate(
-                    ['student_id' => $line['Student ID']],
-                    [
-                        'name' => $line['Name'],
-                        'email' => $line['Email'],
-                        'rfid' => $line['RFID'] ?? null,
-                        'section_id' => $line['Section ID'],
-                        'created_by' => Auth::id(),
-                    ]
-                );
+                $student = Student::create([
+                    'student_id' => $line['Student ID'],
+                    'name' => $line['Name'],
+                    'email' => $line['Email'],
+                    'rfid' => $line['RFID'] ?? null,
+                    'section_id' => $line['Section ID'],
+                    'created_by' => Auth::id(),
+                ]);
 
                 if ($student->wasRecentlyCreated) {
                     $sectionId = $student->section_id;
