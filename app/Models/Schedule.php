@@ -12,11 +12,13 @@ class Schedule extends Model
 
     protected $fillable = [
         'user_id',
+        'attendance_date',
         'day',
         'time_in',
         'time_out',
     ];
     protected $casts = [
+        'attendance_date' => 'datetime',
         'time_in' => 'datetime',
         'time_out' => 'datetime'
     ];

@@ -1,4 +1,4 @@
-<x-layout>
+{{-- <x-layout>
     <x-sidebar />
     @if (session('error'))
         <x-flashMsg msg="{{ session('error') }}" bg="bg-red-500" />
@@ -62,4 +62,4 @@
             </div>
         </form>
     </div>
-</x-layout>
+</x-layout> --}}

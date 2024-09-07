@@ -1,7 +1,7 @@
 <x-layout>
     <x-sidebar />
     <div class="container mx-auto p-5 bg-gray-200 rounded-3xl">
-        <h1 class="text-xl font-bold mb-4">Add Section</h1>
+        <h1 class="text-xl font-bold mb-4">Add Schedule</h1>
         <form action="{{ route('sections.store') }}" method="POST" class="space-y-4">
             @csrf
             <div>
@@ -64,7 +64,7 @@
             <div>
                 <button type="submit"
                     class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    Add Section
+                    Add Schedule
                 </button>
             </div>
         </form>

@@ -21,7 +21,7 @@
                 </div>
                 <div class="flex gap-3 justify-between">
                     <div class="p-4 rounded-lg border border-gray-200 mb-4 w-full">
-                        <p class="text-sm text-gray-600 font-semibold">Schedules</p>
+                        <p class="text-sm text-gray-600 font-semibold">Instructor Logs</p>
                         @forelse ($instructor->schedules as $schedule)
                             <div class="p-4 rounded-lg border border-gray-200 mb-2">
                                 <p class="text-lg font-medium text-gray-800">{{ ucfirst($schedule->day) }}</p>
@@ -30,10 +30,10 @@
                                 </p>
                             </div>
                         @empty
-                            <p class="text-lg font-medium text-gray-800">No schedules available.</p>
+                            <p class="text-lg font-medium text-gray-800">No instructor logs available.</p>
                         @endforelse
                     </div>
-                    <div class="space-y-4 w-full">
+                    {{-- <div class="space-y-4 w-full">
                         <div class="p-4 rounded-lg border border-gray-200">
                             <p class="text-sm text-gray-600 font-semibold">Sections</p>
                             @forelse ($instructor->sections as $section)
@@ -48,10 +48,8 @@
                                 <p class="text-lg font-medium text-gray-800">No sections assigned.</p>
                             @endforelse
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
-
-
 
             </div>
 

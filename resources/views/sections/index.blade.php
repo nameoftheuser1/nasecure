@@ -9,9 +9,7 @@
     </div>
     <div class="container mx-auto p-5 bg-gray-200 rounded-3xl">
         <div class="items-center mb-3">
-            <h1 class="text-xl font-bold ps-4 mb-4">Sections</h1>
-            <p class="text-sm ps-8">Manage your sections here. Ensure sections are added to keep track of students and
-                instructors.</p>
+            <h1 class="text-xl font-bold ps-4 mb-4">Schedules</h1>
         </div>
         <div class="flex justify-end">
             <a href="{{ route('sections.create') }}"
@@ -21,7 +19,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
                 </svg>
-                Add Section
+                Add Schedules
             </a>
         </div>
         <div class="w-full mt-6">

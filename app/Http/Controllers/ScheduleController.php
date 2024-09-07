@@ -31,7 +31,9 @@ class ScheduleController extends Controller
                         ->orWhere('last_name', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%");
                 })
-                    ->orWhere('day', 'like', "%{$search}%");
+                    ->orWhere('day', 'like', "%{$search}%")
+                    ->orWhere('attendance_date', 'like', "%{$search}%");
+
             });
         }
 
@@ -45,7 +47,7 @@ class ScheduleController extends Controller
      */
     public function create()
     {
-        return view('schedules.create');
+        // return view('schedules.create');
     }
 
     /**
@@ -53,20 +55,20 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        $fields = $request->validate([
-            'day' => ['required', 'string', 'max:10'],
-            'time_in' => ['required', 'date_format:H:i'],
-            'time_out' => ['required', 'date_format:H:i'],
-        ]);
+        // $fields = $request->validate([
+        //     'day' => ['required', 'string', 'max:10'],
+        //     'time_in' => ['required', 'date_format:H:i'],
+        //     'time_out' => ['required', 'date_format:H:i'],
+        // ]);
 
-        if (strtotime($fields['time_out']) <= strtotime($fields['time_in'])) {
-            return back()->with('error', 'The time out must be later than the time in.')->withInput();
-        }
+        // if (strtotime($fields['time_out']) <= strtotime($fields['time_in'])) {
+        //     return back()->with('error', 'The time out must be later than the time in.')->withInput();
+        // }
 
-        $fields['user_id'] = Auth::id();
-        Schedule::create($fields);
+        // $fields['user_id'] = Auth::id();
+        // Schedule::create($fields);
 
-        return redirect()->route('schedules.index')->with('success', 'Schedule added successfully.');
+        // return redirect()->route('schedules.index')->with('success', 'Schedule added successfully.');
     }
 
 
@@ -84,7 +86,7 @@ class ScheduleController extends Controller
      */
     public function edit(Schedule $schedule)
     {
-        return view('schedules.edit', compact('schedule'));
+        // return view('schedules.edit', compact('schedule'));
     }
 
 
@@ -93,19 +95,19 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, Schedule $schedule)
     {
-        $fields = $request->validate([
-            'day' => ['required', 'string', 'max:10'],
-            'time_in' => ['required', 'date_format:H:i'],
-            'time_out' => ['required', 'date_format:H:i'],
-        ]);
+        // $fields = $request->validate([
+        //     'day' => ['required', 'string', 'max:10'],
+        //     'time_in' => ['required', 'date_format:H:i'],
+        //     'time_out' => ['required', 'date_format:H:i'],
+        // ]);
 
-        if (strtotime($fields['time_out']) <= strtotime($fields['time_in'])) {
-            return back()->with('error', 'The time out must be later than the time in.')->withInput();
-        }
+        // if (strtotime($fields['time_out']) <= strtotime($fields['time_in'])) {
+        //     return back()->with('error', 'The time out must be later than the time in.')->withInput();
+        // }
 
-        $schedule->update($fields);
+        // $schedule->update($fields);
 
-        return redirect()->route('schedules.index')->with('success', 'Schedule updated successfully.');
+        // return redirect()->route('schedules.index')->with('success', 'Schedule updated successfully.');
     }
 
     /**
@@ -113,8 +115,8 @@ class ScheduleController extends Controller
      */
     public function destroy(Schedule $schedule)
     {
-        $schedule->delete();
+        // $schedule->delete();
 
-        return redirect()->route('schedules.index')->with('deleted', 'Schedule deleted successfully.');
+        // return redirect()->route('schedules.index')->with('deleted', 'Schedule deleted successfully.');
     }
 }
